@@ -1,0 +1,87 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
+
+class User extends Authenticatable
+{
+    use HasFactory, HasApiTokens;
+
+    protected $fillable = [
+        'name',
+        'email',
+        'role_id',
+        'section_id',
+        'position',
+        'code',
+        'status',
+        'img_url',
+        'password',
+        'delegation_id'
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
+    }
+
+    public function inquiries()
+    {
+        return $this->hasMany(Inquiry::class);
+    }
+
+    public function assignedInquiries()
+    {
+        return $this->hasMany(Inquiry::class, 'assigned_to');
+    }
+    public function reports()
+    {
+        return $this->hasMany(Report::class, 'created_by');
+    }
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+    public function followUps()
+    {
+        return $this->hasMany(FollowUp::class, 'transferred_by');
+    }
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_trainer', 'trainer_id', 'category_id');
+    }
+
+    public function delegation(){
+        return $this->belongsTo('users','delegation_id','id');
+    }
+
+    public function delegator(){
+        return $this->hasOne('users','delegation_id','id');
+    }
+
+    public function hasRole(string $role): bool
+    {
+        return $this->role->name === $role;
+    }
+}
