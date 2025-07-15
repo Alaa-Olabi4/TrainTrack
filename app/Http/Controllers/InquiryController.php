@@ -97,7 +97,7 @@ class InquiryController extends Controller
         }
 
         //send notification to trainer
-
+        // update category whieght
         return response()->json(['message' => 'the inquiry has been submitted successfully !']);
     }
 
