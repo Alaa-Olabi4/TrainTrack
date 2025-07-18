@@ -63,7 +63,7 @@ class SectionController extends Controller
     {
         $request->validate([
             'name' => ['string'],
-            'email' => ['required', 'string', 'email', 'unique'],
+            'email' => ['string', 'email', 'unique:sections,email'],
             'division' => ['string']
         ]);
         $section = Section::findOrFail($id)->update($request->all());
