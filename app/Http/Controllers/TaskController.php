@@ -34,18 +34,15 @@ class TaskController extends Controller
         $request->validate([
             'category_id' => ['required', 'numeric', 'exists:categories,id'],
             'owner_id' => ['required', 'numeric', 'exists:users,id'],
-            // 'delegation_id' => ['required', 'numeric','exists:users,id']
         ]);
 
         //select delegation from user profile
-        $delegation_id = User::findOrFail($request['owner_id'])->delegation;
-
-        $request->merge(['delegation_id', $delegation_id]);
+        $delegation_id = User::findOrFail($request['owner_id'])->delegation_id;
+        $request['delegation_id'] = $delegation_id;
 
         Task::create($request->all());
 
-        Category::findOrFail($request['category_id'])->update(['owner_id', $request['owner_id']]);
-        User::findOrFail($request['owner_id'])->update(['delegation_id' => $request['delegation_id']]);
+        Category::findOrFail($request['category_id'])->update(['owner_id' => $request['owner_id']]);
 
         return response()->json(['message' => 'the task has been assigned successfully !'], 201);
     }
@@ -103,11 +100,7 @@ class TaskController extends Controller
         $request->validate([
             'category_ids' => ['required', 'array'],
             'owner_id' => ['required', 'numeric'],
-            'delegation_id' => ['required', 'numeric']
         ]);
-        if ($request['owner_id'] == $request['delegation_id']) {
-            return response()->json(['message' => 'the owner cannot be delegation on himself !'], 422);
-        }
 
         $failesIds = [];
         $i = 0;
@@ -116,13 +109,14 @@ class TaskController extends Controller
                 $failesIds[$i] = $id;
                 $i++;
             } else {
+                $delegation_id = User::findOrFail($request['owner_id'])->delegation_id;
+
                 Task::create([
                     'category_id' => $id,
                     'owner_id' => $request['owner_id'],
-                    'delegation_id' => $request['delegation_id']
+                    'delegation_id' => $delegation_id
                 ]);
-                Category::findOrFail($request['category_id'])->update(['owner_id', $request['owner_id']]);
-                User::findOrFail($request['owner_id'])->update(['delegation_id' => $request['delegation_id']]);
+                Category::findOrFail($request['category_id'])->update(['owner_id' => $request['owner_id']]);
             }
         }
 

@@ -73,11 +73,11 @@ class User extends Authenticatable
     }
 
     public function delegation(){
-        return $this->belongsTo('users','delegation_id','id');
+        return $this->belongsTo(User::class,'delegation_id','id');
     }
 
     public function delegator(){
-        return $this->hasOne('users','delegation_id','id');
+        return $this->hasOne(User::class,'delegation_id','id');
     }
 
     public function hasRole(string $role): bool
