@@ -66,14 +66,15 @@ class SectionController extends Controller
             'email' => ['string', 'email', 'unique:sections,email'],
             'division' => ['string']
         ]);
-        $section = Section::findOrFail($id)->update($request->all());
+        $section = Section::findOrFail($id);
+        $section->update($request->all());
         return response()->json(['message' => 'Section has been updated successfully !', 'section' => $section]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
         $section = Section::findOrFail($id);
         $section->delete();
@@ -87,6 +88,7 @@ class SectionController extends Controller
     {
         $section = Section::withTrashed()->findOrFail($id);
         if ($section->deleted_at != null) {
+            $section->restore();
             return response()->json(['message' => 'section has been restored successfully !','section' => $section]);
         }
         return response()->json(['message' => 'Section isn\'t deleted !'], 400);
