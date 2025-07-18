@@ -139,10 +139,11 @@ Route::controller(FollowupController::class)->group(function () {
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::prefix('followups')->group(function(){
             Route::get('', 'index');
+            Route::get('/{id}', 'show');
             Route::post('', 'store');
-            Route::get('/search', 'search');
         });
         Route::get('followupsSection/{section_id}', 'indexSection');
+        Route::get('followupsrequest/{inquiry_id}', 'followupsrequest');
     });
 });
 

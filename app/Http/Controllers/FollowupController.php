@@ -43,7 +43,7 @@ class FollowupController extends Controller
     }
 
     public function followupsrequest($inquiry_id){
-        return FollowUp::where('inquiry_id',$inquiry_id)->get();
+        return FollowUp::with('section')->with('follower')->where('inquiry_id',$inquiry_id)->get();
     }
 
     /**
@@ -51,7 +51,11 @@ class FollowupController extends Controller
      */
     public function show($id)
     {
-        //
+        $followup = Followup::findOrFail($id);
+        $followup->inquiry;
+        $followup->section;
+        $followup->follower;
+        return $followup;
     }
 
     /**
