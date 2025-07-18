@@ -31,7 +31,12 @@ Route::controller(AuthController::class)->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::middleware(['role:SuperAdmin,Admin'])->group(function(){
             Route::post('add_user', 'addUser');
+            Route::post('changeRole','changeRole');
+            Route::post('block','block');
             Route::post('update/{id}', 'update');
+            Route::get('users','index');
+            Route::get('blockedUsers','blockedUsers');
+            Route::get('userRoles','userRoles');
         });
 
         Route::post('logout', 'logout');
