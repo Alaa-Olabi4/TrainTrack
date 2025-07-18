@@ -6,7 +6,6 @@ use App\Models\Task;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\User;
-use App\Http\Controllers\CategoryController;
 
 class TaskController extends Controller
 {
@@ -32,21 +31,21 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        dd('test');
         $request->validate([
-            'category_id' => ['required', 'numeric','exists:categories,id'],
-            'owner_id' => ['required', 'numeric','exists:users,id'],
+            'category_id' => ['required', 'numeric', 'exists:categories,id'],
+            'owner_id' => ['required', 'numeric', 'exists:users,id'],
             // 'delegation_id' => ['required', 'numeric','exists:users,id']
         ]);
 
         //select delegation from user profile
         $delegation_id = User::findOrFail($request['owner_id'])->delegation;
 
-        $request->merge(['delegation_id',$delegation_id]);
+        $request->merge(['delegation_id', $delegation_id]);
 
         Task::create($request->all());
 
-        CategoryController::update($request, $request['category_id']);
+        Category::findOrFail($request['category_id'])->update(['owner_id', $request['owner_id']]);
+        User::findOrFail($request['owner_id'])->update(['delegation_id' => $request['delegation_id']]);
 
         return response()->json(['message' => 'the task has been assigned successfully !'], 201);
     }
@@ -122,7 +121,8 @@ class TaskController extends Controller
                     'owner_id' => $request['owner_id'],
                     'delegation_id' => $request['delegation_id']
                 ]);
-                CategoryController::update($request, $id);
+                Category::findOrFail($request['category_id'])->update(['owner_id', $request['owner_id']]);
+                User::findOrFail($request['owner_id'])->update(['delegation_id' => $request['delegation_id']]);
             }
         }
 
@@ -131,22 +131,18 @@ class TaskController extends Controller
         } else if ($request['category_ids'] == $i) {
             return response()->json(['message' => 'tasks didn\'t added successfully !'], 400);
         } else {
-            return response()->json(['message' => 'tasks have been added succesfully , except : ' . $failesIds],400);
+            return response()->json(['message' => 'tasks have been added succesfully , except : ' . $failesIds], 400);
         }
     }
 
-    public function reset(){
+    public function reset()
+    {
         $categories = Category::all();
-        foreach($categories as  $category){
-            $category->update([
-                'owner_id' => null,
-                'delegation_id' => null
-            ]);
+        foreach ($categories as  $category) {
+            $category->update(['owner_id' => null,]);
         }
         return response()->json(['message' => 'reset tasks has been done successfully !']);
     }
 
-    public function randomlyAssign(){
-        
-    }
+    public function randomlyAssign() {}
 }

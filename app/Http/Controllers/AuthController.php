@@ -47,7 +47,7 @@ class AuthController extends Controller
     }
     public function addUser(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
@@ -62,6 +62,10 @@ class AuthController extends Controller
             $photoName = time() . $photo->getClientOriginalName();
             $photo->move('uploads/users', $photoName);
             $request->merge(['img_url' => 'uploads/products/' . $photoName]);
+        }
+
+        if ($request['role_id'] != 3) {
+            $request['delegation_id'] = null;
         }
 
         $request['password'] = Hash::make($request['password']);
@@ -187,13 +191,14 @@ class AuthController extends Controller
             'position' => ['string'],
             'section_id' => ['numeric', 'exists:sections,id'],
             'password' => ['string', 'confirmed', 'min:8'],
-            'image' => ['image']
-
+            'image' => ['image'],
+            'role_id' => 'required|integer|in:2,3,4,5',
+            'delegation_id' => ['integer', 'exists:users,id'],
         ]);
 
         $user = User::findOrFail($id);
 
-        if ($request->delegation_id != null) {
+        if ($request['delegation_id'] != null) {
             if ($user->role_id != 3) {
                 return response()->json(['message' => 'soory ! the trainer only who can has a delegation , Thank you for your understanding !'], 400);
             }
@@ -205,7 +210,6 @@ class AuthController extends Controller
             $photo->move('uploads/users', $photoName);
             $request->merge(['img_url' => 'uploads/products/' . $photoName]);
         }
-
 
         $user->update($request->all());
         return response()->json(['message' => 'user updated successfully !']);

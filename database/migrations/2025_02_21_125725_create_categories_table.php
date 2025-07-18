@@ -13,7 +13,6 @@ class CreateCategoriesTable extends Migration
             $table->string('name')->unique();
             $table->string('description')->nullable();
             $table->foreignId('owner_id')->nullable()->constrained('users')->onDelete('cascade');
-            $table->foreignId('delegation_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->integer('weight')->default(0);
             $table->softDeletes();
             $table->timestamps();

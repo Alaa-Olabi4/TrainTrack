@@ -14,7 +14,6 @@ class Category extends Model
         'name', 
         'description', 
         'owner_id',
-        'delegation_id'
     ];
 
     public function inquiries()
@@ -31,7 +30,4 @@ class Category extends Model
         return $this->belongsTo('users', 'owner_id');
     }
 
-    public function delegation(){
-        return $this->belongsTo('users', 'delegation_id');
-    }
 }

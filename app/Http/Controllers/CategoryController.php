@@ -57,7 +57,6 @@ class CategoryController extends Controller
             'name' => ['string', 'unique:categories,name'],
             'description' => ['string'],
             'owner_id' => ['numeric','exists:users,id'],
-            'delegation_id' => ['numeric','exists:users,id']
         ]);
 
         Category::findOrFail($id)->update($request->all());
