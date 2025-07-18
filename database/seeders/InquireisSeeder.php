@@ -38,7 +38,7 @@ class InquireisSeeder extends Seeder
         Inquiry::create([
             'user_id' => 23,
             'assignee_id' => 2,
-            'category_id' => 1,
+            'category_id' => 2,
             'cur_status_id' => 3,
             'title' => "استفسار عن خدمة سوبركليب",
             'body' => "كيف يمكن تفعيل السوبر كليب",
@@ -48,7 +48,7 @@ class InquireisSeeder extends Seeder
         Inquiry::create([
             'user_id' => 23,
             'assignee_id' => 2,
-            'category_id' => 1,
+            'category_id' => 3,
             'cur_status_id' => 4,
             'title' => "استفسار عن خدمة سوبركليب",
             'body' => "كيف يمكن تفعيل السوبر كليب",

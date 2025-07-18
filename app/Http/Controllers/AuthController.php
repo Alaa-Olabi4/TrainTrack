@@ -103,7 +103,7 @@ class AuthController extends Controller
             'code' => $code,
         ]);
 
-        Mail::to($user->email)->send(new ForgetMail($code));
+        // Mail::to($user->email)->send(new ForgetMail($code));
 
         return response()->json([
             "status" => 200,

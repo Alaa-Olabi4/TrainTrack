@@ -94,6 +94,8 @@ Route::controller(TaskController::class)->group(function () {
         Route::get('tasks', 'index');
         Route::get('tasks/{id}', 'show');
     });
+
+    Route::get('random-assign', 'randomlyAssign');
 });
 
 Route::controller(InquiryController::class)->group(function () {
@@ -130,10 +132,12 @@ Route::controller(FollowupController::class)->group(function () {
 
     //TaskController Admin Or Trainers Routes :
     Route::middleware(['auth:sanctum'])->group(function () {
-        Route::get('followups', 'index');
-        Route::post('followups', 'store');
-        Route::get('followups/search', 'search');
-        Route::get('followups/{id}', 'show');
+        Route::prefix('followups')->group(function(){
+            Route::get('', 'index');
+            Route::post('', 'store');
+            Route::get('/search', 'search');
+        });
+        Route::get('followupsSection/{section_id}', 'indexSection');
     });
 });
 

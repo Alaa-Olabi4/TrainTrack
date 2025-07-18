@@ -16,6 +16,9 @@ class FollowupController extends Controller
         return FollowUp::all();
     }
 
+    public function indexSection($section_id){
+        return Followup::with('inquiry')->where('section_id',$section_id)->get();
+    }
     /**
      * Store a newly created resource in storage.
      */
