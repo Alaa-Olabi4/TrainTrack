@@ -36,7 +36,7 @@ Route::controller(AuthController::class)->group(function () {
             Route::post('update/{id}', 'update');
             Route::get('users','index');
             Route::get('blockedUsers','blockedUsers');
-            Route::get('userRoles','userRoles');
+            Route::get('userRoles/{role_id}','userRoles');
         });
 
         Route::post('logout', 'logout');
