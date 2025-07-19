@@ -188,6 +188,7 @@ class InquiryController extends Controller
         $average_handling_time = $total_time/$cnt;
 
         return response()->json([
+            'opened_inquiries' => $opened_inquiries
             
         ]);
 
