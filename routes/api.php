@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
@@ -88,6 +87,7 @@ Route::controller(TaskController::class)->group(function () {
 
     //TaskController Admins Routes :
     Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin'])->group(function () {
+        Route::get('random-assign', 'randomlyAssign');
         Route::post('tasks', 'store');
         Route::post('bulktasks', 'bulkstore');
         Route::post('tasks/{id}', 'update');
@@ -100,7 +100,6 @@ Route::controller(TaskController::class)->group(function () {
         Route::get('tasks/{id}', 'show');
     });
 
-    Route::get('random-assign', 'randomlyAssign');
 });
 
 Route::controller(InquiryController::class)->group(function () {
@@ -114,15 +113,15 @@ Route::controller(InquiryController::class)->group(function () {
             Route::delete('/{id}', 'destroy');
             Route::get('/restore/{id}', 'restore');
         });
-        Route::get('statiscs','statiscs');
+        Route::get('statistics','statistics');
 
         Route::get('', 'index');
         Route::get('/search', 'search');
         Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('Status/{status_id}', 'indexStatuses');
             Route::post('', 'store');
-            Route::get('/{id}', 'show');
         });
+        Route::get('/{id}', 'show');
     });
 });
 
@@ -144,8 +143,8 @@ Route::controller(FollowupController::class)->group(function () {
             Route::post('', 'store');
         });
         Route::get('followupsrequest/{inquiry_id}', 'followupsrequest');
+        Route::get('followupsSection/{section_id}', 'indexSection');
     });
-    Route::get('followupsSection/{section_id}', 'indexSection');
 });
 
 

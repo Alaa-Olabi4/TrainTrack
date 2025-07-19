@@ -133,10 +133,27 @@ class TaskController extends Controller
     {
         $categories = Category::all();
         foreach ($categories as  $category) {
-            $category->update(['owner_id' => null,]);
+            $category->update(['owner_id' => null]);
         }
         return response()->json(['message' => 'reset tasks has been done successfully !']);
     }
 
-    public function randomlyAssign() {}
+    public function randomlyAssign() {
+        $categories = Category::all();
+        $total_weights = 0;
+        foreach ($categories as $cat) {
+            $total_weights += $cat->weight;
+        }
+
+        $trainers = User::where('role_id',3)->get()->count();
+
+        if ($trainers != 0) {
+            $avg = $total_weights/$trainers;
+        }else{
+            return response()->json(['message' => 'there\'s not any trainer to assign task to him !'],400);
+        }
+
+        
+        
+    }
 }

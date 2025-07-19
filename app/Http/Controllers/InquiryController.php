@@ -7,6 +7,7 @@ use App\Models\Inquiry;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Rating;
+use App\Models\Category;
 use DateTime;
 
 class InquiryController extends Controller
@@ -52,6 +53,7 @@ class InquiryController extends Controller
         }
         return $inqs;
     }
+    
     /**
      * Display a listing of the Inquiries.
      */
@@ -73,11 +75,10 @@ class InquiryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'category_id' => ['required', 'numeric'],
+            'category_id' => ['required', 'numeric','exists:categories,id'],
             'title' => ['required', 'string'],
             'body' => ['required', 'string'],
         ]);
-
 
         $data = [
             'category_id' => $request['category_id'],
@@ -87,19 +88,17 @@ class InquiryController extends Controller
             'cur_status_id' => 1
         ];
 
-        $new_inq = Inquiry::create($data);
-
-        $task = Task::where('category_id', $request['category_id'])->latest()->first();
-
-        if ($task != null) {
-            $new_inq->assignee_id = User::findOrFail($task->owner_id)->id;
-            $new_inq->save();
-        } else {
-            $new_inq->assignee_id = User::where('role_id', 2)->first()->id;
-            $new_inq->save();
+        $category = Category::findOrFail($request['category_id']);
+        if($category->owner_id != null){
+            $data['assignee_id'] = $category->owner_id;
+        }else{
+            $data['assignee_id'] = User::where('role_id', 2)->first()->id;
         }
 
+        $new_inq = Inquiry::create($data);
+
         //send notification to trainer
+
         // update category whieght
         return response()->json(['message' => 'the inquiry has been submitted successfully !']);
     }
@@ -114,6 +113,8 @@ class InquiryController extends Controller
         $inq->assigneeUser;
         $inq->category;
         $inq->status;
+        $inq->followUps;
+        $inq->ratings;
         return $inq;
     }
 
@@ -173,11 +174,10 @@ class InquiryController extends Controller
         return count($results) == 0 ? response()->json(['message' => 'not found !']) : $results;
     }
 
-    public function statiscs()
+    public function statistics()
     {
         //opened inquirirs
         //closed inquirirs
-
         $opened_inquiries = Inquiry::where('cur_status_id', 1)->get()->count();
         $closed_inquiries = Inquiry::where('cur_status_id', 3)->get();
 
@@ -185,17 +185,17 @@ class InquiryController extends Controller
         $average_handling_time = 0;
         $total_time = 0;
         $cnt = count($closed_inquiries);
-        foreach ($closed_inquiries as $ci) {
-            $createdAt = new DateTime($ci->created_at);
-            $closedAt = new DateTime($ci->closed_at);
-            $interval = $closedAt->diff($createdAt);
-            // dd($interval);
-            $total_time += ($interval->days * 86400)
-                + ($interval->h * 3600);
-                // + ($interval->i * 60)
-                // + $interval->s;
+        if ($cnt > 0) {
+            foreach ($closed_inquiries as $ci) {
+                $createdAt = new DateTime($ci->created_at);
+                $closedAt = new DateTime($ci->closed_at);
+                $interval = $createdAt->diff($closedAt);
+                $total_time += $interval->days * 24 + $interval->h;
+            }
+            $average_handling_time = ($total_time / $cnt) . " hours";
+        }else{
+            $average_handling_time = "No closed inquireis !";
         }
-        $average_handling_time = $total_time / $cnt;
 
 
         //Avearge rating
@@ -208,9 +208,8 @@ class InquiryController extends Controller
             }
             $average_ratings = $total_ratings / $ratings_cnt;
         }else{
-            $average_ratings = 0;
+            $average_ratings = "No ratings !";
         }
-
 
         return response()->json([
             'opened_inquiries' => $opened_inquiries,

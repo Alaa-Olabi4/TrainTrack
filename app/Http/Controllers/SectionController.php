@@ -12,7 +12,7 @@ class SectionController extends Controller
      */
     public function index()
     {
-        return Section::withCount('users')->get();
+        return Section::withCount('users')->orderByDesc('id')->get();
     }
 
     /**
@@ -52,7 +52,10 @@ class SectionController extends Controller
     public function show($id)
     {
         $section =  Section::withCount('users')->findOrFail($id);
-        $section->followUps;
+        $fus = $section->followUps;
+        foreach($fus as $fu){
+            $fu->inquiry->category;
+        }
         return $section;
     }
 

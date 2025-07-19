@@ -12,7 +12,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return Category::all();
+        return Category::orderByDesc('id')->get();
     }
 
     public function indexWithTrashed()
@@ -80,6 +80,7 @@ class CategoryController extends Controller
     {
         $category = Category::withTrashed()->findOrFail($id);
         if ($category->deleted_at != null) {
+            $category->restore();
             return response()->json(['message' => 'category has been restored successfully !']);
         }
         return response()->json(['message' => 'category isn\'t deleted !'], 400);

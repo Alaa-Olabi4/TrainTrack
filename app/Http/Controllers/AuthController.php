@@ -55,7 +55,10 @@ class AuthController extends Controller
     // End Authorrization
 
 
+
+
     // Start Forget Password
+
     public function forget_password(Request $request)
     {
         $request->validate(['email' => 'required|email']);
@@ -82,6 +85,7 @@ class AuthController extends Controller
             "message" => "Code sent successfully",
         ]);
     }
+
     public function check_forget_code(Request $request)
     {
         $request->validate([
@@ -139,14 +143,19 @@ class AuthController extends Controller
     // Start Users for admin
 
 
+
+
+    // Users :
     public function index()
     {
         return User::all();
     }
-    public function blockedUsers() {
-        return User::where('status',false)->get();
+    public function blockedUsers()
+    {
+        return User::where('status', false)->get();
     }
-    public function userRoles($role_id){
+    public function userRoles($role_id)
+    {
         return User::where('role_id', $role_id)->get();
     }
     public function addUser(Request $request)
@@ -227,7 +236,7 @@ class AuthController extends Controller
             'section_id' => ['numeric', 'exists:sections,id'],
             'password' => ['string', 'confirmed', 'min:8'],
             'image' => ['image'],
-            'role_id' => 'required|integer|in:2,3,4,5',
+            'role_id' => ['integer','exists:roles,id'],
             'delegation_id' => ['integer', 'exists:users,id'],
         ]);
 
@@ -237,9 +246,10 @@ class AuthController extends Controller
             if ($user->role_id != 3) {
                 return response()->json(['message' => 'soory ! the trainer only who can has a delegation , Thank you for your understanding !'], 400);
             }
+            $user->update(['delegation_id'=>$request['delegation_id']]);
 
             //assign the delegation to current tasks
-            
+
         }
 
         if ($request->image) {
