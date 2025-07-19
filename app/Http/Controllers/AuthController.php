@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ForgetMail;
+use App\Models\Category;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -244,12 +245,17 @@ class AuthController extends Controller
 
         if ($request['delegation_id'] != null) {
             if ($user->role_id != 3) {
-                return response()->json(['message' => 'soory ! the trainer only who can has a delegation , Thank you for your understanding !'], 400);
+                return response()->json(['message' => 'Sorry ! the trainer only who can has a delegation , Thank you for your understanding !'], 400);
             }
+            if(User::findOrFail($request['delegation_id'])->role_id != 3){
+                return response()->json(['message' => 'Sorry! the delegation should onlu be a trainer !'],400);
+            }
+
             $user->update(['delegation_id'=>$request['delegation_id']]);
-
-            //assign the delegation to current tasks
-
+            $categories = Category::where('owner_id', $user->id)->get();
+            foreach ($categories as $cat) {
+                $cat->update(['delegation_id' => $request['delegation_id']]);
+            }
         }
 
         if ($request->image) {

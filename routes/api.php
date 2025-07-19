@@ -86,8 +86,8 @@ Route::controller(CategoryController::class)->group(function () {
 Route::controller(TaskController::class)->group(function () {
 
     //TaskController Admins Routes :
+    Route::get('random-assign', 'randomlyAssign');
     Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin'])->group(function () {
-        Route::get('random-assign', 'randomlyAssign');
         Route::post('tasks', 'store');
         Route::post('bulktasks', 'bulkstore');
         Route::post('tasks/{id}', 'update');

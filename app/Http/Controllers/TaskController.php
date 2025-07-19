@@ -6,6 +6,7 @@ use App\Models\Task;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
@@ -138,22 +139,48 @@ class TaskController extends Controller
         return response()->json(['message' => 'reset tasks has been done successfully !']);
     }
 
-    public function randomlyAssign() {
-        $categories = Category::all();
-        $total_weights = 0;
-        foreach ($categories as $cat) {
-            $total_weights += $cat->weight;
+
+    public function randomlyAssign()
+    {
+        $this->reset();
+        $categories = Category::whereNull('owner_id')->get();
+        $trainers = User::where('role_id', 3)->get();
+
+        if ($trainers->isEmpty()) {
+            return response()->json(['message' => 'There are no trainers to assign tasks to!'], 400);
         }
 
-        $trainers = User::where('role_id',3)->get()->count();
+        $assignedWeights = array_fill_keys($trainers->pluck('id')->toArray(), 0);
 
-        if ($trainers != 0) {
-            $avg = $total_weights/$trainers;
-        }else{
-            return response()->json(['message' => 'there\'s not any trainer to assign task to him !'],400);
+        $shuffledCategories = $categories->shuffle();
+        $sortedCategories = $shuffledCategories->sortByDesc('weight');
+
+        DB::beginTransaction();
+        try {
+            foreach ($sortedCategories as $category) {
+                $minWeight = min($assignedWeights);
+                $candidateTrainerIds = array_keys($assignedWeights, $minWeight);
+
+                $selectedTrainerId = $candidateTrainerIds[array_rand($candidateTrainerIds)];
+
+                $category->update(['owner_id' => $selectedTrainerId]);
+
+                $delegationId = User::find($selectedTrainerId)->delegation_id;
+                Task::create([
+                    'category_id' => $category->id,
+                    'owner_id' => $selectedTrainerId,
+                    'delegation_id' => $delegationId
+                ]);
+
+                $assignedWeights[$selectedTrainerId] += $category->weight;
+            }
+
+            DB::commit();
+            return response()->json(['message' => 'Tasks have been randomly assigned successfully!']);
+            // return response()->json(['message' => 'Tasks have been randomly assigned successfully!',$assignedWeights]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Assignment failed: ' . $e->getMessage()], 500);
         }
-
-        
-        
     }
 }
