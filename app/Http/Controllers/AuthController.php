@@ -75,7 +75,7 @@ class AuthController extends Controller
             'code' => $code,
         ]);
 
-        // Mail::to($user->email)->send(new ForgetMail($code));
+        Mail::to($user->email)->send(new ForgetMail($code));
 
         return response()->json([
             "status" => 200,
@@ -237,6 +237,9 @@ class AuthController extends Controller
             if ($user->role_id != 3) {
                 return response()->json(['message' => 'soory ! the trainer only who can has a delegation , Thank you for your understanding !'], 400);
             }
+
+            //assign the delegation to current tasks
+            
         }
 
         if ($request->image) {

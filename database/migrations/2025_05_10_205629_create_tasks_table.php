@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
             $table->foreignId('owner_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('delegation_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('delegation_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });

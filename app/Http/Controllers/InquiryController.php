@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Inquiry;
 use App\Models\Task;
 use App\Models\User;
+use App\Models\Rating;
+use DateTime;
 
 class InquiryController extends Controller
 {
@@ -39,7 +41,8 @@ class InquiryController extends Controller
         return $inqs;
     }
 
-    public function indexOnlyTrashed(){
+    public function indexOnlyTrashed()
+    {
         $inqs = Inquiry::onlyTrashed()->get();
         foreach ($inqs as $inq) {
             $inq->user;
@@ -49,12 +52,12 @@ class InquiryController extends Controller
         }
         return $inqs;
     }
-        /**
+    /**
      * Display a listing of the Inquiries.
      */
     public function indexStatuses($status_id)
     {
-        $inqs = Inquiry::where('cur_status_id' , $status_id)->get();
+        $inqs = Inquiry::where('cur_status_id', $status_id)->get();
         foreach ($inqs as $inq) {
             $inq->user;
             $inq->assigneeUser;
@@ -167,30 +170,54 @@ class InquiryController extends Controller
 
         $results = $query->latest()->get();
 
-        return count($results) == 0 ? response()->json(['message'=> 'not found !']) : $results;
+        return count($results) == 0 ? response()->json(['message' => 'not found !']) : $results;
     }
 
-    public function statiscs(){
+    public function statiscs()
+    {
         //opened inquirirs
         //closed inquirirs
-        //average handled time (معدل سرعة الإجابة)          
-        //Avearge rating
 
-        $opened_inquiries = Inquiry::where('status_id',1)->get();
-        $closed_inquiries = Inquiry::where('status_id',3)->get();
+        $opened_inquiries = Inquiry::where('cur_status_id', 1)->get()->count();
+        $closed_inquiries = Inquiry::where('cur_status_id', 3)->get();
+
+        //average handled time (معدل سرعة الإجابة)          
         $average_handling_time = 0;
-        
-        $total_time =0;
+        $total_time = 0;
         $cnt = count($closed_inquiries);
-        foreach($closed_inquiries as $ci){
-            $total_time+=$ci->closed_at-$ci->created_at;            
+        foreach ($closed_inquiries as $ci) {
+            $createdAt = new DateTime($ci->created_at);
+            $closedAt = new DateTime($ci->closed_at);
+            $interval = $closedAt->diff($createdAt);
+            // dd($interval);
+            $total_time += ($interval->days * 86400)
+                + ($interval->h * 3600);
+                // + ($interval->i * 60)
+                // + $interval->s;
         }
-        $average_handling_time = $total_time/$cnt;
+        $average_handling_time = $total_time / $cnt;
+
+
+        //Avearge rating
+        $ratings = Rating::all();
+        $total_ratings = 0;
+        $ratings_cnt = count($ratings);
+        if($ratings_cnt > 0){
+            foreach ($ratings as $r) {
+                $total_ratings += $r->score;
+            }
+            $average_ratings = $total_ratings / $ratings_cnt;
+        }else{
+            $average_ratings = 0;
+        }
+
 
         return response()->json([
-            'opened_inquiries' => $opened_inquiries
-            
-        ]);
+            'opened_inquiries' => $opened_inquiries,
+            'closed_inquiries' => $cnt,
+            'average_handling_time' => $average_handling_time,
+            'average_ratings' => $average_ratings
 
+        ]);
     }
 }

@@ -114,6 +114,7 @@ Route::controller(InquiryController::class)->group(function () {
             Route::delete('/{id}', 'destroy');
             Route::get('/restore/{id}', 'restore');
         });
+        Route::get('statiscs','statiscs');
 
         Route::get('', 'index');
         Route::get('/search', 'search');
@@ -142,9 +143,9 @@ Route::controller(FollowupController::class)->group(function () {
             Route::get('/{id}', 'show');
             Route::post('', 'store');
         });
-        Route::get('followupsSection/{section_id}', 'indexSection');
         Route::get('followupsrequest/{inquiry_id}', 'followupsrequest');
     });
+    Route::get('followupsSection/{section_id}', 'indexSection');
 });
 
 
