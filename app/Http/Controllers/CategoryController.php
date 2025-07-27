@@ -33,6 +33,7 @@ class CategoryController extends Controller
         $request->validate([
             'name' => ['required', 'string','unique:categories,name'],
             'description' => ['string'],
+            'weight' => ['numeric' ,'max:100' ,'min:0'],    
         ]);
 
         Category::create($request->all());
@@ -57,6 +58,7 @@ class CategoryController extends Controller
             'name' => ['string', 'unique:categories,name'],
             'description' => ['string'],
             'owner_id' => ['numeric','exists:users,id'],
+            'weight' => ['numeric' ,'max:100' ,'min:0'],
         ]);
 
         Category::findOrFail($id)->update($request->all());

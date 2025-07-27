@@ -26,7 +26,6 @@ class InquiryController extends Controller
         }
         return $inqs;
     }
-
     /**
      * Display a listing of the Inquiries.
      */
@@ -41,7 +40,6 @@ class InquiryController extends Controller
         }
         return $inqs;
     }
-
     public function indexOnlyTrashed()
     {
         $inqs = Inquiry::onlyTrashed()->get();
@@ -53,7 +51,6 @@ class InquiryController extends Controller
         }
         return $inqs;
     }
-    
     /**
      * Display a listing of the Inquiries.
      */
@@ -68,14 +65,50 @@ class InquiryController extends Controller
         }
         return $inqs;
     }
+    public function indexSender($sender_id)
+    {
+        $inqs = Inquiry::where('user_id', $sender_id)->get();
+        foreach ($inqs as $inq) {
+            $inq->user;
+            $inq->assigneeUser;
+            $inq->category;
+            $inq->status;
+        }
+        return $inqs;
+    }
+    public function indexTrainer($assignee_id)
+    {
+        $inqs = Inquiry::where('assignee_id', $assignee_id)->get();
+        foreach ($inqs as $inq) {
+            $inq->user;
+            $inq->assigneeUser;
+            $inq->category;
+            $inq->status;
+        }
+        return $inqs;
+    }
+    public function myinquiries()
+    {
+        $user = auth()->user();
+        $inqs = Inquiry::where('assignee_id', $user->id)
+            ->orWhere('user_id', $user->id)
+            ->get();
 
+        foreach ($inqs as $inq) {
+            $inq->user;
+            $inq->assigneeUser;
+            $inq->category;
+            $inq->status;
+        }
+        return $inqs;
+    }
     /**
      * Store a newly created Inquiry in storage.
      */
     public function store(Request $request)
     {
         $request->validate([
-            'category_id' => ['required', 'numeric','exists:categories,id'],
+            'category_id' => ['required', 'numeric', 'exists:categories,id'],
             'title' => ['required', 'string'],
             'body' => ['required', 'string'],
         ]);
@@ -89,20 +122,19 @@ class InquiryController extends Controller
         ];
 
         $category = Category::findOrFail($request['category_id']);
-        if($category->owner_id != null){
+        if ($category->owner_id != null) {
             $data['assignee_id'] = $category->owner_id;
-        }else{
+        } else {
             $data['assignee_id'] = User::where('role_id', 2)->first()->id;
         }
 
         $new_inq = Inquiry::create($data);
 
-        //send notification to trainer
+        //send notification to UAT & Training
 
-        // update category whieght
+
         return response()->json(['message' => 'the inquiry has been submitted successfully !']);
     }
-
     /**
      * Display the specified Inquiry.
      */
@@ -117,7 +149,6 @@ class InquiryController extends Controller
         $inq->ratings;
         return $inq;
     }
-
     /**
      * Update the specified Inquiry in storage.
      */
@@ -125,7 +156,6 @@ class InquiryController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified Inquiry from storage.
      */
@@ -134,7 +164,6 @@ class InquiryController extends Controller
         Inquiry::findOrFail($id)->delete();
         return response()->json(['message' => 'inquiry has been deleted successfully !']);
     }
-
     /**
      * Remove the specified Inquiry from storage.
      */
@@ -143,7 +172,6 @@ class InquiryController extends Controller
         Inquiry::withTrashed()->findOrFail($id)->restore();
         return response()->json(['message' => 'inquiry has been restored successfully !']);
     }
-
     public function search(Request $request)
     {
         $data = $request->validate([
@@ -174,11 +202,75 @@ class InquiryController extends Controller
         return count($results) == 0 ? response()->json(['message' => 'not found !']) : $results;
     }
 
+    public function reassign(Request $request)
+    {
+        $request->validate([
+            'inquiry_id' => ['numeric', 'exists:inquiries,id'],
+            'assignee_id' => ['numeric', 'exists:users,id']
+        ]);
+
+        $new = User::findOrFail($request['assignee_id']);
+
+        if ($new->role_id != 3) {
+            return response()->json(['message' => 'you can reassign the inquiry to trainer only !']);
+        }
+
+        $inq = Inquiry::findOrFail($request['inquiry_id'])->update(['assignee_id' => $request['assignee_id']]);
+
+        // Should Notify the both Trainers
+
+        return response()->json(['message' => "the inquiry has been reassigned successfully to " . $new->name . " !"]);
+    }
+
+    public function reply(Request $request) {
+        $request->validate([
+            'inquiry_id' => ['required' , 'numeric' ,'exists:inuiries,id'],
+            'response' => ['required', 'string'],
+            'status_id' => ['numeric' , 'exists:statuses,id']
+        ]);
+
+        $inq = Inquiry::findOrFail($request['inquiry_id']);
+
+        if($request['status_id'] == 3){
+            $status_id = $request['status_id'];
+            $inq->update(['closed_at' => now()]);
+        }else{
+            $status_id = $request['status_id'];
+        }
+
+        $inq->update([
+            'response' => $request['response'],
+            'status_id' => $status_id
+        ]);
+
+        // Create a followup
+
+        // Notify the team of the sender
+
+
+        return response()->json(['message'=> 'your reply has been submitted successfully !']);
+    }
+
+    public function reopen($inq_id){
+        $user = auth()->user();
+        $inq = Inquiry::findOrFail($inq_id);
+
+        if($inq->user_id != $user->id){return response()->json(['message'=>'only the user who ask can reopen the inquiry !'],400);}
+
+        $inq->update(['cur_status_id'=>4]);
+        // Create a follow up
+
+        // Notify UAT & Training
+
+        return response()->json(['message' => 'the inquiry has been reopened successfully !']);
+    }
+
     public function statistics()
     {
         //opened inquirirs
         //closed inquirirs
         $opened_inquiries = Inquiry::where('cur_status_id', 1)->get()->count();
+        $pending_inquiries = Inquiry::where('cur_status_id', 2)->get()->count();
         $closed_inquiries = Inquiry::where('cur_status_id', 3)->get();
 
         //average handled time (معدل سرعة الإجابة)          
@@ -193,7 +285,7 @@ class InquiryController extends Controller
                 $total_time += $interval->days * 24 + $interval->h;
             }
             $average_handling_time = ($total_time / $cnt) . " hours";
-        }else{
+        } else {
             $average_handling_time = "No closed inquireis !";
         }
 
@@ -202,17 +294,18 @@ class InquiryController extends Controller
         $ratings = Rating::all();
         $total_ratings = 0;
         $ratings_cnt = count($ratings);
-        if($ratings_cnt > 0){
+        if ($ratings_cnt > 0) {
             foreach ($ratings as $r) {
                 $total_ratings += $r->score;
             }
             $average_ratings = $total_ratings / $ratings_cnt;
-        }else{
+        } else {
             $average_ratings = "No ratings !";
         }
 
         return response()->json([
             'opened_inquiries' => $opened_inquiries,
+            'pending_inquiries' => $pending_inquiries,
             'closed_inquiries' => $cnt,
             'average_handling_time' => $average_handling_time,
             'average_ratings' => $average_ratings
