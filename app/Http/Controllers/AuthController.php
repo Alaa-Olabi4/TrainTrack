@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\ForgetMail;
 use App\Models\Category;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
@@ -175,7 +175,7 @@ class AuthController extends Controller
             $photo = $request->image;
             $photoName = time() . $photo->getClientOriginalName();
             $photo->move('uploads/users', $photoName);
-            $request->merge(['img_url' => 'uploads/products/' . $photoName]);
+            $request->merge(['img_url' => 'uploads/users/' . $photoName]);
         }
 
         if ($request['role_id'] != 3) {
@@ -232,7 +232,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => ['string'],
-            'email' => ['string', 'email', 'unique:users,email'],
+            'email' => ['email', Rule::unique('users')->ignore($id)],
             'position' => ['string'],
             'section_id' => ['numeric', 'exists:sections,id'],
             'password' => ['string', 'confirmed', 'min:8'],

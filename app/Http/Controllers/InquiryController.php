@@ -224,7 +224,7 @@ class InquiryController extends Controller
 
     public function reply(Request $request) {
         $request->validate([
-            'inquiry_id' => ['required' , 'numeric' ,'exists:inuiries,id'],
+            'inquiry_id' => ['required' , 'numeric' ,'exists:inquiries,id'],
             'response' => ['required', 'string'],
             'status_id' => ['numeric' , 'exists:statuses,id']
         ]);
@@ -240,7 +240,7 @@ class InquiryController extends Controller
 
         $inq->update([
             'response' => $request['response'],
-            'status_id' => $status_id
+            'cur_status_id' => $status_id
         ]);
 
         // Create a followup

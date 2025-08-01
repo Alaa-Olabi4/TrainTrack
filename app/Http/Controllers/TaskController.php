@@ -117,7 +117,7 @@ class TaskController extends Controller
                     'owner_id' => $request['owner_id'],
                     'delegation_id' => $delegation_id
                 ]);
-                Category::findOrFail($request['category_id'])->update(['owner_id' => $request['owner_id']]);
+                Category::findOrFail($id)->update(['owner_id' => $request['owner_id']]);
             }
         }
 

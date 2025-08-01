@@ -57,8 +57,8 @@ Route::controller(SectionController::class)->group(function () {
             Route::delete('/{id}', 'destroy');
             Route::get('/restore/{id}', 'restore');
         });
-        Route::get('/{id}', 'show');
         Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin,Trainer,Assistant'])->group(function () {
+            Route::get('/{id}', 'show');
         });
     });
 });

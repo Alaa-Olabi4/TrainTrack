@@ -14,7 +14,7 @@ class FollowUpSeeder extends Seeder
     public function run(): void
     {
         FollowUp::create([
-                    'inquiry_id'=>1,
+                    'inquiry_id'=>1,    
         'status'=>1,
         'follower_id'=>1,
         'section_id'=>1,

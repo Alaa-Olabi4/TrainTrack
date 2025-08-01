@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Section;
+use Illuminate\Validation\Rule;
+
 
 class SectionController extends Controller
 {
@@ -66,7 +68,7 @@ class SectionController extends Controller
     {
         $request->validate([
             'name' => ['string'],
-            'email' => ['string', 'email', 'unique:sections,email'],
+            'email' => ['email', Rule::unique('sections')->ignore($id)],
             'division' => ['string']
         ]);
         $section = Section::findOrFail($id);

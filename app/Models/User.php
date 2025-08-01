@@ -49,7 +49,7 @@ class User extends Authenticatable
 
     public function assignedInquiries()
     {
-        return $this->hasMany(Inquiry::class, 'assigned_to');
+        return $this->hasMany(Inquiry::class, 'assignee_id');
     }
     public function reports()
     {

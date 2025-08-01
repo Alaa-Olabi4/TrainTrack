@@ -17,7 +17,7 @@ class FollowupController extends Controller
     }
 
     public function indexSection($section_id){
-        return Followup::with('inquiry')->where('section_id',$section_id)->get();
+        return FollowUp::with('inquiry')->where('section_id',$section_id)->get();
     }
     /**
      * Store a newly created resource in storage.
@@ -25,9 +25,9 @@ class FollowupController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'inquiry_id' => ['required'],
+            'inquiry_id' => ['required', 'numeric' , 'exists:inquiries,id'],
             'status' => ['required'],
-            'section_id' => ['required']
+            'section_id' => ['required', 'numeric' , 'exists:sections,id']
         ]);
 
         $follower = User::findOrFail(auth()->user()->id);
@@ -35,7 +35,7 @@ class FollowupController extends Controller
             'inquiry_id' => $request['inquiry_id'],
             'status' => $request['status'],
             'section_id' => $request['section_id'],
-            'follower_id' => $follower
+            'follower_id' => $follower->id
         ];
         FollowUp::create($data);
 
@@ -51,7 +51,7 @@ class FollowupController extends Controller
      */
     public function show($id)
     {
-        $followup = Followup::findOrFail($id);
+        $followup = FollowUp::findOrFail($id);
         $followup->inquiry;
         $followup->section;
         $followup->follower;
@@ -61,9 +61,17 @@ class FollowupController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $followup = FollowUp::findOrFail($id);
+        $request->validate([
+            'status' => ['required'],
+            'reply' => ['string']
+        ]);
+
+        $followup->update($request->all());
+
+        return response()->json(['message'=>'followup updated successfully !']);
     }
 
     /**

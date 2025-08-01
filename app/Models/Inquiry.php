@@ -36,7 +36,7 @@ class Inquiry extends Model
     }
     public function status()
     {
-        return $this->belongsTo(status::class,'cur_status_id','id');
+        return $this->belongsTo(Status::class,'cur_status_id','id');
     }
 
     public function ratings()
