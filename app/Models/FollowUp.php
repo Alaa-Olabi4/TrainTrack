@@ -31,4 +31,9 @@ class FollowUp extends Model
     {
         return $this->belongsTo(User::class, 'follower_id');
     }
+
+    public function attachments()
+    {
+        return $this->hasMany(Attachment::class);
+    }
 }

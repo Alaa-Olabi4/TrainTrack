@@ -13,7 +13,7 @@ class CreateFollowUpsTable extends Migration
             $table->foreignId('inquiry_id')->constrained('inquiries')->onDelete('cascade');
             $table->integer('status')->default(1);
             $table->foreignId('follower_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('section_id')->constrained('sections')->onDelete('cascade');
+            $table->foreignId('section_id')->nullable()->constrained('sections')->onDelete('cascade');
             $table->string('response')->nullable();
             $table->timestamps();
         });

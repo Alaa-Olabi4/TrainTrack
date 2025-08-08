@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\attachment;
 use Illuminate\Http\Request;
 use App\Models\Inquiry;
 use App\Models\Task;
@@ -23,6 +24,7 @@ class InquiryController extends Controller
             $inq->assigneeUser;
             $inq->category;
             $inq->status;
+            $inq->attachments;
         }
         return $inqs;
     }
@@ -37,6 +39,7 @@ class InquiryController extends Controller
             $inq->assigneeUser;
             $inq->category;
             $inq->status;
+            $inq->attachments;
         }
         return $inqs;
     }
@@ -48,6 +51,7 @@ class InquiryController extends Controller
             $inq->assigneeUser;
             $inq->category;
             $inq->status;
+            $inq->attachments;
         }
         return $inqs;
     }
@@ -62,6 +66,7 @@ class InquiryController extends Controller
             $inq->assigneeUser;
             $inq->category;
             $inq->status;
+            $inq->attachments;
         }
         return $inqs;
     }
@@ -73,6 +78,7 @@ class InquiryController extends Controller
             $inq->assigneeUser;
             $inq->category;
             $inq->status;
+            $inq->attachments;
         }
         return $inqs;
     }
@@ -84,6 +90,7 @@ class InquiryController extends Controller
             $inq->assigneeUser;
             $inq->category;
             $inq->status;
+            $inq->attachments;
         }
         return $inqs;
     }
@@ -99,6 +106,7 @@ class InquiryController extends Controller
             $inq->assigneeUser;
             $inq->category;
             $inq->status;
+            $inq->attachments;
         }
         return $inqs;
     }
@@ -111,6 +119,8 @@ class InquiryController extends Controller
             'category_id' => ['required', 'numeric', 'exists:categories,id'],
             'title' => ['required', 'string'],
             'body' => ['required', 'string'],
+            'attachments' => ['nullable', 'array'],
+            'attachments.*' => ['file', 'max:5120', 'mimes:jpg,jpeg,png,pdf,doc,docx']
         ]);
 
         $data = [
@@ -128,7 +138,19 @@ class InquiryController extends Controller
             $data['assignee_id'] = User::where('role_id', 2)->first()->id;
         }
 
-        $new_inq = Inquiry::create($data);
+        $inquiry = Inquiry::create($data);
+
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $fileName = time() . $file->getClientOriginalName();
+                $file->move('uploads/attachments', $fileName);
+                attachment::create([
+                    'inquiry_id' => $inquiry->id,
+                    'url' => 'uploads/attachments/' . $fileName
+                ]);
+            }
+        }
+
 
         //send notification to UAT & Training
 
@@ -146,6 +168,7 @@ class InquiryController extends Controller
         $inq->category;
         $inq->status;
         $inq->followUps;
+        $inq->attachments;
         $inq->ratings;
         return $inq;
     }
@@ -222,19 +245,22 @@ class InquiryController extends Controller
         return response()->json(['message' => "the inquiry has been reassigned successfully to " . $new->name . " !"]);
     }
 
-    public function reply(Request $request) {
+    public function reply(Request $request)
+    {
         $request->validate([
-            'inquiry_id' => ['required' , 'numeric' ,'exists:inquiries,id'],
+            'inquiry_id' => ['required', 'numeric', 'exists:inquiries,id'],
             'response' => ['required', 'string'],
-            'status_id' => ['numeric' , 'exists:statuses,id']
+            'status_id' => ['numeric', 'exists:statuses,id'],
+            'attachments' => ['nullable', 'array'],
+            'attachments.*' => ['file', 'max:5120', 'mimes:jpg,jpeg,png,pdf,doc,docx']
         ]);
 
         $inq = Inquiry::findOrFail($request['inquiry_id']);
 
-        if($request['status_id'] == 3){
+        if ($request['status_id'] == 3) {
             $status_id = $request['status_id'];
             $inq->update(['closed_at' => now()]);
-        }else{
+        } else {
             $status_id = $request['status_id'];
         }
 
@@ -244,20 +270,25 @@ class InquiryController extends Controller
         ]);
 
         // Create a followup
+        $section_id = $inq->user->section->id;
+        FollowupController::store($request->merge(['status' => 3, 'section_id' => $section_id]));
+
 
         // Notify the team of the sender
 
-
-        return response()->json(['message'=> 'your reply has been submitted successfully !']);
+        return response()->json(['message' => 'your reply has been submitted successfully !']);
     }
 
-    public function reopen($inq_id){
+    public function reopen($inq_id)
+    {
         $user = auth()->user();
         $inq = Inquiry::findOrFail($inq_id);
 
-        if($inq->user_id != $user->id){return response()->json(['message'=>'only the user who ask can reopen the inquiry !'],400);}
+        if ($inq->user_id != $user->id) {
+            return response()->json(['message' => 'only the user who ask can reopen the inquiry !'], 400);
+        }
 
-        $inq->update(['cur_status_id'=>4]);
+        $inq->update(['cur_status_id' => 4]);
         // Create a follow up
 
         // Notify UAT & Training
