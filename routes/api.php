@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FavouriteController;
 use App\Http\Controllers\FollowupController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\InquiryController;
@@ -28,14 +29,14 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/reset_password', 'reset_password');
 
     Route::middleware('auth:sanctum')->group(function () {
-        Route::middleware(['role:SuperAdmin,Admin'])->group(function(){
+        Route::middleware(['role:SuperAdmin,Admin'])->group(function () {
             Route::post('add_user', 'addUser');
-            Route::post('changeRole','changeRole');
-            Route::post('block','block');
+            Route::post('changeRole', 'changeRole');
+            Route::post('block', 'block');
             Route::post('update/{id}', 'update');
-            Route::get('users','index');
-            Route::get('blockedUsers','blockedUsers');
-            Route::get('userRoles/{role_id}','userRoles');
+            Route::get('users', 'index');
+            Route::get('blockedUsers', 'blockedUsers');
+            Route::get('userRoles/{role_id}', 'userRoles');
         });
 
         Route::post('logout', 'logout');
@@ -99,7 +100,6 @@ Route::controller(TaskController::class)->group(function () {
         Route::get('tasks', 'index');
         Route::get('tasks/{id}', 'show');
     });
-
 });
 
 Route::controller(InquiryController::class)->group(function () {
@@ -109,14 +109,14 @@ Route::controller(InquiryController::class)->group(function () {
         Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin'])->group(function () {
             Route::get('/WithTrashed', 'indexWithTrashed');
             Route::get('/indexOnlyTrashed', 'indexOnlyTrashed');
-            Route::post('reassign','reassign');
+            Route::post('reassign', 'reassign');
             Route::post('/{id}', 'update');
             Route::delete('/{id}', 'destroy');
             Route::get('/restore/{id}', 'restore');
-            Route::get('statistics','statistics');
+            Route::get('statistics', 'statistics');
         });
         Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin,Trainer'])->group(function () {
-            Route::post('reply','reply');
+            Route::post('reply', 'reply');
         });
 
         Route::get('', 'index');
@@ -126,7 +126,7 @@ Route::controller(InquiryController::class)->group(function () {
             Route::get('Status/{status_id}', 'indexStatuses');
             Route::get('Sender/{sender_id}', 'indexSender');
             Route::get('Trainer/{assignee_id}', 'indexTrainer');
-            Route::post('repoen/{inq_id}','reopen');
+            Route::post('repoen/{inq_id}', 'reopen');
             Route::post('', 'store');
         });
         Route::get('/{id}', 'show');
@@ -145,7 +145,7 @@ Route::controller(FollowupController::class)->group(function () {
 
     //TaskController Admin Or Trainers Routes :
     Route::middleware(['auth:sanctum'])->group(function () {
-        Route::prefix('followups')->group(function(){
+        Route::prefix('followups')->group(function () {
             Route::get('', 'index');
             Route::get('/{id}', 'show');
             Route::post('', 'store');
@@ -155,6 +155,21 @@ Route::controller(FollowupController::class)->group(function () {
     });
 });
 
+Route::controller(FavouriteController::class)->group(function () {
+
+    Route::prefix('favourites')->group(function () {
+        Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin'])->group(function () {
+            Route::get('', 'index');
+            Route::get('/{id}', 'show');
+        });
+        Route::middleware(['auth:sanctum'])->group(function () {
+            Route::delete('/{id}', 'remove');
+            Route::post('', 'store');
+        });
+    });
+
+    Route::get('/myFavourites', 'myFavourites')->middleware(['auth:sanctum']);
+});
 
 Route::get('/roles', function () {
     return Role::all();

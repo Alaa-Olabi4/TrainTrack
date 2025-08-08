@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use GuzzleHttp\Psr7\Request;
+use App\Models\Inquiry;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,8 +15,8 @@ class Favourite extends Model
         'user_id'
     ];
 
-    public function request(){
-        return $this->belongsTo(Request::class);
+    public function inquiry(){
+        return $this->belongsTo(Inquiry::class);
     }
 
     public function user(){
