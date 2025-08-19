@@ -22,15 +22,14 @@ use App\Models\Role;
 */
 
 Route::controller(AuthController::class)->group(function () {
-    Route::post('login', 'login')->middleware('throttle:5,1');
-
-    Route::post('/forget_password', 'forget_password');
-    Route::post('/check_forget_code', 'check_forget_code');
-    Route::post('/reset_password', 'reset_password');
+    Route::post('login', 'login')->middleware('throttle:5,1');//1
+    Route::post('/forget_password', 'forget_password');//1
+    Route::post('/check_forget_code', 'check_forget_code');//1
+    Route::post('/reset_password', 'reset_password');//1
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::middleware(['role:SuperAdmin,Admin'])->group(function () {
-            Route::post('add_user', 'addUser');
+            Route::post('add_user', 'addUser');//1
             Route::post('changeRole', 'changeRole');
             Route::post('block', 'block');
             Route::post('update/{id}', 'update');
@@ -39,44 +38,44 @@ Route::controller(AuthController::class)->group(function () {
             Route::get('userRoles/{role_id}', 'userRoles');
         });
 
-        Route::post('logout', 'logout');
-        Route::get('/profile', 'profile');
+        Route::post('logout', 'logout');//1
+        Route::get('/profile', 'profile');//1
     });
 });
 
 Route::controller(SectionController::class)->group(function () {
     Route::prefix('sections')->group(function () {
-        Route::get('', 'index');
+        Route::get('', 'index');//1
         Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin,Trainer,Assistant'])->group(function () {
             Route::get('/search', 'search');
         });
         Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin'])->group(function () {
             Route::get('/withTrashed', 'indexWithTrashed');
             Route::get('/trashed', 'indexOnlyTrashed');
-            Route::post('', 'store');
-            Route::post('/{id}', 'update');
-            Route::delete('/{id}', 'destroy');
+            Route::post('', 'store');//1
+            Route::post('/{id}', 'update');//1
+            Route::delete('/{id}', 'destroy');//1
             Route::get('/restore/{id}', 'restore');
         });
         Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin,Trainer,Assistant'])->group(function () {
-            Route::get('/{id}', 'show');
+            Route::get('/{id}', 'show');//1
         });
     });
 });
 
 Route::controller(CategoryController::class)->group(function () {
     Route::prefix('categories')->group(function () {
+        Route::get('', 'index');//1
         Route::middleware(['auth:sanctum'])->group(function () {
-            Route::get('', 'index');
-            Route::get('/search', 'search');
+            Route::get('/search', 'search');//1
         });
         Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin'])->group(function () {
-            Route::post('', 'store');
-            Route::post('/{id}', 'update');
-            Route::get('/withTrashed', 'indexWithTrashed');
-            Route::get('/trashed', 'indexOnlyTrashed');
-            Route::get('/restore/{id}', 'restore');
-            Route::delete('/{id}', 'destroy');
+            Route::post('', 'store');//1
+            Route::post('/{id}', 'update');//1
+            Route::get('/withTrashed', 'indexWithTrashed');//1
+            Route::get('/trashed', 'indexOnlyTrashed');//1
+            Route::get('/restore/{id}', 'restore');//1
+            Route::delete('/{id}', 'destroy');//1
         });
         Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/{id}', 'show');
@@ -119,8 +118,8 @@ Route::controller(InquiryController::class)->group(function () {
             Route::post('reply', 'reply');
         });
 
-        Route::get('', 'index');
         Route::get('/search', 'search');
+        Route::get('', 'index');
         Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('myinquiries', 'myinquiries');
             Route::get('Status/{status_id}', 'indexStatuses');
@@ -138,17 +137,17 @@ Route::controller(FollowupController::class)->group(function () {
     //TaskController Admins Routes :
     Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin'])->group(function () {
         Route::get('followups', 'index');
-        Route::post('followups/{id}', 'update');
-        Route::delete('followups/{id}', 'destroy');
         Route::get('followups/restore/{id}', 'restore');
     });
-
+    
     //TaskController Admin Or Trainers Routes :
     Route::middleware(['auth:sanctum'])->group(function () {
+        Route::delete('followups/{id}', 'destroy');
         Route::prefix('followups')->group(function () {
             Route::get('', 'index');
             Route::get('/{id}', 'show');
             Route::post('', 'store');
+            Route::post('/{id}', 'update');
         });
         Route::get('followupsrequest/{inquiry_id}', 'followupsrequest');
         Route::get('followupsSection/{section_id}', 'indexSection');

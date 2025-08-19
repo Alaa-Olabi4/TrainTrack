@@ -188,9 +188,10 @@
 <body>
   <header>
     <!-- Success icon with checkmark -->
-{{-- <svg style="display:block;margin:20px auto;width:80px;height:80px;fill:#27ae60;" viewBox="0 0 24 24">
-    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-</svg> --}}
+    {{-- <svg style="display:block;margin:20px auto;width:80px;height:80px;fill:#27ae60;" viewBox="0 0 24 24">
+      <path
+        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+    </svg> --}}
     <h1>Train Track API Documentation</h1>
     <p>Comprehensive guide to using our API</p>
     <button onclick="toggleTheme()">🌓 Toggle Theme</button>
@@ -215,7 +216,7 @@
     </section>
 
 
-    <!-- 🧭 Section 1: Auth -->
+    <!-- Section 1: Auth -->
     <div class="section-wrapper">
       <div class="section-header"
         onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
@@ -415,8 +416,442 @@
       </div>
     </div>
 
+    <!-- Section 2: Sections -->
+    <div class="section-wrapper">
+      <div class="section-header"
+        onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
+        <h2>Sections</h2>
+      </div>
+      <div class="section-content">
 
-    <!-- 🧭 Section 2: Tasks -->
+        <div class="endpoint" data-title="List All Sections">
+          <h3>1. List All Sections</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/sections</p>
+            <p><strong>Description:</strong> Retrieves all sections in the system.</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+  {
+    "id": 1,
+    "name": "UAT & Training",
+    "division": "CC - Customer Care Support"
+  },
+  {
+    "id": 2,
+    "name": "Segment Consumer",
+    "division": "Marketing - P&S"
+  },
+  {
+    "id": 3,
+    "name": "CVM",
+    "division": "Marketing - P&S"
+  }
+]</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+{ "message": "Unauthenticated." }
+
+// 403 Forbidden (if not superadmin)
+{ "message": "User does not have the right roles." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Create New Section">
+          <h3>2. Create New Section</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/sections</p>
+            <p><strong>Description:</strong> Creates a new section in the system.</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{
+  "name": "VAS - Administration & Operation",
+  "division": "IT - CSD"
+}</code></pre>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{ "message": "Section has been added successfully!" }</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 400 Validation Error
+{
+  "message": "The given data was invalid.",
+  "errors": {
+    "name": ["The name field is required."],
+    "division": ["The division field must be a string."]
+  }
+}
+
+// 401 Unauthorized
+{ "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Get Section Details">
+          <h3>3. Get Section Details</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/sections/1</p>
+            <p><strong>Description:</strong> Retrieves details of a specific section.</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{
+  "id": 1,
+  "name": "UAT & Training",
+  "division": "CC - Customer Care Support"
+}</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 404 Not Found
+{ "message": "No query results for model [Section] 999" }
+
+// 401 Unauthorized
+{ "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Update Section">
+          <h3>4. Update Section</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/sections/4</p>
+            <p><strong>Description:</strong> Updates an existing section's information.</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{
+  "name": "VAS - Administration & Operations",
+  "division": "IT - Customer Support Division"
+}</code></pre>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{ "message": "Section has been updated successfully !" }</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 404 Not Found
+{ "message": "No query results for model [Section] 999" }
+
+// 400 Validation Error
+{
+  "message": "The given data was invalid.",
+  "errors": {
+    "division": ["The division field must be a string."]
+  }
+}</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Delete Section">
+          <h3>5. Delete Section</h3>
+          <div class="endpoint-content">
+            <p><span class="method DELETE">DELETE</span> /api/sections/2</p>
+            <p><strong>Description:</strong> Permanently deletes a section from the system.</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{ "message": "Section has been deleted successfully !" }</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 404 Not Found
+{ "message": "No query results for model [Section] 999" }
+
+// 401 Unauthorized
+{ "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- Section 3: Categories -->
+    <div class="section-wrapper">
+      <div class="section-header"
+        onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
+        <h2>Categories</h2>
+      </div>
+      <div class="section-content">
+
+        <!-- 1. List All Categories -->
+        <div class="endpoint" data-title="List All Categories">
+          <h3>1. List All Categories</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/categories</p>
+            <p><strong>Description:</strong> Retrieves all categories in the system. (Should be logged in)</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+  {
+    "id": 3,
+    "name": "call screening",
+    "description": "call screening",
+    "owner_id": null,
+    "weight": 0,
+    "deleted_at": null,
+    "created_at": "2025-08-14T20:15:54.000000Z",
+    "updated_at": "2025-08-14T20:15:54.000000Z"
+  },
+  {
+    "id": 16,
+    "name": "Call me",
+    "description": "Call me",
+    "owner_id": null,
+    "weight": 0,
+    "deleted_at": null,
+    "created_at": "2025-08-14T20:15:54.000000Z",
+    "updated_at": "2025-08-14T20:15:54.000000Z"
+  }
+]</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+{ "message": "Unauthenticated." }
+
+// 403 Forbidden (if not superadmin)
+{ "message": "User does not have the right roles." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <!-- 2. Create New Category -->
+        <div class="endpoint" data-title="Create New Category">
+          <h3>2. Create New Category</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/categories</p>
+            <p><strong>Description:</strong> Creates a new category in the system. (Role: SuperAdmin, Admin)</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{
+  "name": "Annual Validity",
+  "description": "Annual Validity",
+  "weight": 70
+}</code></pre>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{ "message": "Category has been added successfully !" }</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 400 Validation Error
+{
+  "message": "The given data was invalid.",
+  "errors": {
+    "name": ["The name field is required."],
+    "description": ["The description field must be a string."],
+    "weight": ["The weight must be between 0 and 100."]
+  }
+}
+
+// 401 Unauthorized
+{ "message": "Unauthenticated." }
+
+// 403 Forbidden (if not SuperAdmin/Admin)
+{ "message": "User does not have the right roles." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <!-- 3. Update Category -->
+        <div class="endpoint" data-title="Update Category">
+          <h3>3. Update Category</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/categories/{id}</p>
+            <p><strong>Description:</strong> Updates a category’s details. If <code>owner_id</code> is provided, a new
+              Task is created for that category using the latest task’s delegation. (Role: SuperAdmin, Admin)</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{
+  "name": "Updated Category Name",
+  "description": "Updated description",
+  "owner_id": 5,
+  "weight": 80
+}</code></pre>
+            <p><strong>Response Example (with owner_id):</strong></p>
+            <pre><code>{ "message": "Category has been updated successfully ! And new Task has been created successfully !" }</code></pre>
+            <p><strong>Response Example (without owner_id):</strong></p>
+            <pre><code>{ "message": "Category has been updated successfully !" }</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 400 Validation Error
+{
+  "message": "The given data was invalid.",
+  "errors": {
+    "name": ["The name has already been taken."],
+    "owner_id": ["The selected owner id is invalid."],
+    "weight": ["The weight must be between 0 and 100."]
+  }
+}
+
+// 401 Unauthorized
+{ "message": "Unauthenticated." }
+
+// 403 Forbidden (if not SuperAdmin/Admin)
+{ "message": "User does not have the right roles." }
+
+// 404 Not Found
+{ "message": "No query results for model [Category] 123" }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <!-- 4. Delete Category -->
+        <div class="endpoint" data-title="Delete Category">
+          <h3>4. Delete Category</h3>
+          <div class="endpoint-content">
+            <p><span class="method DELETE">DELETE</span> /api/categories/{id}</p>
+            <p><strong>Description:</strong> Soft-deletes a category. (Role: SuperAdmin, Admin)</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{ "message": "Category has been deleted successfully !" }</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+{ "message": "Unauthenticated." }
+
+// 403 Forbidden (if not SuperAdmin/Admin)
+{ "message": "User does not have the right roles." }
+
+// 404 Not Found
+{ "message": "No query results for model [Category] 123" }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <!-- 5. Restore Category -->
+        <div class="endpoint" data-title="Restore Category">
+          <h3>5. Restore Category</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/categories/restore/{id}</p>
+            <p><strong>Description:</strong> Restores a previously soft-deleted category. (Role: SuperAdmin, Admin)</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{ "message": "category has been restored successfully !" }</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 400 Bad Request (category isn't deleted)
+{ "message": "category isn't deleted !" }
+
+// 401 Unauthorized
+{ "message": "Unauthenticated." }
+
+// 403 Forbidden (if not SuperAdmin/Admin)
+{ "message": "User does not have the right roles." }
+
+// 404 Not Found
+{ "message": "No query results for model [Category] 123" }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <!-- 6. Search Categories -->
+        <div class="endpoint" data-title="Search Categories">
+          <h3>6. Search Categories</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/categories/search?query=keyword</p>
+            <p><strong>Description:</strong> Searches categories by name or description. (Should be logged in)</p>
+            <p><strong>Response Example (matches found):</strong></p>
+            <pre><code>[
+  {
+    "id": 7,
+    "name": "Prepaid & Postpaid Subscription ( Stay With us - Pick your number )",
+    "description": "Prepaid & Postpaid Subscription ( Stay With us - Pick your number )",
+    "owner_id": null,
+    "weight": 0,
+    "deleted_at": null,
+    "created_at": "2025-08-14T20:15:53.000000Z",
+    "updated_at": "2025-08-14T20:15:53.000000Z"
+  }
+]</code></pre>
+            <p><strong>Alternate Response Example (no matches):</strong></p>
+            <pre><code>{ "message": "not found !" }</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+{ "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <!-- 7. List All Categories (With Trashed) -->
+        <div class="endpoint" data-title="List With Trashed">
+          <h3>7. List All Categories (With Trashed)</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/categories/withTrashed</p>
+            <p><strong>Description:</strong> Lists all categories including soft-deleted ones. (Role: SuperAdmin, Admin)
+            </p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+  {
+    "id": 10,
+    "name": "RBT",
+    "description": "RBT",
+    "deleted_at": "2025-08-15T08:00:00.000000Z"
+  },
+  {
+    "id": 11,
+    "name": "superclip",
+    "description": "superclip",
+    "deleted_at": null
+  }
+]</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+{ "message": "Unauthenticated." }
+
+// 403 Forbidden (if not SuperAdmin/Admin)
+{ "message": "User does not have the right roles." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <!-- 8. List Only Trashed Categories -->
+        <div class="endpoint" data-title="List Only Trashed">
+          <h3>8. List Only Trashed Categories</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/categories/trashed</p>
+            <p><strong>Description:</strong> Lists only the soft-deleted categories. (Role: SuperAdmin, Admin)</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+  {
+    "id": 10,
+    "name": "RBT",
+    "description": "RBT",
+    "deleted_at": "2025-08-15T08:00:00.000000Z"
+  }
+]</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+{ "message": "Unauthenticated." }
+
+// 403 Forbidden (if not SuperAdmin/Admin)
+{ "message": "User does not have the right roles." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <!-- 9. Show Category -->
+        <div class="endpoint" data-title="Show Category">
+          <h3>9. Show Category</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/categories/{id}</p>
+            <p><strong>Description:</strong> Retrieves a single category by ID. (Should be logged in)</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{
+  "id": 11,
+  "name": "superclip",
+  "description": "superclip",
+  "owner_id": null,
+  "weight": 0,
+  "deleted_at": null,
+  "created_at": "2025-08-14T20:15:53.000000Z",
+  "updated_at": "2025-08-14T20:15:53.000000Z"
+}</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+{ "message": "Unauthenticated." }
+
+// 404 Not Found
+{ "message": "No query results for model [Category] 123" }</code></pre>
+            </details>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- Section 4: Tasks -->
     <div class="section-wrapper">
       <div class="section-header"
         onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
@@ -578,8 +1013,535 @@
       </div>
     </div>
 
+    <!-- Section: Inquiries -->
+    {{-- <div class="section-wrapper">
+      <div class="section-header"
+        onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
+        <h2>Inquiries</h2>
+      </div>
+      <div class="section-content">
 
-    <!-- 📨 Section 3: Inquiries -->
+        <!-- 1. Get All Inquiries -->
+        <div class="endpoint">
+          <h3>1. Get All Inquiries</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/inquiries</p>
+            <p><strong>Description:</strong> Retrieves every inquiry with relations: user, assigneeUser, category,
+              status, followUps, attachments.</p>
+            <p><strong>Sample cURL:</strong></p>
+            <pre><code>curl -X GET https://yourdomain.com/api/inquiries</code></pre>
+            <p><strong>Sample Response:</strong></p>
+            <pre><code>[
+  {
+    "id": 1,
+    "title": "VPN not working",
+    "body": "Please reset credentials",
+    "status": { "id": 1, "name": "opened" }
+  }
+]</code></pre>
+          </div>
+        </div>
+
+        <!-- 2. Get My Inquiries -->
+        <div class="endpoint">
+          <h3>2. Get My Inquiries</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/inquiries/myinquiries</p>
+            <p><strong>Auth:</strong> Bearer token</p>
+            <p><strong>Sample cURL:</strong></p>
+            <pre><code>curl -H "Authorization: Bearer &lt;token&gt;" \
+  https://yourdomain.com/api/inquiries/myinquiries</code></pre>
+          </div>
+        </div>
+
+        <!-- 3. Create Inquiry -->
+        <div class="endpoint">
+          <h3>3. Create Inquiry</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/inquiries</p>
+            <p><strong>Auth:</strong> Bearer token</p>
+            <p><strong>Sample cURL:</strong></p>
+            <pre><code>curl -X POST https://yourdomain.com/api/inquiries \
+ -H "Authorization: Bearer &lt;token&gt;" \
+ -F category_id=1 \
+ -F title="Can't access VPN" \
+ -F body="Please reset my VPN credentials." \
+ -F "attachments[]=@/path/to/file.pdf"</code></pre>
+            <p><strong>Sample Response:</strong></p>
+            <pre><code>{ "message": "the inquiry has been submitted successfully !" }</code></pre>
+          </div>
+        </div>
+
+        <!-- 4. Show Inquiry -->
+        <div class="endpoint">
+          <h3>4. Get Inquiry by ID</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/inquiries/{id}</p>
+            <p><strong>Sample cURL:</strong></p>
+            <pre><code>curl -X GET https://yourdomain.com/api/inquiries/5</code></pre>
+          </div>
+        </div>
+
+        <!-- 5. Delete Inquiry -->
+        <div class="endpoint">
+          <h3>5. Delete Inquiry</h3>
+          <div class="endpoint-content">
+            <p><span class="method DELETE">DELETE</span> /api/inquiries/{id}</p>
+            <p><strong>Auth:</strong> Bearer token (SuperAdmin/Admin)</p>
+            <pre><code>curl -X DELETE https://yourdomain.com/api/inquiries/5 \
+ -H "Authorization: Bearer &lt;token&gt;"</code></pre>
+          </div>
+        </div>
+
+        <!-- 6. Restore Inquiry -->
+        <div class="endpoint">
+          <h3>6. Restore Inquiry</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/inquiries/restore/{id}</p>
+            <pre><code>curl -X GET https://yourdomain.com/api/inquiries/restore/5 \
+ -H "Authorization: Bearer &lt;token&gt;"</code></pre>
+          </div>
+        </div>
+
+        <!-- 7. Search Inquiries -->
+        <div class="endpoint">
+          <h3>7. Search Inquiries</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/inquiries/search?query=keyword</p>
+            <pre><code>curl -G https://yourdomain.com/api/inquiries/search \
+ -d query="VPN reset"</code></pre>
+          </div>
+        </div>
+
+        <!-- 8. Reassign Inquiry -->
+        <div class="endpoint">
+          <h3>8. Reassign Inquiry</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/inquiries/reassign</p>
+            <pre><code>curl -X POST https://yourdomain.com/api/inquiries/reassign \
+ -H "Authorization: Bearer &lt;token&gt;" \
+ -d inquiry_id=5 \
+ -d assignee_id=12</code></pre>
+          </div>
+        </div>
+
+        <!-- 9. Reply to Inquiry -->
+        <div class="endpoint">
+          <h3>9. Reply to Inquiry</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/inquiries/reply</p>
+            <pre><code>curl -X POST https://yourdomain.com/api/inquiries/reply \
+ -H "Authorization: Bearer &lt;token&gt;" \
+ -F inquiry_id=5 \
+ -F response="Your VPN is reset" \
+ -F status_id=3</code></pre>
+          </div>
+        </div>
+
+        <!-- 10. Reopen Inquiry -->
+        <div class="endpoint">
+          <h3>10. Reopen Inquiry</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/inquiries/reopen/{inq_id}</p>
+            <pre><code>curl -X POST https://yourdomain.com/api/inquiries/reopen/5 \
+ -H "Authorization: Bearer &lt;token&gt;"</code></pre>
+          </div>
+        </div>
+
+        <!-- 11. Statistics -->
+        <div class="endpoint">
+          <h3>11. Statistics</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/inquiries/statistics</p>
+            <pre><code>curl -X GET https://yourdomain.com/api/inquiries/statistics \
+ -H "Authorization: Bearer &lt;token&gt;"</code></pre>
+            <p><strong>Sample Response:</strong></p>
+            <pre><code>{
+  "opened_inquiries": 12,
+  "pending_inquiries": 5,
+  "closed_inquiries": 8,
+  "average_handling_time": "4.5 hours",
+  "average_ratings": 4.3
+}</code></pre>
+          </div>
+        </div>
+
+      </div>
+    </div> --}}
+
+    <!-- Section 5: Inquiries -->
+<div class="section-wrapper">
+  <div class="section-header"
+    onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
+    <h2>Inquiries</h2>
+  </div>
+  <div class="section-content">
+
+    <!-- Endpoint 1: Get All Inquiries -->
+    <div class="endpoint" data-title="Get All Inquiries">
+      <h3>1. Get All Inquiries</h3>
+      <div class="endpoint-content">
+        <p><span class="method GET">GET</span> /api/inquiries</p>
+        <p><strong>Description:</strong> Returns all inquiries with linked user, assignee, status, and category.</p>
+        <pre><code>// No body needed</code></pre>
+        <p><strong>Response Example:</strong></p>
+        <pre><code>[{
+  "id": 1,
+  "user_id": 23,
+  "assignee_id": 2,
+  "category_id": 1,
+  "cur_status_id": 1,
+  "title": "استفسار عن خدمة سوبركليب",
+  "body": "كيف يمكن تفعيل السوبر كليب",
+  "response": null,
+  "closed_at": null,
+  "deleted_at": null,
+  "created_at": "2025-07-09T09:10:56.000000Z",
+  "updated_at": "2025-07-09T09:10:56.000000Z",
+  "user": {
+    "id": 23,
+    "name": "new user",
+    "email": "new@mail.com",
+    // ... user fields
+  },
+  "assignee_user": {
+    "id": 2,
+    "name": "Alaa",
+    // ... assignee fields
+  },
+  "category": {
+    "id": 1,
+    "name": "superclip",
+    // ... category fields
+  },
+  "status": {
+    "id": 1,
+    "name": "opened",
+    // ... status fields
+  }
+}]</code></pre>
+        <details>
+          <summary><strong>Possible Error Responses</strong></summary>
+          <pre><code>// 401 Unauthorized
+{ "message": "Unauthenticated." }</code></pre>
+        </details>
+      </div>
+    </div>
+
+    <!-- Endpoint 2: Get Trashed Inquiries -->
+    <div class="endpoint" data-title="Get Trashed Inquiries">
+      <h3>2. Get Inquiries With Trashed</h3>
+      <div class="endpoint-content">
+        <p><span class="method GET">GET</span> /api/inquiriesWithTrashed</p>
+        <p><strong>Middleware:</strong> auth:sanctum, role.superadmin</p>
+        <p><strong>Description:</strong> Returns all inquiries including soft-deleted ones (admin only).</p>
+        <p><strong>Response Example:</strong></p>
+        <pre><code>[{
+  "id": 4,
+  "user_id": 23,
+  "deleted_at": "2025-08-15T10:30:00.000000Z",
+  // ... other fields same as endpoint 1
+}]</code></pre>
+      </div>
+    </div>
+
+    <!-- Endpoint 3: Search Inquiries -->
+    <div class="endpoint" data-title="Search Inquiries">
+      <h3>3. Search Inquiries</h3>
+      <div class="endpoint-content">
+        <p><span class="method GET">GET</span> /api/inquiries/search</p>
+        <p><strong>Description:</strong> Searches inquiries by title, body, or response. Keyword split supported.</p>
+        <p><strong>Query Param:</strong> <code>?query=password reset</code></p>
+        <p><strong>Response Example:</strong></p>
+        <pre><code>[{
+  "id": 5,
+  "title": "Password Reset Request",
+  "body": "I need to reset my password",
+  // ... other fields same as endpoint 1
+}]</code></pre>
+        <details>
+          <summary><strong>Possible Error Responses</strong></summary>
+          <pre><code>// 404 Not Found
+{ "message": "not found !" }</code></pre>
+        </details>
+      </div>
+    </div>
+
+    <!-- Endpoint 4: Create Inquiry -->
+    <div class="endpoint" data-title="Create Inquiry">
+      <h3>4. Create Inquiry</h3>
+      <div class="endpoint-content">
+        <p><span class="method POST">POST</span> /api/inquiries</p>
+        <p><strong>Description:</strong> Submits a new inquiry. Status and user are auto-set by backend.</p>
+        <p><strong>Request Example:</strong></p>
+        <pre><code>{
+  "category_id": 1,
+  "title": "Can't access VPN",
+  "body": "Please reset my VPN credentials."
+}</code></pre>
+        <p><strong>Response Example:</strong></p>
+        <pre><code>{ 
+  "message": "the inquiry has been submitted successfully !",
+  "inquiry": {
+    "id": 25,
+    "title": "Can't access VPN",
+    // ... created inquiry fields
+  }
+}</code></pre>
+        <details>
+          <summary><strong>Possible Error Responses</strong></summary>
+          <pre><code>// 401 Unauthorized
+{ "message": "Unauthenticated." }</code></pre>
+          <pre><code>// 422 Validation Error
+{
+  "message": "The given data was invalid.",
+  "errors": {
+    "title": ["The title field is required."]
+  }
+}</code></pre>
+        </details>
+      </div>
+    </div>
+
+    <!-- Endpoint 5: Get Inquiry by ID -->
+    <div class="endpoint" data-title="Get Inquiry by ID">
+      <h3>5. Get Inquiry by ID</h3>
+      <div class="endpoint-content">
+        <p><span class="method GET">GET</span> /api/inquiries/{id}</p>
+        <p><strong>Description:</strong> Returns one inquiry with related user, category, status, and assignee.</p>
+        <p><strong>Response Example:</strong></p>
+        <pre><code>{
+  "id": 1,
+  "title": "استفسار عن خدمة سوبركليب",
+  // ... all fields same as endpoint 1
+}</code></pre>
+        <details>
+          <summary><strong>Possible Error Responses</strong></summary>
+          <pre><code>// 404 Not Found
+{ "message": "No query results for model [Inquiry] 404." }</code></pre>
+        </details>
+      </div>
+    </div>
+
+    <!-- Endpoint 6: Get Inquiries by Status -->
+    <div class="endpoint" data-title="Get Inquiries by Status">
+      <h3>6. Get Inquiries by Status ID</h3>
+      <div class="endpoint-content">
+        <p><span class="method GET">GET</span> /api/inquiriesStatus/{status_id}</p>
+        <p><strong>Description:</strong> Filters inquiries by current status (e.g. Open, Closed).</p>
+        <p><strong>Response Example:</strong></p>
+        <pre><code>[{
+  "id": 3,
+  "cur_status_id": 3,
+  "title": "Closed Inquiry Example",
+  // ... other fields same as endpoint 1
+}]</code></pre>
+      </div>
+    </div>
+
+    <!-- Endpoint 7: Update Inquiry -->
+    <div class="endpoint" data-title="Update Inquiry">
+      <h3>7. Update Inquiry</h3>
+      <div class="endpoint-content">
+        <p><span class="method POST">POST</span> /api/inquiries/{id}</p>
+        <p><strong>Middleware:</strong> auth:sanctum, role.superadmin</p>
+        <p><strong>Description:</strong> Updates inquiry information or status (admin only).</p>
+        <p><strong>Request Example:</strong></p>
+        <pre><code>{
+  "title": "Updated VPN Issue",
+  "cur_status_id": 2
+}</code></pre>
+        <p><strong>Response Example:</strong></p>
+        <pre><code>{
+  "message": "Inquiry updated successfully!",
+  "inquiry": {
+    "id": 15,
+    "title": "Updated VPN Issue",
+    "cur_status_id": 2,
+    // ... updated fields
+  }
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Endpoint 8: Delete Inquiry -->
+    <div class="endpoint" data-title="Delete Inquiry">
+      <h3>8. Delete Inquiry</h3>
+      <div class="endpoint-content">
+        <p><span class="method DELETE">DELETE</span> /api/inquiries/{id}</p>
+        <p><strong>Description:</strong> Soft-deletes the inquiry.</p>
+        <p><strong>Response Example:</strong></p>
+        <pre><code>{ 
+  "message": "inquiry has been deleted successfully !" 
+}</code></pre>
+        <details>
+          <summary><strong>Possible Error Responses</strong></summary>
+          <pre><code>// 404 Not Found
+{ "message": "No query results for model [Inquiry] 111." }</code></pre>
+        </details>
+      </div>
+    </div>
+
+    <!-- Endpoint 9: Restore Inquiry -->
+    <div class="endpoint" data-title="Restore Inquiry">
+      <h3>9. Restore Inquiry</h3>
+      <div class="endpoint-content">
+        <p><span class="method GET">GET</span> /api/inquiries/restore/{id}</p>
+        <p><strong>Description:</strong> Restores a previously soft-deleted inquiry by ID.</p>
+        <p><strong>Response Example:</strong></p>
+        <pre><code>{ 
+  "message": "inquiry has been restored successfully !" 
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Endpoint 10: Get Only Trashed Inquiries -->
+    <div class="endpoint" data-title="Get Only Trashed Inquiries">
+      <h3>10. Get Only Trashed Inquiries</h3>
+      <div class="endpoint-content">
+        <p><span class="method GET">GET</span> /api/inquiries/indexOnlyTrashed</p>
+        <p><strong>Middleware:</strong> auth:sanctum, role.superadmin</p>
+        <p><strong>Description:</strong> Returns only soft-deleted inquiries (admin only).</p>
+        <p><strong>Response Example:</strong></p>
+        <pre><code>[{
+  "id": 4,
+  "user_id": 23,
+  "deleted_at": "2025-08-15T10:30:00.000000Z",
+  // ... other inquiry fields
+}]</code></pre>
+      </div>
+    </div>
+
+    <!-- Endpoint 11: Get Statistics -->
+    <div class="endpoint" data-title="Get Statistics">
+      <h3>11. Get Statistics</h3>
+      <div class="endpoint-content">
+        <p><span class="method GET">GET</span> /api/inquiries/statistics</p>
+        <p><strong>Middleware:</strong> auth:sanctum, role.superadmin</p>
+        <p><strong>Description:</strong> Returns inquiry statistics including counts and averages.</p>
+        <p><strong>Response Example:</strong></p>
+        <pre><code>{
+  "opened_inquiries": 5,
+  "pending_inquiries": 3,
+  "closed_inquiries": 12,
+  "average_handling_time": "24.5 hours",
+  "average_ratings": 4.2
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Endpoint 12: Reassign Inquiry -->
+    <div class="endpoint" data-title="Reassign Inquiry">
+      <h3>12. Reassign Inquiry</h3>
+      <div class="endpoint-content">
+        <p><span class="method POST">POST</span> /api/inquiries/reassign</p>
+        <p><strong>Middleware:</strong> auth:sanctum, role.superadmin,admin</p>
+        <p><strong>Description:</strong> Reassigns an inquiry to another trainer.</p>
+        <p><strong>Request Example:</strong></p>
+        <pre><code>{
+  "inquiry_id": 15,
+  "assignee_id": 8
+}</code></pre>
+        <p><strong>Response Example:</strong></p>
+        <pre><code>{ 
+  "message": "the inquiry has been reassigned successfully to Trainer Name!" 
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Endpoint 13: Reply to Inquiry -->
+    <div class="endpoint" data-title="Reply to Inquiry">
+      <h3>13. Reply to Inquiry</h3>
+      <div class="endpoint-content">
+        <p><span class="method POST">POST</span> /api/inquiries/reply</p>
+        <p><strong>Middleware:</strong> auth:sanctum, role.superadmin,admin,trainer</p>
+        <p><strong>Description:</strong> Submits a response to an inquiry and updates its status.</p>
+        <p><strong>Request Example:</strong></p>
+        <pre><code>{
+  "inquiry_id": 15,
+  "response": "Please check your VPN settings",
+  "status_id": 3
+}</code></pre>
+        <p><strong>Response Example:</strong></p>
+        <pre><code>{ 
+  "message": "your reply has been submitted successfully !" 
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Endpoint 14: Get My Inquiries -->
+    <div class="endpoint" data-title="Get My Inquiries">
+      <h3>14. Get My Inquiries</h3>
+      <div class="endpoint-content">
+        <p><span class="method GET">GET</span> /api/inquiries/myinquiries</p>
+        <p><strong>Middleware:</strong> auth:sanctum</p>
+        <p><strong>Description:</strong> Returns inquiries related to current user (both sent and assigned).</p>
+        <p><strong>Response Example:</strong></p>
+        <pre><code>[{
+  "id": 15,
+  "user_id": 42,
+  "title": "VPN Access Issue",
+  "body": "Can't connect to VPN",
+  // ... other inquiry fields
+}]</code></pre>
+      </div>
+    </div>
+
+    <!-- Endpoint 15: Get Inquiries by Sender -->
+    <div class="endpoint" data-title="Get Inquiries by Sender">
+      <h3>15. Get Inquiries by Sender</h3>
+      <div class="endpoint-content">
+        <p><span class="method GET">GET</span> /api/inquiries/Sender/{sender_id}</p>
+        <p><strong>Middleware:</strong> auth:sanctum</p>
+        <p><strong>Description:</strong> Returns inquiries sent by a specific user.</p>
+        <p><strong>Example:</strong> <code>/api/inquiries/Sender/42</code></p>
+        <p><strong>Response Example:</strong></p>
+        <pre><code>[{
+  "id": 15,
+  "user_id": 42,
+  "title": "Sender's Inquiry",
+  // ... other inquiry fields
+}]</code></pre>
+      </div>
+    </div>
+
+    <!-- Endpoint 16: Get Inquiries by Trainer -->
+    <div class="endpoint" data-title="Get Inquiries by Trainer">
+      <h3>16. Get Inquiries by Trainer</h3>
+      <div class="endpoint-content">
+        <p><span class="method GET">GET</span> /api/inquiries/Trainer/{assignee_id}</p>
+        <p><strong>Middleware:</strong> auth:sanctum</p>
+        <p><strong>Description:</strong> Returns inquiries assigned to a specific trainer.</p>
+        <p><strong>Example:</strong> <code>/api/inquiries/Trainer/8</code></p>
+        <p><strong>Response Example:</strong></p>
+        <pre><code>[{
+  "id": 15,
+  "assignee_id": 8,
+  "title": "Assigned to Trainer",
+  // ... other inquiry fields
+}]</code></pre>
+      </div>
+    </div>
+
+    <!-- Endpoint 17: Reopen Inquiry -->
+    <div class="endpoint" data-title="Reopen Inquiry">
+      <h3>17. Reopen Inquiry</h3>
+      <div class="endpoint-content">
+        <p><span class="method POST">POST</span> /api/inquiries/repoen/{inq_id}</p>
+        <p><strong>Middleware:</strong> auth:sanctum</p>
+        <p><strong>Description:</strong> Reopens a closed inquiry (only original sender can reopen).</p>
+        <p><strong>Example:</strong> <code>/api/inquiries/repoen/15</code></p>
+        <p><strong>Response Example:</strong></p>
+        <pre><code>{ 
+  "message": "the inquiry has been reopened successfully !" 
+}</code></pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+    <!-- Section 5: Inquiries -->
     <div class="section-wrapper">
       <div class="section-header"
         onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
@@ -595,8 +1557,7 @@
               category.</p>
             <pre><code>// No body needed</code></pre>
             <p><strong>Response Example:</strong></p>
-            <pre><code>[
-  {
+            <pre><code>[{
         "id": 1,
         "user_id": 23,
         "assignee_id": 2,
@@ -654,8 +1615,8 @@
             "created_at": "2025-07-09T08:09:56.000000Z",
             "updated_at": "2025-07-09T08:09:56.000000Z"
         }
-    },
-]</code></pre>
+    },]
+  </code></pre>
             <details>
               <summary><strong>Possible Error Responses</strong></summary>
               <pre><code>// 401 Unauthorized
@@ -778,7 +1739,7 @@
     </div>
 
 
-    <!-- 🔄 Section 4: Follow-ups -->
+    <!-- Section 6: Follow-ups -->
     <div class="section-wrapper">
       <div class="section-header"
         onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
@@ -802,7 +1763,7 @@
         <div class="endpoint" data-title="Get Follow-ups by Inquiry">
           <h3>2. Get Follow-ups by Inquiry ID</h3>
           <div class="endpoint-content">
-            <p><span class="method GET">GET</span> /api/followups/{inquiry_id}</p>
+            <p><span class="method GET">GET</span> /api/followupsrequest/{inquiry_id}</p>
             <p><strong>Description:</strong> Fetches all follow-ups related to a specific inquiry.</p>
             <details>
               <summary><strong>Possible Error Responses</strong></summary>
@@ -881,142 +1842,24 @@
 
       </div>
     </div>
-    
 
-    <!-- 🔄 Section 5: Sections -->
+
+    <!-- Section 7: Favourites -->
     <div class="section-wrapper">
       <div class="section-header"
         onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
-        <h2>Sections</h2>
+        <h2>Favourites</h2>
       </div>
       <div class="section-content">
 
-        <div class="endpoint" data-title="List All Sections">
-          <h3>1. List All Sections</h3>
+        <div class="endpoint" data-title="Get All Follow-ups">
+          <h3>1. Get All Follow-ups</h3>
           <div class="endpoint-content">
-            <p><span class="method GET">GET</span> /api/sections</p>
-            <p><strong>Description:</strong> Retrieves all sections in the system.</p>
-            <p><strong>Response Example:</strong></p>
-            <pre><code>[
-  {
-    "id": 1,
-    "name": "UAT & Training",
-    "division": "CC - Customer Care Support"
-  },
-  {
-    "id": 2,
-    "name": "Segment Consumer",
-    "division": "Marketing - P&S"
-  },
-  {
-    "id": 3,
-    "name": "CVM",
-    "division": "Marketing - P&S"
-  }
-]</code></pre>
+            <p><span class="method GET">GET</span> /api/followups</p>
+            <p><strong>Description:</strong> Returns a list of all follow-up records.</p>
             <details>
               <summary><strong>Possible Error Responses</strong></summary>
               <pre><code>// 401 Unauthorized
-{ "message": "Unauthenticated." }
-
-// 403 Forbidden (if not superadmin)
-{ "message": "User does not have the right roles." }</code></pre>
-            </details>
-          </div>
-        </div>
-
-        <div class="endpoint" data-title="Create New Section">
-          <h3>2. Create New Section</h3>
-          <div class="endpoint-content">
-            <p><span class="method POST">POST</span> /api/sections</p>
-            <p><strong>Description:</strong> Creates a new section in the system.</p>
-            <p><strong>Request Example:</strong></p>
-            <pre><code>{
-  "name": "VAS - Administration & Operation",
-  "division": "IT - CSD"
-}</code></pre>
-            <p><strong>Response Example:</strong></p>
-            <pre><code>{ "message": "Section has been added successfully!" }</code></pre>
-            <details>
-              <summary><strong>Possible Error Responses</strong></summary>
-              <pre><code>// 400 Validation Error
-{
-  "message": "The given data was invalid.",
-  "errors": {
-    "name": ["The name field is required."],
-    "division": ["The division field must be a string."]
-  }
-}
-
-// 401 Unauthorized
-{ "message": "Unauthenticated." }</code></pre>
-            </details>
-          </div>
-        </div>
-
-        <div class="endpoint" data-title="Get Section Details">
-          <h3>3. Get Section Details</h3>
-          <div class="endpoint-content">
-            <p><span class="method GET">GET</span> /api/sections/1</p>
-            <p><strong>Description:</strong> Retrieves details of a specific section.</p>
-            <p><strong>Response Example:</strong></p>
-            <pre><code>{
-  "id": 1,
-  "name": "UAT & Training",
-  "division": "CC - Customer Care Support"
-}</code></pre>
-            <details>
-              <summary><strong>Possible Error Responses</strong></summary>
-              <pre><code>// 404 Not Found
-{ "message": "No query results for model [Section] 999" }
-
-// 401 Unauthorized
-{ "message": "Unauthenticated." }</code></pre>
-            </details>
-          </div>
-        </div>
-
-        <div class="endpoint" data-title="Update Section">
-          <h3>4. Update Section</h3>
-          <div class="endpoint-content">
-            <p><span class="method POST">POST</span> /api/sections/4</p>
-            <p><strong>Description:</strong> Updates an existing section's information.</p>
-            <p><strong>Request Example:</strong></p>
-            <pre><code>{
-  "name": "VAS - Administration & Operations",
-  "division": "IT - Customer Support Division"
-}</code></pre>
-            <p><strong>Response Example:</strong></p>
-            <pre><code>{ "message": "Section has been updated successfully !" }</code></pre>
-            <details>
-              <summary><strong>Possible Error Responses</strong></summary>
-              <pre><code>// 404 Not Found
-{ "message": "No query results for model [Section] 999" }
-
-// 400 Validation Error
-{
-  "message": "The given data was invalid.",
-  "errors": {
-    "division": ["The division field must be a string."]
-  }
-}</code></pre>
-            </details>
-          </div>
-        </div>
-
-        <div class="endpoint" data-title="Delete Section">
-          <h3>5. Delete Section</h3>
-          <div class="endpoint-content">
-            <p><span class="method DELETE">DELETE</span> /api/sections/2</p>
-            <p><strong>Description:</strong> Permanently deletes a section from the system.</p>
-            <p><strong>Response Example:</strong></p>
-            <pre><code>{ "message": "Section has been deleted successfully !" }</code></pre>
-            <details>
-              <summary><strong>Possible Error Responses</strong></summary>
-              <pre><code>// 404 Not Found
-{ "message": "No query results for model [Section] 999" }
-
-// 401 Unauthorized
 { "message": "Unauthenticated." }</code></pre>
             </details>
           </div>
@@ -1024,6 +1867,32 @@
 
       </div>
     </div>
+
+    <!-- Section 8: Roles -->
+    <div class="section-wrapper">
+      <div class="section-header"
+        onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
+        <h2>Roles</h2>
+      </div>
+      <div class="section-content">
+
+        <div class="endpoint" data-title="Get All Follow-ups">
+          <h3>1. Get All Follow-ups</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/followups</p>
+            <p><strong>Description:</strong> Returns a list of all follow-up records.</p>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+{ "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
   </main>
 
   <script>

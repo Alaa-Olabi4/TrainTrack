@@ -9,7 +9,10 @@ use App\Models\Task;
 use App\Models\User;
 use App\Models\Rating;
 use App\Models\Category;
+use App\Models\Favourite;
 use DateTime;
+
+use function PHPUnit\Framework\isEmpty;
 
 class InquiryController extends Controller
 {
@@ -18,16 +21,25 @@ class InquiryController extends Controller
      */
     public function index()
     {
-        $inqs = Inquiry::all();
-        foreach ($inqs as $inq) {
-            $inq->user;
-            $inq->assigneeUser;
-            $inq->category;
-            $inq->status;
-            $inq->attachments;
+        $userId = auth()->id();
+        $res = [];
+        foreach (Inquiry::all() as $inq) {
+            $res[] = [
+                'inquiry'       => $inq,
+                'user'          => $inq->user,
+                'assigneeUser'  => $inq->assigneeUser,
+                'category'      => $inq->category,
+                'status'        => $inq->status,
+                'followUps'     => $inq->followUps,
+                'attachments'   => $inq->attachments,
+                'favourited'    => Favourite::where('inquiry_id', $inq->id)
+                    ->where('user_id', $userId)
+                    ->exists() ? 1 : 0,
+            ];
         }
-        return $inqs;
+        return $res;
     }
+
     /**
      * Display a listing of the Inquiries.
      */
@@ -39,6 +51,7 @@ class InquiryController extends Controller
             $inq->assigneeUser;
             $inq->category;
             $inq->status;
+            $inq->followUps;
             $inq->attachments;
         }
         return $inqs;
@@ -51,6 +64,7 @@ class InquiryController extends Controller
             $inq->assigneeUser;
             $inq->category;
             $inq->status;
+            $inq->followUps;
             $inq->attachments;
         }
         return $inqs;
@@ -66,6 +80,7 @@ class InquiryController extends Controller
             $inq->assigneeUser;
             $inq->category;
             $inq->status;
+            $inq->followUps;
             $inq->attachments;
         }
         return $inqs;
@@ -78,6 +93,7 @@ class InquiryController extends Controller
             $inq->assigneeUser;
             $inq->category;
             $inq->status;
+            $inq->followUps;
             $inq->attachments;
         }
         return $inqs;
@@ -90,6 +106,7 @@ class InquiryController extends Controller
             $inq->assigneeUser;
             $inq->category;
             $inq->status;
+            $inq->followUps;
             $inq->attachments;
         }
         return $inqs;
@@ -106,6 +123,7 @@ class InquiryController extends Controller
             $inq->assigneeUser;
             $inq->category;
             $inq->status;
+            $inq->followUps;
             $inq->attachments;
         }
         return $inqs;
@@ -146,7 +164,7 @@ class InquiryController extends Controller
                 $file->move('uploads/attachments', $fileName);
                 attachment::create([
                     'inquiry_id' => $inquiry->id,
-                    'url' => 'uploads/attachments/' . $fileName
+                    'url' => 'uploads/attachments/' . $fileName,
                 ]);
             }
         }
@@ -195,6 +213,7 @@ class InquiryController extends Controller
         Inquiry::withTrashed()->findOrFail($id)->restore();
         return response()->json(['message' => 'inquiry has been restored successfully !']);
     }
+
     public function search(Request $request)
     {
         $data = $request->validate([
@@ -319,7 +338,6 @@ class InquiryController extends Controller
         } else {
             $average_handling_time = "No closed inquireis !";
         }
-
 
         //Avearge rating
         $ratings = Rating::all();

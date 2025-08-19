@@ -57,5 +57,9 @@ class Inquiry extends Model
         return $this->hasMany(Notification::class);
     }
 
+    public function favourites(){
+        return $this->hasMany(Favourite::class);
+    }
+
 }
 

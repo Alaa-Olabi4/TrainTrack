@@ -55,7 +55,10 @@ class FollowupController extends Controller
             }
         }
 
-        return response()->json(['message' => 'the inquiry is following up successfully !']);
+        return response()->json([
+            'message' => 'the inquiry is following up successfully !',
+            // 'followup' => $followup
+        ]);
     }
 
     public function followupsrequest($inquiry_id)
@@ -83,19 +86,27 @@ class FollowupController extends Controller
         $followup = FollowUp::findOrFail($id);
         $request->validate([
             'status' => ['required'],
-            'reply' => ['string']
+            'response' => ['string']
         ]);
 
-        $followup->update($request->all());
+        if ($followup->follower_id == auth()->user()->id) {
+            $followup->update($request->all());
+            return response()->json(['message' => 'followup updated successfully !']);
+        }
 
-        return response()->json(['message' => 'followup updated successfully !']);
+        return response()->json(['message' => 'Unauthorized! '], 403);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $followup = FollowUp::findOrFail($id);
+        if ($followup->follower_id == auth()->user()->id) {
+            $followup->delete();
+            return response()->json(['message' => 'followup has been deleted successfully !']);
+        }
+        return response()->json(['message' => 'Unauthorized! '], 403);
     }
 }

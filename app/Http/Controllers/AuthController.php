@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ForgetMail;
 use App\Models\Category;
+use App\Models\Task;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
@@ -237,7 +238,7 @@ class AuthController extends Controller
             'section_id' => ['numeric', 'exists:sections,id'],
             'password' => ['string', 'confirmed', 'min:8'],
             'image' => ['image'],
-            'role_id' => ['integer','exists:roles,id'],
+            'role_id' => ['integer', 'exists:roles,id'],
             'delegation_id' => ['integer', 'exists:users,id'],
         ]);
 
@@ -247,14 +248,19 @@ class AuthController extends Controller
             if ($user->role_id != 3) {
                 return response()->json(['message' => 'Sorry ! the trainer only who can has a delegation , Thank you for your understanding !'], 400);
             }
-            if(User::findOrFail($request['delegation_id'])->role_id != 3){
-                return response()->json(['message' => 'Sorry! the delegation should onlu be a trainer !'],400);
+            if (User::findOrFail($request['delegation_id'])->role_id != 3) {
+                return response()->json(['message' => 'Sorry! the delegation should only be a trainer !'], 400);
             }
 
-            $user->update(['delegation_id'=>$request['delegation_id']]);
-            $categories = Category::where('owner_id', $user->id)->get();
-            foreach ($categories as $cat) {
-                $cat->update(['delegation_id' => $request['delegation_id']]);
+            $user->update(['delegation_id' => $request['delegation_id']]);
+
+            $tasks = Task::where('owner_id', $id)->get();
+            foreach ($tasks as $task) {
+                Task::create([
+                    'category_id' => $task->category_id,
+                    'owner_id' => $id,
+                    'delegation_id' => $request['delegation_id']
+                ]);
             }
         }
 

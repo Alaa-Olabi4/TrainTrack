@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('attachments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('inquiry_id')->nullable()->constrained('inquiries')->cascadeOnDelete();
-            $table->foreignId('followup_id')->nullable()->constrained('followups')->cascadeOnDelete();
+            $table->foreignId('followup_id')->nullable()->constrained('follow_ups')->cascadeOnDelete();
             $table->string('url')->nullable();            
             $table->timestamps();
         });

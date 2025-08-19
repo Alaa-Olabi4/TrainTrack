@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TaskSeeder::class);
         $this->call(InquireisSeeder::class);
         $this->call(FollowUpSeeder::class);
+        $this->call(FavouriteSeeder::class);
 
         // \App\Models\User::factory(10)->create();
 
