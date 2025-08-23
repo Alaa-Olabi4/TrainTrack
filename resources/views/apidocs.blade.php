@@ -1170,22 +1170,22 @@
     </div> --}}
 
     <!-- Section 5: Inquiries -->
-<div class="section-wrapper">
-  <div class="section-header"
-    onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
-    <h2>Inquiries</h2>
-  </div>
-  <div class="section-content">
+    <div class="section-wrapper">
+      <div class="section-header"
+        onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
+        <h2>Inquiries</h2>
+      </div>
+      <div class="section-content">
 
-    <!-- Endpoint 1: Get All Inquiries -->
-    <div class="endpoint" data-title="Get All Inquiries">
-      <h3>1. Get All Inquiries</h3>
-      <div class="endpoint-content">
-        <p><span class="method GET">GET</span> /api/inquiries</p>
-        <p><strong>Description:</strong> Returns all inquiries with linked user, assignee, status, and category.</p>
-        <pre><code>// No body needed</code></pre>
-        <p><strong>Response Example:</strong></p>
-        <pre><code>[{
+        <!-- Endpoint 1: Get All Inquiries -->
+        <div class="endpoint" data-title="Get All Inquiries">
+          <h3>1. Get All Inquiries</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/inquiries</p>
+            <p><strong>Description:</strong> Returns all inquiries with linked user, assignee, status, and category.</p>
+            <pre><code>// No body needed</code></pre>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[{
   "id": 1,
   "user_id": 23,
   "assignee_id": 2,
@@ -1220,67 +1220,68 @@
     // ... status fields
   }
 }]</code></pre>
-        <details>
-          <summary><strong>Possible Error Responses</strong></summary>
-          <pre><code>// 401 Unauthorized
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
 { "message": "Unauthenticated." }</code></pre>
-        </details>
-      </div>
-    </div>
+            </details>
+          </div>
+        </div>
 
-    <!-- Endpoint 2: Get Trashed Inquiries -->
-    <div class="endpoint" data-title="Get Trashed Inquiries">
-      <h3>2. Get Inquiries With Trashed</h3>
-      <div class="endpoint-content">
-        <p><span class="method GET">GET</span> /api/inquiriesWithTrashed</p>
-        <p><strong>Middleware:</strong> auth:sanctum, role.superadmin</p>
-        <p><strong>Description:</strong> Returns all inquiries including soft-deleted ones (admin only).</p>
-        <p><strong>Response Example:</strong></p>
-        <pre><code>[{
+        <!-- Endpoint 2: Get Trashed Inquiries -->
+        <div class="endpoint" data-title="Get Trashed Inquiries">
+          <h3>2. Get Inquiries With Trashed</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/inquiriesWithTrashed</p>
+            <p><strong>Middleware:</strong> auth:sanctum, role.superadmin</p>
+            <p><strong>Description:</strong> Returns all inquiries including soft-deleted ones (admin only).</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[{
   "id": 4,
   "user_id": 23,
   "deleted_at": "2025-08-15T10:30:00.000000Z",
   // ... other fields same as endpoint 1
 }]</code></pre>
-      </div>
-    </div>
+          </div>
+        </div>
 
-    <!-- Endpoint 3: Search Inquiries -->
-    <div class="endpoint" data-title="Search Inquiries">
-      <h3>3. Search Inquiries</h3>
-      <div class="endpoint-content">
-        <p><span class="method GET">GET</span> /api/inquiries/search</p>
-        <p><strong>Description:</strong> Searches inquiries by title, body, or response. Keyword split supported.</p>
-        <p><strong>Query Param:</strong> <code>?query=password reset</code></p>
-        <p><strong>Response Example:</strong></p>
-        <pre><code>[{
+        <!-- Endpoint 3: Search Inquiries -->
+        <div class="endpoint" data-title="Search Inquiries">
+          <h3>3. Search Inquiries</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/inquiries/search</p>
+            <p><strong>Description:</strong> Searches inquiries by title, body, or response. Keyword split supported.
+            </p>
+            <p><strong>Query Param:</strong> <code>?query=password reset</code></p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[{
   "id": 5,
   "title": "Password Reset Request",
   "body": "I need to reset my password",
   // ... other fields same as endpoint 1
 }]</code></pre>
-        <details>
-          <summary><strong>Possible Error Responses</strong></summary>
-          <pre><code>// 404 Not Found
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 404 Not Found
 { "message": "not found !" }</code></pre>
-        </details>
-      </div>
-    </div>
+            </details>
+          </div>
+        </div>
 
-    <!-- Endpoint 4: Create Inquiry -->
-    <div class="endpoint" data-title="Create Inquiry">
-      <h3>4. Create Inquiry</h3>
-      <div class="endpoint-content">
-        <p><span class="method POST">POST</span> /api/inquiries</p>
-        <p><strong>Description:</strong> Submits a new inquiry. Status and user are auto-set by backend.</p>
-        <p><strong>Request Example:</strong></p>
-        <pre><code>{
+        <!-- Endpoint 4: Create Inquiry -->
+        <div class="endpoint" data-title="Create Inquiry">
+          <h3>4. Create Inquiry</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/inquiries</p>
+            <p><strong>Description:</strong> Submits a new inquiry. Status and user are auto-set by backend.</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{
   "category_id": 1,
   "title": "Can't access VPN",
   "body": "Please reset my VPN credentials."
 }</code></pre>
-        <p><strong>Response Example:</strong></p>
-        <pre><code>{ 
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{ 
   "message": "the inquiry has been submitted successfully !",
   "inquiry": {
     "id": 25,
@@ -1288,71 +1289,71 @@
     // ... created inquiry fields
   }
 }</code></pre>
-        <details>
-          <summary><strong>Possible Error Responses</strong></summary>
-          <pre><code>// 401 Unauthorized
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
 { "message": "Unauthenticated." }</code></pre>
-          <pre><code>// 422 Validation Error
+              <pre><code>// 422 Validation Error
 {
   "message": "The given data was invalid.",
   "errors": {
     "title": ["The title field is required."]
   }
 }</code></pre>
-        </details>
-      </div>
-    </div>
+            </details>
+          </div>
+        </div>
 
-    <!-- Endpoint 5: Get Inquiry by ID -->
-    <div class="endpoint" data-title="Get Inquiry by ID">
-      <h3>5. Get Inquiry by ID</h3>
-      <div class="endpoint-content">
-        <p><span class="method GET">GET</span> /api/inquiries/{id}</p>
-        <p><strong>Description:</strong> Returns one inquiry with related user, category, status, and assignee.</p>
-        <p><strong>Response Example:</strong></p>
-        <pre><code>{
+        <!-- Endpoint 5: Get Inquiry by ID -->
+        <div class="endpoint" data-title="Get Inquiry by ID">
+          <h3>5. Get Inquiry by ID</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/inquiries/{id}</p>
+            <p><strong>Description:</strong> Returns one inquiry with related user, category, status, and assignee.</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{
   "id": 1,
   "title": "استفسار عن خدمة سوبركليب",
   // ... all fields same as endpoint 1
 }</code></pre>
-        <details>
-          <summary><strong>Possible Error Responses</strong></summary>
-          <pre><code>// 404 Not Found
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 404 Not Found
 { "message": "No query results for model [Inquiry] 404." }</code></pre>
-        </details>
-      </div>
-    </div>
+            </details>
+          </div>
+        </div>
 
-    <!-- Endpoint 6: Get Inquiries by Status -->
-    <div class="endpoint" data-title="Get Inquiries by Status">
-      <h3>6. Get Inquiries by Status ID</h3>
-      <div class="endpoint-content">
-        <p><span class="method GET">GET</span> /api/inquiriesStatus/{status_id}</p>
-        <p><strong>Description:</strong> Filters inquiries by current status (e.g. Open, Closed).</p>
-        <p><strong>Response Example:</strong></p>
-        <pre><code>[{
+        <!-- Endpoint 6: Get Inquiries by Status -->
+        <div class="endpoint" data-title="Get Inquiries by Status">
+          <h3>6. Get Inquiries by Status ID</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/inquiriesStatus/{status_id}</p>
+            <p><strong>Description:</strong> Filters inquiries by current status (e.g. Open, Closed).</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[{
   "id": 3,
   "cur_status_id": 3,
   "title": "Closed Inquiry Example",
   // ... other fields same as endpoint 1
 }]</code></pre>
-      </div>
-    </div>
+          </div>
+        </div>
 
-    <!-- Endpoint 7: Update Inquiry -->
-    <div class="endpoint" data-title="Update Inquiry">
-      <h3>7. Update Inquiry</h3>
-      <div class="endpoint-content">
-        <p><span class="method POST">POST</span> /api/inquiries/{id}</p>
-        <p><strong>Middleware:</strong> auth:sanctum, role.superadmin</p>
-        <p><strong>Description:</strong> Updates inquiry information or status (admin only).</p>
-        <p><strong>Request Example:</strong></p>
-        <pre><code>{
+        <!-- Endpoint 7: Update Inquiry -->
+        <div class="endpoint" data-title="Update Inquiry">
+          <h3>7. Update Inquiry</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/inquiries/{id}</p>
+            <p><strong>Middleware:</strong> auth:sanctum, role.superadmin</p>
+            <p><strong>Description:</strong> Updates inquiry information or status (admin only).</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{
   "title": "Updated VPN Issue",
   "cur_status_id": 2
 }</code></pre>
-        <p><strong>Response Example:</strong></p>
-        <pre><code>{
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{
   "message": "Inquiry updated successfully!",
   "inquiry": {
     "id": 15,
@@ -1361,185 +1362,185 @@
     // ... updated fields
   }
 }</code></pre>
-      </div>
-    </div>
+          </div>
+        </div>
 
-    <!-- Endpoint 8: Delete Inquiry -->
-    <div class="endpoint" data-title="Delete Inquiry">
-      <h3>8. Delete Inquiry</h3>
-      <div class="endpoint-content">
-        <p><span class="method DELETE">DELETE</span> /api/inquiries/{id}</p>
-        <p><strong>Description:</strong> Soft-deletes the inquiry.</p>
-        <p><strong>Response Example:</strong></p>
-        <pre><code>{ 
+        <!-- Endpoint 8: Delete Inquiry -->
+        <div class="endpoint" data-title="Delete Inquiry">
+          <h3>8. Delete Inquiry</h3>
+          <div class="endpoint-content">
+            <p><span class="method DELETE">DELETE</span> /api/inquiries/{id}</p>
+            <p><strong>Description:</strong> Soft-deletes the inquiry.</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{ 
   "message": "inquiry has been deleted successfully !" 
 }</code></pre>
-        <details>
-          <summary><strong>Possible Error Responses</strong></summary>
-          <pre><code>// 404 Not Found
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 404 Not Found
 { "message": "No query results for model [Inquiry] 111." }</code></pre>
-        </details>
-      </div>
-    </div>
+            </details>
+          </div>
+        </div>
 
-    <!-- Endpoint 9: Restore Inquiry -->
-    <div class="endpoint" data-title="Restore Inquiry">
-      <h3>9. Restore Inquiry</h3>
-      <div class="endpoint-content">
-        <p><span class="method GET">GET</span> /api/inquiries/restore/{id}</p>
-        <p><strong>Description:</strong> Restores a previously soft-deleted inquiry by ID.</p>
-        <p><strong>Response Example:</strong></p>
-        <pre><code>{ 
+        <!-- Endpoint 9: Restore Inquiry -->
+        <div class="endpoint" data-title="Restore Inquiry">
+          <h3>9. Restore Inquiry</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/inquiries/restore/{id}</p>
+            <p><strong>Description:</strong> Restores a previously soft-deleted inquiry by ID.</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{ 
   "message": "inquiry has been restored successfully !" 
 }</code></pre>
-      </div>
-    </div>
+          </div>
+        </div>
 
-    <!-- Endpoint 10: Get Only Trashed Inquiries -->
-    <div class="endpoint" data-title="Get Only Trashed Inquiries">
-      <h3>10. Get Only Trashed Inquiries</h3>
-      <div class="endpoint-content">
-        <p><span class="method GET">GET</span> /api/inquiries/indexOnlyTrashed</p>
-        <p><strong>Middleware:</strong> auth:sanctum, role.superadmin</p>
-        <p><strong>Description:</strong> Returns only soft-deleted inquiries (admin only).</p>
-        <p><strong>Response Example:</strong></p>
-        <pre><code>[{
+        <!-- Endpoint 10: Get Only Trashed Inquiries -->
+        <div class="endpoint" data-title="Get Only Trashed Inquiries">
+          <h3>10. Get Only Trashed Inquiries</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/inquiries/indexOnlyTrashed</p>
+            <p><strong>Middleware:</strong> auth:sanctum, role.superadmin</p>
+            <p><strong>Description:</strong> Returns only soft-deleted inquiries (admin only).</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[{
   "id": 4,
   "user_id": 23,
   "deleted_at": "2025-08-15T10:30:00.000000Z",
   // ... other inquiry fields
 }]</code></pre>
-      </div>
-    </div>
+          </div>
+        </div>
 
-    <!-- Endpoint 11: Get Statistics -->
-    <div class="endpoint" data-title="Get Statistics">
-      <h3>11. Get Statistics</h3>
-      <div class="endpoint-content">
-        <p><span class="method GET">GET</span> /api/inquiries/statistics</p>
-        <p><strong>Middleware:</strong> auth:sanctum, role.superadmin</p>
-        <p><strong>Description:</strong> Returns inquiry statistics including counts and averages.</p>
-        <p><strong>Response Example:</strong></p>
-        <pre><code>{
+        <!-- Endpoint 11: Get Statistics -->
+        <div class="endpoint" data-title="Get Statistics">
+          <h3>11. Get Statistics</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/inquiries/statistics</p>
+            <p><strong>Middleware:</strong> auth:sanctum, role.superadmin</p>
+            <p><strong>Description:</strong> Returns inquiry statistics including counts and averages.</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{
   "opened_inquiries": 5,
   "pending_inquiries": 3,
   "closed_inquiries": 12,
   "average_handling_time": "24.5 hours",
   "average_ratings": 4.2
 }</code></pre>
-      </div>
-    </div>
+          </div>
+        </div>
 
-    <!-- Endpoint 12: Reassign Inquiry -->
-    <div class="endpoint" data-title="Reassign Inquiry">
-      <h3>12. Reassign Inquiry</h3>
-      <div class="endpoint-content">
-        <p><span class="method POST">POST</span> /api/inquiries/reassign</p>
-        <p><strong>Middleware:</strong> auth:sanctum, role.superadmin,admin</p>
-        <p><strong>Description:</strong> Reassigns an inquiry to another trainer.</p>
-        <p><strong>Request Example:</strong></p>
-        <pre><code>{
+        <!-- Endpoint 12: Reassign Inquiry -->
+        <div class="endpoint" data-title="Reassign Inquiry">
+          <h3>12. Reassign Inquiry</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/inquiries/reassign</p>
+            <p><strong>Middleware:</strong> auth:sanctum, role.superadmin,admin</p>
+            <p><strong>Description:</strong> Reassigns an inquiry to another trainer.</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{
   "inquiry_id": 15,
   "assignee_id": 8
 }</code></pre>
-        <p><strong>Response Example:</strong></p>
-        <pre><code>{ 
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{ 
   "message": "the inquiry has been reassigned successfully to Trainer Name!" 
 }</code></pre>
-      </div>
-    </div>
+          </div>
+        </div>
 
-    <!-- Endpoint 13: Reply to Inquiry -->
-    <div class="endpoint" data-title="Reply to Inquiry">
-      <h3>13. Reply to Inquiry</h3>
-      <div class="endpoint-content">
-        <p><span class="method POST">POST</span> /api/inquiries/reply</p>
-        <p><strong>Middleware:</strong> auth:sanctum, role.superadmin,admin,trainer</p>
-        <p><strong>Description:</strong> Submits a response to an inquiry and updates its status.</p>
-        <p><strong>Request Example:</strong></p>
-        <pre><code>{
+        <!-- Endpoint 13: Reply to Inquiry -->
+        <div class="endpoint" data-title="Reply to Inquiry">
+          <h3>13. Reply to Inquiry</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/inquiries/reply</p>
+            <p><strong>Middleware:</strong> auth:sanctum, role.superadmin,admin,trainer</p>
+            <p><strong>Description:</strong> Submits a response to an inquiry and updates its status.</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{
   "inquiry_id": 15,
   "response": "Please check your VPN settings",
   "status_id": 3
 }</code></pre>
-        <p><strong>Response Example:</strong></p>
-        <pre><code>{ 
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{ 
   "message": "your reply has been submitted successfully !" 
 }</code></pre>
-      </div>
-    </div>
+          </div>
+        </div>
 
-    <!-- Endpoint 14: Get My Inquiries -->
-    <div class="endpoint" data-title="Get My Inquiries">
-      <h3>14. Get My Inquiries</h3>
-      <div class="endpoint-content">
-        <p><span class="method GET">GET</span> /api/inquiries/myinquiries</p>
-        <p><strong>Middleware:</strong> auth:sanctum</p>
-        <p><strong>Description:</strong> Returns inquiries related to current user (both sent and assigned).</p>
-        <p><strong>Response Example:</strong></p>
-        <pre><code>[{
+        <!-- Endpoint 14: Get My Inquiries -->
+        <div class="endpoint" data-title="Get My Inquiries">
+          <h3>14. Get My Inquiries</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/inquiries/myinquiries</p>
+            <p><strong>Middleware:</strong> auth:sanctum</p>
+            <p><strong>Description:</strong> Returns inquiries related to current user (both sent and assigned).</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[{
   "id": 15,
   "user_id": 42,
   "title": "VPN Access Issue",
   "body": "Can't connect to VPN",
   // ... other inquiry fields
 }]</code></pre>
-      </div>
-    </div>
+          </div>
+        </div>
 
-    <!-- Endpoint 15: Get Inquiries by Sender -->
-    <div class="endpoint" data-title="Get Inquiries by Sender">
-      <h3>15. Get Inquiries by Sender</h3>
-      <div class="endpoint-content">
-        <p><span class="method GET">GET</span> /api/inquiries/Sender/{sender_id}</p>
-        <p><strong>Middleware:</strong> auth:sanctum</p>
-        <p><strong>Description:</strong> Returns inquiries sent by a specific user.</p>
-        <p><strong>Example:</strong> <code>/api/inquiries/Sender/42</code></p>
-        <p><strong>Response Example:</strong></p>
-        <pre><code>[{
+        <!-- Endpoint 15: Get Inquiries by Sender -->
+        <div class="endpoint" data-title="Get Inquiries by Sender">
+          <h3>15. Get Inquiries by Sender</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/inquiries/Sender/{sender_id}</p>
+            <p><strong>Middleware:</strong> auth:sanctum</p>
+            <p><strong>Description:</strong> Returns inquiries sent by a specific user.</p>
+            <p><strong>Example:</strong> <code>/api/inquiries/Sender/42</code></p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[{
   "id": 15,
   "user_id": 42,
   "title": "Sender's Inquiry",
   // ... other inquiry fields
 }]</code></pre>
-      </div>
-    </div>
+          </div>
+        </div>
 
-    <!-- Endpoint 16: Get Inquiries by Trainer -->
-    <div class="endpoint" data-title="Get Inquiries by Trainer">
-      <h3>16. Get Inquiries by Trainer</h3>
-      <div class="endpoint-content">
-        <p><span class="method GET">GET</span> /api/inquiries/Trainer/{assignee_id}</p>
-        <p><strong>Middleware:</strong> auth:sanctum</p>
-        <p><strong>Description:</strong> Returns inquiries assigned to a specific trainer.</p>
-        <p><strong>Example:</strong> <code>/api/inquiries/Trainer/8</code></p>
-        <p><strong>Response Example:</strong></p>
-        <pre><code>[{
+        <!-- Endpoint 16: Get Inquiries by Trainer -->
+        <div class="endpoint" data-title="Get Inquiries by Trainer">
+          <h3>16. Get Inquiries by Trainer</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/inquiries/Trainer/{assignee_id}</p>
+            <p><strong>Middleware:</strong> auth:sanctum</p>
+            <p><strong>Description:</strong> Returns inquiries assigned to a specific trainer.</p>
+            <p><strong>Example:</strong> <code>/api/inquiries/Trainer/8</code></p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[{
   "id": 15,
   "assignee_id": 8,
   "title": "Assigned to Trainer",
   // ... other inquiry fields
 }]</code></pre>
-      </div>
-    </div>
+          </div>
+        </div>
 
-    <!-- Endpoint 17: Reopen Inquiry -->
-    <div class="endpoint" data-title="Reopen Inquiry">
-      <h3>17. Reopen Inquiry</h3>
-      <div class="endpoint-content">
-        <p><span class="method POST">POST</span> /api/inquiries/repoen/{inq_id}</p>
-        <p><strong>Middleware:</strong> auth:sanctum</p>
-        <p><strong>Description:</strong> Reopens a closed inquiry (only original sender can reopen).</p>
-        <p><strong>Example:</strong> <code>/api/inquiries/repoen/15</code></p>
-        <p><strong>Response Example:</strong></p>
-        <pre><code>{ 
+        <!-- Endpoint 17: Reopen Inquiry -->
+        <div class="endpoint" data-title="Reopen Inquiry">
+          <h3>17. Reopen Inquiry</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/inquiries/repoen/{inq_id}</p>
+            <p><strong>Middleware:</strong> auth:sanctum</p>
+            <p><strong>Description:</strong> Reopens a closed inquiry (only original sender can reopen).</p>
+            <p><strong>Example:</strong> <code>/api/inquiries/repoen/15</code></p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{ 
   "message": "the inquiry has been reopened successfully !" 
 }</code></pre>
+          </div>
+        </div>
+
       </div>
     </div>
-
-  </div>
-</div>
 
     <!-- Section 5: Inquiries -->
     <div class="section-wrapper">
@@ -1868,7 +1869,268 @@
       </div>
     </div>
 
-    <!-- Section 8: Roles -->
+    <!-- Section 8: Reports -->
+    <div class="section-wrapper">
+      <div class="section-header"
+        onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
+        <h2>Reports</h2>
+      </div>
+      <div class="section-content">
+
+        <div class="endpoint" data-title="System Report">
+          <h3>1. System Reports</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/reports/system/</p>
+            <p><strong>Description:</strong> Returns a System Report.</p>
+
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{ "start_date": "​2025-08-01", "end_date": "2025-08-31​" }</code></pre>
+
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{
+                "users_count": 23,
+                "active_users_count": 23,
+                "trainers_count": 12,
+                "active_trainers_count": 12,
+                "sections_count": 8,
+                "categories_count": 17,
+                "inquiries_count": 4,
+                "closed_inquiries_count": 1,
+                "opened_inquiries_count": 1,
+                "pending_inquiries_count": 1,
+                "reopened_inquiries_count": 1,
+                "avg_closing": "48:00"
+              }
+            </code>
+            </pre>
+
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Trainers Report">
+          <h3>2. Trainers Report</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/reports/trainers/</p>
+            <p><strong>Description:</strong> Returns a Trainers Report.</p>
+
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{ "start_date": "​2025-08-01", "end_date": "2025-08-31​" }</code></pre>
+
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+              {
+                "user_id": 2,
+                "username": "Alaa",
+                "total_responded_inquiries": 4,
+                "opened_inquiries": 1,
+                "closed_inquiries": 1,
+                "pending_inquiries": 1,
+                "reopened_inquiries": 1,
+                "avg_closing_hours": "18:52",
+                "last_delegated_user": "Admin"
+              },
+              {
+                "user_id": 3,
+                "username": "trainer",
+                "total_responded_inquiries": 0,
+                "opened_inquiries": 0,
+                "closed_inquiries": 0,
+                "pending_inquiries": 0,
+                "reopened_inquiries": 0,
+                "avg_closing_hours": null,
+                "last_delegated_user": null
+              },
+              {
+                "user_id": 4,
+                "username": "Gabriel Cummings",
+                "total_responded_inquiries": 0,
+                "opened_inquiries": 0,
+                "closed_inquiries": 0,
+                "pending_inquiries": 0,
+                "reopened_inquiries": 0,
+                "avg_closing_hours": null,
+                "last_delegated_user": null
+              },
+              {
+                "user_id": 5,
+                "username": "Prof. Emile Kozey Jr.",
+                "total_responded_inquiries": 0,
+                "opened_inquiries": 0,
+                "closed_inquiries": 0,
+                "pending_inquiries": 0,
+                "reopened_inquiries": 0,
+                "avg_closing_hours": null,
+                "last_delegated_user": null
+              },
+              {
+                "user_id": 6,
+                "username": "Edward Durgan",
+                "total_responded_inquiries": 0,
+                "opened_inquiries": 0,
+                "closed_inquiries": 0,
+                "pending_inquiries": 0,
+                "reopened_inquiries": 0,
+                "avg_closing_hours": null,
+                "last_delegated_user": null
+              },
+              {
+                "user_id": 7,
+                "username": "Elvera Smith",
+                "total_responded_inquiries": 0,
+                "opened_inquiries": 0,
+                "closed_inquiries": 0,
+                "pending_inquiries": 0,
+                "reopened_inquiries": 0,
+                "avg_closing_hours": null,
+                "last_delegated_user": null
+              },]
+            </code>
+            </pre>
+
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Section 9: Notification -->
+    <div class="section-wrapper">
+      <div class="section-header"
+        onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
+        <h2>Notifications</h2>
+      </div>
+      <div class="section-content">
+
+        {{-- <div class="endpoint" data-title="All Notifcations">
+          <ifca>1. List All Notifcations</h3>
+            <div class="endpoint-content">
+              <p><span class="method POST">POST</span> /api/notifications/</p>
+              <p><strong>Description:</strong> Returns all notifications.</p>
+
+              <p><strong>Response Example:</strong></p>
+              <pre><code>{
+                "users_count": 23,
+                "active_users_count": 23,
+                "trainers_count": 12,
+                "active_trainers_count": 12,
+                "sections_count": 8,
+                "categories_count": 17,
+                "inquiries_count": 4,
+                "closed_inquiries_count": 1,
+                "opened_inquiries_count": 1,
+                "pending_inquiries_count": 1,
+                "reopened_inquiries_count": 1,
+                "avg_closing": "48:00"
+              }
+            </code>
+            </pre>
+
+              <details>
+                <summary><strong>Possible Error Responses</strong></summary>
+                <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+              </details>
+            </div>
+        </div> --}}
+
+          <div class="endpoint" data-title="My Notifcations">
+          <h3>2. My Notifcations</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/notifications/myNotifications</p>
+            <p><strong>Description:</strong> Returns my notifications.</p>
+
+            <p><strong>Response Example:</strong></p>
+              <pre><code>[
+                {
+                  "id": 1,
+                  "inquiry_id": 10,
+                  "user_id": 3,
+                  "message": "Hello, this is just for you!",
+                  "status": "unread",
+                  "created_at": "2025-08-23T12:46:28.000000Z",
+                  "updated_at": "2025-08-23T12:46:28.000000Z"
+                },
+                {
+                  "id": 2,
+                  "inquiry_id": 11,
+                  "user_id": 3,
+                  "message": "Hello, this is just for you!",
+                  "status": "unread",
+                  "created_at": "2025-08-23T12:48:35.000000Z",
+                  "updated_at": "2025-08-23T12:48:35.000000Z"
+                },
+                {
+                  "id": 3,
+                  "inquiry_id": 12,
+                  "user_id": 3,
+                  "message": "Hello, this is just for you!",
+                  "status": "unread",
+                  "created_at": "2025-08-23T12:52:20.000000Z",
+                  "updated_at": "2025-08-23T12:52:20.000000Z"
+                },
+                {
+                  "id": 4,
+                  "inquiry_id": 13,
+                  "user_id": 3,
+                  "message": "Hello, this is just for you!",
+                  "status": "unread",
+                  "created_at": "2025-08-23T12:52:54.000000Z",
+                  "updated_at": "2025-08-23T12:52:54.000000Z"
+                },
+                {
+                  "id": 5,
+                  "inquiry_id": 14,
+                  "user_id": 3,
+                  "message": "Hello, this is just for you!",
+                  "status": "unread",
+                  "created_at": "2025-08-23T12:59:27.000000Z",
+                  "updated_at": "2025-08-23T12:59:27.000000Z"
+                },
+                {
+                  "id": 6,
+                  "inquiry_id": 15,
+                  "user_id": 3,
+                  "message": "Hello, this is just for you!",
+                  "status": "unread",
+                  "created_at": "2025-08-23T13:00:59.000000Z",
+                  "updated_at": "2025-08-23T13:00:59.000000Z"
+                },
+                {
+                  "id": 7,
+                  "inquiry_id": 16,
+                  "user_id": 3,
+                  "message": "Hello, this is just for you!",
+                  "status": "unread",
+                  "created_at": "2025-08-23T13:01:19.000000Z",
+                  "updated_at": "2025-08-23T13:01:19.000000Z"
+                }
+              ]
+            </code>
+            </pre>
+
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- Section 9: Roles -->
     <div class="section-wrapper">
       <div class="section-header"
         onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">

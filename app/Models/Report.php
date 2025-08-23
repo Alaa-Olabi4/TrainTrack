@@ -11,7 +11,6 @@ class Report extends Model
 
     protected $fillable = ['created_by', 'type', 'content'];
 
-
     public function user()
     {
         return $this->belongsTo(User::class, 'created_by');

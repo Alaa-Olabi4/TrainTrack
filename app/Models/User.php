@@ -61,7 +61,7 @@ class User extends Authenticatable
     }
     public function followUps()
     {
-        return $this->hasMany(FollowUp::class, 'transferred_by');
+        return $this->hasMany(FollowUp::class, 'follower_id');
     }
     public function notifications()
     {
@@ -72,13 +72,26 @@ class User extends Authenticatable
         return $this->belongsToMany(Category::class, 'category_trainer', 'trainer_id', 'category_id');
     }
 
-    public function delegation(){
-        return $this->belongsTo(User::class,'delegation_id','id');
+    public function delegation()
+    {
+        return $this->belongsTo(User::class, 'delegation_id', 'id');
     }
 
-    public function delegator(){
-        return $this->hasOne(User::class,'delegation_id','id');
+    public function delegator()
+    {
+        return $this->hasOne(User::class, 'delegation_id', 'id');
     }
+
+    public function delegatedTasks()
+    {
+        return $this->hasMany(Task::class, 'delegation_id', 'id');
+    }
+
+    public function ownedTasks()
+    {
+        return $this->hasMany(Task::class, 'owner_id', 'id');
+    }
+
 
     public function hasRole(string $role): bool
     {

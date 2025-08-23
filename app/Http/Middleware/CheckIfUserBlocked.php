@@ -12,7 +12,7 @@ class CheckIfUserBlocked
     {
         $user = auth()->user();
 
-        if ($user && $user->is_blocked) {
+        if ($user && $user->status == 0) {
             return response()->json([
                 'status' => 403,
                 'message' => 'Your account is blocked. Please contact admin.',

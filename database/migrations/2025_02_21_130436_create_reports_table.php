@@ -10,9 +10,9 @@ class CreateReportsTable extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('created_by')->constrained('users')->onDelete('cascade'); // user_id كـ مفتاح أجنبي
-            $table->string('type'); // نوع التقرير
-            $table->text('content'); // محتويات التقرير
+            $table->string('type');
+            $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
+            $table->text('content');
             $table->timestamps();
         });
     }

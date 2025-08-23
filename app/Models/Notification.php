@@ -11,13 +11,11 @@ class Notification extends Model
 
     protected $fillable = ['inquiry_id', 'user_id', 'message', 'status'];
 
-    // علاقة مع الاستفسار
     public function inquiry()
     {
         return $this->belongsTo(Inquiry::class);
     }
 
-    // علاقة مع المستخدم
     public function user()
     {
         return $this->belongsTo(User::class);

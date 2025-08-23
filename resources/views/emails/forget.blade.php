@@ -161,11 +161,12 @@
             
             <p>If you didn't request this password reset, you can safely ignore this email. Your account security is important to us.</p>
             
-            <p>Best regards,<br>The Account Security Team</p>
+            <p>Best regards,<br>UAT & Training - Customer Care Support</p>
+            <p><a href="mailto:CCTraining@mtn.com.sy">CCTraining@mtn.com.sy</a></p>
         </div>
         
         <div class="footer">
-            <p>© 2025 MTN Syria. All rights reserved.</p>
+            <p>© {{ date('Y') }} MTN Syria. All rights reserved.</p>
         </div>
     </div>
 </body>

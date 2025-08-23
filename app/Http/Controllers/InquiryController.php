@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SendNotification;
 use App\Models\attachment;
 use Illuminate\Http\Request;
 use App\Models\Inquiry;
@@ -10,9 +11,14 @@ use App\Models\User;
 use App\Models\Rating;
 use App\Models\Category;
 use App\Models\Favourite;
+use App\Models\Notification;
 use DateTime;
+use Pusher\Pusher;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewInquiryMail;
+use App\Jobs\SendNewInquiryEmail;
+use App\Jobs\SendPusherNotification;
 
-use function PHPUnit\Framework\isEmpty;
 
 class InquiryController extends Controller
 {
@@ -138,7 +144,11 @@ class InquiryController extends Controller
             'title' => ['required', 'string'],
             'body' => ['required', 'string'],
             'attachments' => ['nullable', 'array'],
-            'attachments.*' => ['file', 'max:5120', 'mimes:jpg,jpeg,png,pdf,doc,docx']
+            'attachments.*' => [
+                'file',
+                'max:5120',
+                // 'mimes:jpg,jpeg,png,pdf,doc,docx'
+            ]
         ]);
 
         $data = [
@@ -150,11 +160,9 @@ class InquiryController extends Controller
         ];
 
         $category = Category::findOrFail($request['category_id']);
-        if ($category->owner_id != null) {
-            $data['assignee_id'] = $category->owner_id;
-        } else {
-            $data['assignee_id'] = User::where('role_id', 2)->first()->id;
-        }
+        $data['assignee_id'] = $category->owner
+            ? $category->owner->id
+            : User::where('role_id', 2)->first()->id;
 
         $inquiry = Inquiry::create($data);
 
@@ -169,11 +177,27 @@ class InquiryController extends Controller
             }
         }
 
+        //send notification to UAT & Training:
+        // Create DB notification record
+        $msg = "You have received a new inquiry!";
+        Notification::create([
+            'inquiry_id' => $inquiry->id,
+            'user_id' => $data['assignee_id'],
+            'message' => $msg,
+        ]);
+        SendPusherNotification::dispatch(
+            'user-' . $data['assignee_id'],
+            'my-event',
+            $msg
+        );
 
-        //send notification to UAT & Training
 
+        // Dispatch queued jobs
+        if ($category->owner) {
+            SendNewInquiryEmail::dispatch($inquiry->id, $category->owner->email, $category->owner->name);
+        }
 
-        return response()->json(['message' => 'the inquiry has been submitted successfully !']);
+        return response()->json(['message' => 'the inquiry has been submitted successfully !', $inquiry]);
     }
     /**
      * Display the specified Inquiry.
@@ -241,7 +265,7 @@ class InquiryController extends Controller
 
         $results = $query->latest()->get();
 
-        return count($results) == 0 ? response()->json(['message' => 'not found !']) : $results;
+        return count($results) == 0 ? response()->json(['message' => 'not found !'], 404) : $results;
     }
 
     public function reassign(Request $request)
@@ -291,7 +315,6 @@ class InquiryController extends Controller
         // Create a followup
         $section_id = $inq->user->section->id;
         FollowupController::store($request->merge(['status' => 3, 'section_id' => $section_id]));
-
 
         // Notify the team of the sender
 

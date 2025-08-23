@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
+use App\Events\SendNotification;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,15 +16,50 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-return view('welcome');
+    // return view('welcome');
+    return view('apidocs');
 });
 
 Route::get('/apidocs', function () {
     return view('apidocs');
 });
 
-Route::get('/tasks',[App\Http\Controllers\TaskController::class , 'index']);
+Route::get('test', function () {
 
-Route::get('test',function(){
-    return response()->json(['message'=>'Welcome Alaa !']);
+    // $pusher = new Pusher\Pusher(
+    //     "7e128d7214eddf18c6d0",
+    //     "36b32569fb0299435f99",
+    //     "1442095",
+    //     array('cluster' => 'ap2')
+    // );
+
+    // $pusher->trigger('user-3', 'my-event', array('message' => 'hello Nour'));
+    // // $pusher->trigger('my-channel', 'my-event', array('message' => 'hello world!!'));
+
+    // // event(new SendNotification(3, "test"));
+    // return response()->json(['message' => 'Notification has been sent successfully !']);
+
+    // dd("test");
+    $code = "7105";
+    return view('emails.forget',compact('code'));
+    // return response()->json(['message'=>'Welcome Alaa !']);
+});
+
+Route::get('notification', function () {
+    return view('notification');
+});
+
+Route::post('SystemReport', [ReportController::class, 'SystemReport']);
+
+Route::get('new',function(){
+    return view('emails.newInquiry')->with(['inquiryUrl'=>'www']);
+});
+Route::get('reminder',function(){
+    return view('emails.reminder')->with(['inquiryUrl'=>'www']);
+});
+Route::get('replied',function(){
+    return view('emails.repliedInquiry')->with(['inquiryUrl'=>'www']);
+});
+Route::get('submit',function(){
+    return view('emails.submitInquiry')->with(['inquiryUrl'=>'www']);
 });

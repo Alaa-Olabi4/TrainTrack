@@ -30,9 +30,9 @@ class FollowupController extends Controller
             'inquiry_id' => ['required', 'numeric', 'exists:inquiries,id'],
             'status' => ['required'],
             'section_id' => ['numeric', 'exists:sections,id'],
+            'response' => ['string'],
             'attachments' => ['nullable', 'array'],
             'attachments.*' => ['file', 'max:5120', 'mimes:jpg,jpeg,png,pdf,doc,docx']
-
         ]);
 
         $follower = User::findOrFail(auth()->user()->id);
@@ -94,7 +94,7 @@ class FollowupController extends Controller
             return response()->json(['message' => 'followup updated successfully !']);
         }
 
-        return response()->json(['message' => 'Unauthorized! '], 403);
+        return response()->json(['message' => 'the follower only can update the followup! '], 403);
     }
 
     /**
@@ -107,6 +107,6 @@ class FollowupController extends Controller
             $followup->delete();
             return response()->json(['message' => 'followup has been deleted successfully !']);
         }
-        return response()->json(['message' => 'Unauthorized! '], 403);
+        return response()->json(['message' => 'the follower only can delete the followup! '], 403);
     }
 }

@@ -41,9 +41,38 @@ class AuthController extends Controller
             'message' => 'Incorrect login credentials'
         ], 401);
     }
+    public function loginMobile(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string|min:6',
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $user = User::findOrFail(auth()->user()->id);
+            if ($user->role_id > 3) {
+                return response()->json(['message' => 'the mobile app is only for trainer/admins'], 403);
+            }
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            $user->section;
+            $user->role;
+
+            return response()->json([
+                'message' => 'Logged in successfully ',
+                'token' => $token,
+                'user' => $user,
+            ], 200);
+        }
+
+        return response()->json([
+            'message' => 'Incorrect login credentials'
+        ], 401);
+    }
     public function profile()
     {
         $user = User::findOrFail(auth()->user()->id);
+        $user->section;
         return $user;
     }
     public function logout(Request $request)
@@ -144,13 +173,10 @@ class AuthController extends Controller
 
     // Start Users for admin
 
-
-
-
     // Users :
     public function index()
     {
-        return User::all();
+        return User::where('role_id', '!=', 1)->get();
     }
     public function blockedUsers()
     {
@@ -268,10 +294,40 @@ class AuthController extends Controller
             $photo = $request->image;
             $photoName = time() . $photo->getClientOriginalName();
             $photo->move('uploads/users', $photoName);
-            $request->merge(['img_url' => 'uploads/products/' . $photoName]);
+            $request->merge(['img_url' => 'uploads/images   /' . $photoName]);
         }
 
         $user->update($request->all());
         return response()->json(['message' => 'user updated successfully !']);
+    }
+
+    public function search(Request $request)
+    {
+        $data = $request->validate([
+            'query' => 'nullable|string'
+        ]);
+
+        $queryInput = $data['query'] ?? '';
+
+        $query = User::query();
+
+        if (!empty($queryInput)) {
+            // Split the input into keywords by whitespace
+            $keywords = array_filter(explode(' ', $queryInput));
+
+            // Group conditions in a closure so that they don't interfere with other where conditions
+            $query->where(function ($q) use ($keywords) {
+                foreach ($keywords as $keyword) {
+                    // You can search multiple columns by chaining orWhere conditions.
+                    $q->Where('email', 'LIKE', "%{$keyword}%")
+                        ->orWhere('name', 'LIKE', "%{$keyword}%");
+                    // ->orWhere('response', 'LIKE', "%{$keyword}%");
+                }
+            });
+        }
+
+        $results = $query->latest()->get();
+
+        return count($results) == 0 ? response()->json(['message' => 'not found !']) : $results;
     }
 }
