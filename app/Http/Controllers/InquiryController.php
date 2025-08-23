@@ -115,7 +115,36 @@ class InquiryController extends Controller
             $inq->followUps;
             $inq->attachments;
         }
-        return $inqs;
+
+            $totalResponded = (clone $inqs)->count();
+            $opened   = (clone $inqs)->whereHas('status', fn($q) => $q->where('name', 'opened'))->count();
+            $closed   = (clone $inqs)->whereHas('status', fn($q) => $q->where('name', 'closed'))->count();
+            $pending  = (clone $inqs)->whereHas('status', fn($q) => $q->where('name', 'pending'))->count();
+            $reopened = (clone $inqs)->whereHas('status', fn($q) => $q->where('name', 'reopened'))->count();
+
+            // Average closing time in seconds
+            $avgClosingSeconds = (clone $inqs)
+                ->whereHas('status', fn($q) => $q->where('name', 'closed'))
+                ->whereNotNull('closed_at')
+                ->selectRaw('AVG(TIMESTAMPDIFF(SECOND, created_at, closed_at)) as avg_seconds')
+                ->value('avg_seconds');
+
+            $avgClosingFormatted = null;
+            if ($avgClosingSeconds !== null) {
+                $hours = floor($avgClosingSeconds / 3600);
+                $minutes = floor(($avgClosingSeconds % 3600) / 60);
+                $avgClosingFormatted = sprintf('%02d:%02d', $hours, $minutes);
+            }
+
+        return [
+            'inqs'=>$inqs,
+            'totalResponded'=> $totalResponded,
+            'opened' => $opened,
+            'closed'=>$closed,
+            'pending'=>$pending,
+            'reopened'=>$reopened,
+            'avg_closing_hours'=>$avgClosingFormatted,
+        ];
     }
     public function myinquiries()
     {
