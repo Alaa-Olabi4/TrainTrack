@@ -115,34 +115,37 @@ class InquiryController extends Controller
             $inq->attachments;
         }
 
-            $totalResponded = (clone $inqs)->count();
-            $opened   = (clone $inqs)->whereHas('status', fn($q) => $q->where('name', 'opened'))->count();
-            $closed   = (clone $inqs)->whereHas('status', fn($q) => $q->where('name', 'closed'))->count();
-            $pending  = (clone $inqs)->whereHas('status', fn($q) => $q->where('name', 'pending'))->count();
-            $reopened = (clone $inqs)->whereHas('status', fn($q) => $q->where('name', 'reopened'))->count();
+        $query = Inquiry::with(['user', 'assigneeUser', 'category', 'status', 'followUps', 'attachments'])
+            ->where('assignee_id', $assignee_id);
 
-            // Average closing time in seconds
-            $avgClosingSeconds = (clone $inqs)
-                ->whereHas('status', fn($q) => $q->where('name', 'closed'))
-                ->whereNotNull('closed_at')
-                ->selectRaw('AVG(TIMESTAMPDIFF(SECOND, created_at, closed_at)) as avg_seconds')
-                ->value('avg_seconds');
+        $totalResponded = $query->count();
 
-            $avgClosingFormatted = null;
-            if ($avgClosingSeconds !== null) {
-                $hours = floor($avgClosingSeconds / 3600);
-                $minutes = floor(($avgClosingSeconds % 3600) / 60);
-                $avgClosingFormatted = sprintf('%02d:%02d', $hours, $minutes);
-            }
+        $opened   = (clone $query)->whereHas('status', fn($q) => $q->where('name', 'opened'))->count();
+        $closed   = (clone $query)->whereHas('status', fn($q) => $q->where('name', 'closed'))->count();
+        $pending  = (clone $query)->whereHas('status', fn($q) => $q->where('name', 'pending'))->count();
+        $reopened = (clone $query)->whereHas('status', fn($q) => $q->where('name', 'reopened'))->count();
+
+        $avgClosingSeconds = (clone $query)
+            ->whereHas('status', fn($q) => $q->where('name', 'closed'))
+            ->whereNotNull('closed_at')
+            ->selectRaw('AVG(TIMESTAMPDIFF(SECOND, created_at, closed_at)) as avg_seconds')
+            ->value('avg_seconds');
+
+        $avgClosingFormatted = null;
+        if ($avgClosingSeconds !== null) {
+            $hours = floor($avgClosingSeconds / 3600);
+            $minutes = floor(($avgClosingSeconds % 3600) / 60);
+            $avgClosingFormatted = sprintf('%02d:%02d', $hours, $minutes);
+        }
 
         return [
-            'inqs'=>$inqs,
-            'totalResponded'=> $totalResponded,
+            'inqs' => $query->get(),
+            'totalResponded' => $totalResponded,
             'opened' => $opened,
-            'closed'=>$closed,
-            'pending'=>$pending,
-            'reopened'=>$reopened,
-            'avg_closing_hours'=>$avgClosingFormatted,
+            'closed' => $closed,
+            'pending' => $pending,
+            'reopened' => $reopened,
+            'avg_closing_hours' => $avgClosingFormatted,
         ];
     }
     public function myinquiries()
@@ -327,8 +330,12 @@ class InquiryController extends Controller
 
         $inq = Inquiry::findOrFail($request['inquiry_id']);
 
-        if($inq->status->id == 3){
-            return response()->json(['message'=>'the inquiry is already closed !'],400);
+        if ($inq->status->id == 3) {
+            return response()->json(['message' => 'the inquiry is already closed !'], 400);
+        }
+
+        if ($request['status_id'] == null) {
+            $request['status_id'] = 3;
         }
 
         if ($request['status_id'] == 3) {
@@ -355,18 +362,22 @@ class InquiryController extends Controller
     public function reopen(Request $request)
     {
         $request->validate([
-            'inq_id' => ['required', 'exists:inquiries,id'],
+            'inquiry_id' => ['required', 'exists:inquiries,id'],
             'response' => ['string']
         ]);
 
         $user = auth()->user();
-        $inq = Inquiry::findOrFail($request['inq_id']);
+        $inq = Inquiry::findOrFail($request['inquiry_id']);
 
         if ($inq->user_id != $user->id) {
             return response()->json(['message' => 'only the user who ask can reopen the inquiry !'], 400);
         }
 
-        $inq->update(['cur_status_id' => 4]);
+        if ($inq->status->id != 3) {
+            return response()->json(['message' => 'the only closed inquiry could be reopened !'], 400);
+        }
+
+        $inq->update(['cur_status_id' => 4, 'closed_at' => null]);
 
         // Create a follow up
         FollowupController::store($request->merge(['status' => 4, 'section_id' => 1]));
