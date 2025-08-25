@@ -112,6 +112,10 @@ class InquiryController extends Controller
             $inq->category;
             $inq->status;
             $inq->followUps;
+            foreach ($inq->followUps as $if) {
+                $if->section;
+                $if->follower;
+            }
             $inq->attachments;
         }
 
@@ -232,6 +236,7 @@ class InquiryController extends Controller
     /**
      * Display the specified Inquiry.
      */
+
     public function show($id)
     {
         $inq = Inquiry::findOrFail($id);
@@ -244,13 +249,53 @@ class InquiryController extends Controller
         $inq->ratings;
         return $inq;
     }
+
     /**
      * Update the specified Inquiry in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'category_id' => ['numeric', 'exists:categories,id'],
+            'title' => ['string'],
+            'body' => ['string'],
+            'attachments' => ['nullable', 'array'],
+            'attachments.*' => [
+                'file',
+                'max:5120',
+                // 'mimes:jpg,jpeg,png,pdf,doc,docx'
+            ]
+        ]);
+
+        $data = [
+            'category_id' => $request['category_id'],
+            'title' => $request['title'],
+            'body' => $request['body'],
+            'user_id' => auth()->user()->id,
+            'cur_status_id' => 1
+        ];
+
+        $category = Category::findOrFail($request['category_id']);
+        $data['assignee_id'] = $category->owner
+            ? $category->owner->id
+            : User::where('role_id', 2)->first()->id;
+
+        $inquiry = Inquiry::create($data);
+
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $fileName = time() . $file->getClientOriginalName();
+                $file->move('uploads/attachments', $fileName);
+                attachment::create([
+                    'inquiry_id' => $inquiry->id,
+                    'url' => 'uploads/attachments/' . $fileName,
+                ]);
+            }
+        }
+
+        return response()->json(['message' => 'the inquiry has been updated successfully!']);
     }
+
     /**
      * Remove the specified Inquiry from storage.
      */
@@ -395,7 +440,7 @@ class InquiryController extends Controller
         $pending_inquiries = Inquiry::where('cur_status_id', 2)->get()->count();
         $closed_inquiries = Inquiry::where('cur_status_id', 3)->get();
 
-        //average handled time (معدل سرعة الإجابة)          
+        //average handled time
         $average_handling_time = 0;
         $total_time = 0;
         $cnt = count($closed_inquiries);
