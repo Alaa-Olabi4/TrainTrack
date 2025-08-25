@@ -1386,7 +1386,7 @@
           </div>
         </div>
 
-        <div class="endpoint" data-title="Delete Task">
+        {{-- <div class="endpoint" data-title="Delete Task">
           <h3>6. Delete Task</h3>
           <div class="endpoint-content">
             <p><span class="method DELETE">DELETE</span> /api/tasks/{id}</p>
@@ -1400,10 +1400,10 @@
 { "message": "No query results for model [Task] 100." }</code></pre>
             </details>
           </div>
-        </div>
+        </div> --}}
 
         <div class="endpoint" data-title="Reset All Tasks">
-          <h3>7. Reset All Tasks</h3>
+          <h3>6. Reset All Tasks</h3>
           <div class="endpoint-content">
             <p><span class="method GET">GET</span> /api/tasks/reset</p>
             <p><strong>Description:</strong> Reset All Task (remove the owner from categories)
@@ -1420,7 +1420,7 @@
         </div>
 
         <div class="endpoint" data-title="Reset Specified Task">
-          <h3>8. Reset Specified Task</h3>
+          <h3>7. Reset Specified Task</h3>
           <div class="endpoint-content">
             <p><span class="method GET">GET</span> /api/tasks/reset/{id}</p>
             <p><strong>Description:</strong> Reset Specified Task (remove the owner from category)
@@ -1437,7 +1437,7 @@
         </div>
 
         <div class="endpoint" data-title="Randomly Assign">
-          <h3>9. Randomly Assign</h3>
+          <h3>8. Randomly Assign</h3>
           <div class="endpoint-content">
             <p><span class="method GET">GET</span> /api/random-assign</p>
             <p><strong>Description:</strong> Reset All Tasks then random-assign
@@ -1619,6 +1619,7 @@
         onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
         <h2>Inquiries</h2>
       </div>
+
       <div class="section-content">
 
         <!-- Endpoint 1: Get All Inquiries -->
@@ -1785,7 +1786,7 @@
         </div>
 
         <!-- Endpoint 7: Update Inquiry -->
-        <div class="endpoint" data-title="Update Inquiry">
+        {{-- <div class="endpoint" data-title="Update Inquiry">
           <h3>7. Update Inquiry</h3>
           <div class="endpoint-content">
             <p><span class="method POST">POST</span> /api/inquiries/{id}</p>
@@ -1807,7 +1808,7 @@
   }
 }</code></pre>
           </div>
-        </div>
+        </div> --}}
 
         <!-- Endpoint 8: Delete Inquiry -->
         <div class="endpoint" data-title="Delete Inquiry">

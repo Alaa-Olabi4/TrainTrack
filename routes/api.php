@@ -59,7 +59,7 @@ Route::controller(SectionController::class)->group(function () {
             Route::post('', 'store'); //1
             Route::post('/{id}', 'update'); //1
             Route::delete('/{id}', 'destroy'); //1
-            Route::get('/restore/{id}', 'restore');
+            Route::get('/restore/{id}', 'restore');//1
         });
         Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin,Trainer,Assistant', 'active'])->group(function () {
             Route::get('/{id}', 'show'); //1
@@ -82,14 +82,12 @@ Route::controller(CategoryController::class)->group(function () {
             Route::delete('/{id}', 'destroy'); //1
         });
         Route::middleware(['auth:sanctum', 'active'])->group(function () {
-            Route::get('/{id}', 'show');
+            Route::get('/{id}', 'show');//1
         });
     });
 });
 
 Route::controller(TaskController::class)->group(function () {
-
-    //TaskController Admins Routes :
     Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin', 'active'])->group(function () {
         Route::get('random-assign', 'randomlyAssign');
         Route::post('bulktasks', 'bulkstore');
@@ -111,8 +109,6 @@ Route::controller(TaskController::class)->group(function () {
 
 Route::controller(InquiryController::class)->group(function () {
     Route::prefix('inquiries')->group(function () {
-
-        //TaskController Admins Routes :
         Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin', 'active'])->group(function () {
             Route::get('/WithTrashed', 'indexWithTrashed');
             Route::get('/indexOnlyTrashed', 'indexOnlyTrashed');
@@ -142,19 +138,18 @@ Route::controller(InquiryController::class)->group(function () {
 
 Route::controller(FollowupController::class)->group(function () {
 
-    //TaskController Admins Routes :
     Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin', 'active'])->group(function () {
         Route::get('followups/restore/{id}', 'restore');
     });
 
     //TaskController Admin Or Trainers Routes :
     Route::middleware(['auth:sanctum', 'active'])->group(function () {
-        Route::delete('followups/{id}', 'destroy');
         Route::prefix('followups')->group(function () {
             Route::get('', 'index');
             Route::get('/{id}', 'show');
             Route::post('', 'store');
             Route::post('/{id}', 'update');
+            Route::delete('/{id}', 'destroy');
         });
         Route::get('followupsrequest/{inquiry_id}', 'followupsrequest');
         Route::get('followupsSection/{section_id}', 'indexSection');
@@ -165,7 +160,7 @@ Route::controller(FavouriteController::class)->group(function () {
     Route::prefix('favourites')->group(function () {
         Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin', 'active'])->group(function () {
             Route::get('', 'index');
-            Route::get('/{id}', 'show');
+            Route::get('/{id}', 'show');///0
         });
         Route::middleware(['auth:sanctum', 'active'])->group(function () {
             Route::delete('/{id}', 'remove');
@@ -180,7 +175,7 @@ Route::controller(ReportController::class)->group(function () {
     Route::prefix('reports')->group(function () {
         Route::middleware(['auth:sanctum', 'active', 'role:SuperAdmin,Admin,Trainer'])->group(function () {
             Route::post('system', 'SystemReport');
-            Route::post('myDailyReport', 'myDailyReport');
+            Route::post('myDailyReport', 'myDailyReport');///0
         });
         Route::post('trainers', 'TrainerReport');
         Route::get('trainers', 'Trainers');
@@ -192,7 +187,7 @@ Route::controller(NotificationController::class)->group(function () {
         Route::prefix('notifications')->group(function () {
             Route::get('', 'index');
             Route::get('myNotifications', 'myNotifications');
-            Route::get('setRead/{notification_id}', 'setRead');
+            Route::get('setRead/{notification_id}', 'setRead');///0
         });
     });
 });
