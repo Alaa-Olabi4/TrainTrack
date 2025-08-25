@@ -17,19 +17,31 @@ class FollowupController extends Controller
         $fs = FollowUp::all();
         foreach ($fs as $f) {
             $f->inquiry;
+            $f->inquiry->user;
+            $f->inquiry->assigneeUser;
+            $f->inquiry->category;
+            $f->inquiry->status;
+            $f->inquiry->attachments;
             $f->section;
             $f->follower;
+            // $f->attachments;
         }
         return $fs;
     }
 
     public function indexSection($section_id)
     {
-        $fs= FollowUp::where('section_id', $section_id)->get();
+        $fs = FollowUp::where('section_id', $section_id)->get();
         foreach ($fs as $f) {
             $f->inquiry;
+            $f->inquiry->user;
+            $f->inquiry->assigneeUser;
+            $f->inquiry->category;
+            $f->inquiry->status;
+            $f->inquiry->attachments;
             $f->section;
             $f->follower;
+            // $f->attachments;
         }
         return $fs;
     }
@@ -79,8 +91,14 @@ class FollowupController extends Controller
         $fs = FollowUp::where('inquiry_id', $inquiry_id)->get();
         foreach ($fs as $f) {
             $f->inquiry;
+            $f->inquiry->user;
+            $f->inquiry->assigneeUser;
+            $f->inquiry->category;
+            $f->inquiry->status;
+            $f->inquiry->attachments;
             $f->section;
             $f->follower;
+            // $f->attachments;
         }
         return $fs;
     }
@@ -92,8 +110,14 @@ class FollowupController extends Controller
     {
         $followup = FollowUp::findOrFail($id);
         $followup->inquiry;
+        $followup->inquiry->user;
+        $followup->inquiry->assigneeUser;
+        $followup->inquiry->category;
+        $followup->inquiry->status;
+        $followup->inquiry->attachments;
         $followup->section;
         $followup->follower;
+        // $followup->attachments;
         return $followup;
     }
 
