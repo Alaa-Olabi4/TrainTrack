@@ -235,37 +235,38 @@
             <pre><code>{ "email": "dstroman@example.net", "password": "12345678" }</code></pre>
             <p><strong>Response Example:</strong></p>
             <pre><code>{
-    "message": "Logged in successfully ",
-    "token": "14|gAftDniU5VipCR7h2A4PRFC0VIXQntQgJE48an5I1d0b6cdd",
-    "user": {
-        "id": 9,
-        "name": "Prof. Grayson Mann",
-        "email": "dstroman@example.net",
-        "email_verified_at": "2025-06-04 23:10:15",
-        "position": "Coordinator",
-        "section_id": 1,
-        "role_id": 3,
-        "code": null,
-        "status": 1,
-        "img_url": null,
-        "created_at": "2025-06-04T23:10:15.000000Z",
-        "updated_at": "2025-06-04T23:10:15.000000Z",
-        "section": {
-            "id": 1,
-            "name": "UAT & Training",
-            "division": "Customer Care Support",
-            "deleted_at": null,
-            "created_at": "2025-06-04T23:09:41.000000Z",
-            "updated_at": "2025-06-04T23:09:41.000000Z"
-        },
-        "role": {
-            "id": 3,
-            "name": "Trainer",
-            "created_at": "2025-06-04T23:10:14.000000Z",
-            "updated_at": "2025-06-04T23:10:14.000000Z"
-        }
-    }
-}</code></pre>
+                  "message": "Logged in successfully ",
+                  "token": "14|gAftDniU5VipCR7h2A4PRFC0VIXQntQgJE48an5I1d0b6cdd",
+                  "user": {
+                      "id": 9,
+                      "name": "Prof. Grayson Mann",
+                      "email": "dstroman@example.net",
+                      "email_verified_at": "2025-06-04 23:10:15",
+                      "position": "Coordinator",
+                      "section_id": 1,
+                      "role_id": 3,
+                      "code": null,
+                      "status": 1,
+                      "img_url": null,
+                      "created_at": "2025-06-04T23:10:15.000000Z",
+                      "updated_at": "2025-06-04T23:10:15.000000Z",
+                      "section": {
+                          "id": 1,
+                          "name": "UAT & Training",
+                          "division": "Customer Care Support",
+                          "deleted_at": null,
+                          "created_at": "2025-06-04T23:09:41.000000Z",
+                          "updated_at": "2025-06-04T23:09:41.000000Z"
+                      },
+                      "role": {
+                          "id": 3,
+                          "name": "Trainer",
+                          "created_at": "2025-06-04T23:10:14.000000Z",
+                          "updated_at": "2025-06-04T23:10:14.000000Z"
+                      }
+                  }
+              }</code>
+            </pre>
             <details>
               <summary><strong>Possible Error Responses</strong></summary>
               <pre><code>// 401 Unauthorized
@@ -282,8 +283,68 @@
           </div>
         </div>
 
+        <div class="endpoint" data-title="Login/Mobile">
+          <h3>2. Login from mobile app</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/login/mobile</p>
+            <p><strong>Description:</strong> Authenticates the user using email and password. Returns a
+              token if successful.</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{ "email": "trainer@mail.com", "password": "12345678" }</code></pre>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{"message": "Logged in successfully ",
+              "token": "67|N57kbO3yp0pBs7D2VcW52BvTPoiaS2h7RBbzZzBo877b6546",
+              "user": {
+                "id": 3,
+                "name": "trainer",
+                "email": "trainer@mail.com",
+                "email_verified_at": null,
+                "position": "Coordinator",
+                "section_id": 1,
+                "role_id": 3,
+                "delegation_id": null,
+                "code": null,
+                "status": 1,
+                "img_url": null,
+                "created_at": "2025-08-14T20:15:50.000000Z",
+                "updated_at": "2025-08-14T20:15:50.000000Z",
+                "section": {
+                  "id": 1,
+                  "name": "UAT & Training",
+                  "division": "CC - Customer Care Support",
+                  "email": "UAT@mail.com",
+                  "deleted_at": null,
+                  "created_at": "2025-08-14T20:15:49.000000Z",
+                  "updated_at": "2025-08-14T20:15:49.000000Z"
+                },
+                "role": {
+                  "id": 3,
+                  "name": "Trainer",
+                  "created_at": "2025-08-14T20:15:49.000000Z",
+                  "updated_at": "2025-08-14T20:15:49.000000Z"
+                }
+              }
+            }</code>
+            </pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Incorrect login credentials" }</code></pre>
+              <pre><code>// 422 Validation Error
+                {
+                  "message": "The given data was invalid.",
+                  "errors": {
+                    "email": ["The email field is required."],
+                    "password": ["The password must be at least 6 characters."]
+                  }
+                }</code>
+              </pre>
+            </details>
+          </div>
+        </div>
+
         <div class="endpoint" data-title="Logout">
-          <h3>2. Logout</h3>
+          <h3>3. Logout</h3>
           <div class="endpoint-content">
             <p><span class="method POST">POST</span> /api/logout</p>
             <p><strong>Description:</strong> Logs the user out and deletes all active tokens.</p>
@@ -300,7 +361,7 @@
         </div>
 
         <div class="endpoint" data-title="Add User">
-          <h3>3. Add User</h3>
+          <h3>4. Add User</h3>
           <div class="endpoint-content">
             <p><span class="method POST">POST</span> /api/add_user</p>
             <p><strong>Description:</strong> Creates a new user. Only Super Admins can perform this action.
@@ -312,23 +373,109 @@
             <details>
               <summary><strong>Possible Error Responses</strong></summary>
               <pre><code>// 401 Unauthorized
-{ "message": "Unauthenticated." }</code></pre>
+                { "message": "Unauthenticated." }</code></pre>
               <pre><code>// 403 Forbidden
-{ "message": "ليس لديك الصلاحية لإضافة مستخدم." }</code></pre>
+                { "message": "Unauthorized!" }</code></pre>
               <pre><code>// 422 Validation Error
-{
-  "message": "The given data was invalid.",
-  "errors": {
-    "email": ["The email has already been taken."],
-    "password": ["The password confirmation does not match."]
-  }
-}</code></pre>
+                {
+                  "message": "The given data was invalid.",
+                  "errors": {
+                    "email": ["The email has already been taken."],
+                    "password": ["The password confirmation does not match."]
+                  }
+                }</code>
+              </pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Update Profile">
+          <h3>5. Update Profile</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/updateProfile/{id}</p>
+            <p><strong>Description:</strong> updateProfile of user. Only Super Admins can perform this action.
+            </p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{ "name": "New User", "email": "newuser@example.com", "password": "password123", "password_confirmation": "password123", "role_id": 2, "section_id": 1 , 'delegation_id' : 2}</code></pre>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{ "message": "User updated successfully!" }</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code>
+              </pre>
+              <pre><code>// 403 Forbidden
+                  { "message": "Unauthorized!" }</code>
+              </pre>
+              <pre><code>// 400 trying to set delegation to not trainer
+                  { "message": "Sorry ! the trainer only who can has a delegation , Thank you for your understanding !" }</code>
+              </pre>
+              <pre><code>// 400 trying to set delegation not trainer
+                  { "message": "Sorry! the delegation should only be a trainer !" }</code>
+              </pre>
+              <pre><code>// 422 Validation Error
+                {
+                  "message": "The given data was invalid.",
+                  "errors": {
+                    "email": ["The email has already been taken."],
+                    "password": ["The password confirmation does not match."]
+                  }
+                }</code>
+              </pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Change Role">
+          <h3>6. Change Role</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/changeRole</p>
+            <p><strong>Description:</strong> change Role of specified User</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{ "user_id": 10, "role_id": 2 }</code></pre>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{ "message": "user\'s roles has been changed successfully!" }</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+              <pre><code>// 403 Forbidden
+                { "message": "Unauthorized!" }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Block">
+          <h3>7. Block / Unblock user</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/block</p>
+            <p><strong>Description:</strong> Block / Unblock specified user</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{ "user_id": 10, "status": true }</code></pre>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{ "message": "user has been unblocked successfully !" }</code></pre>
+
+            <p><strong>Request2 Example:</strong></p>
+            <pre><code>{ "user_id": 10, "status": 0 }</code></pre>
+            <p><strong>Response2 Example:</strong></p>
+            <pre><code>{ "message": "user has been blocked successfully !" }</code></pre>
+            
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+              <pre><code>// 403 Forbidden
+                { "message": "Unauthorized!" }</code></pre>
+              <pre><code>// 400 Wrong request
+                { "message": "user is already active !" }</code></pre>
+              <pre><code>// 400 Wrong request
+                { "message": "user is already blocked !" }</code></pre>
             </details>
           </div>
         </div>
 
         <div class="endpoint" data-title="Forget Password">
-          <h3>4. Forget Password</h3>
+          <h3>8. Forget Password</h3>
           <div class="endpoint-content">
             <p><span class="method POST">POST</span> /api/forget_password</p>
             <p><strong>Description:</strong> Sends a verification code to the entered user's email.
@@ -343,7 +490,7 @@
         </div>
 
         <div class="endpoint" data-title="Check Forget Code">
-          <h3>5. Check Forget Code</h3>
+          <h3>9. Check Forget Code</h3>
           <div class="endpoint-content">
             <p><span class="method POST">POST</span> /api/check_forget_code</p>
             <p><strong>Description:</strong> Validates the code sent to the user's email.</p>
@@ -361,7 +508,7 @@
         </div>
 
         <div class="endpoint" data-title="Reset Password">
-          <h3>6. Reset Password</h3>
+          <h3>10. Reset Password</h3>
           <div class="endpoint-content">
             <p><span class="method POST">POST</span> /api/reset_password</p>
             <p><strong>Description:</strong> Updates a user's password after verifying the code.</p>
@@ -380,24 +527,59 @@
           </div>
         </div>
 
-        {{-- <div class="endpoint" data-title="Get Logged In User">
-          <h3>7. Get Logged In User</h3>
+        <div class="endpoint" data-title="Get All Users">
+          <h3>11. Get All Users</h3>
           <div class="endpoint-content">
-            <p><span class="method GET">GET</span> /api/user</p>
-            <p><strong>Description:</strong> Retrieves the currently authenticated user's profile.</p>
+            <p><span class="method GET">GET</span> /api/users</p>
+            <p><strong>Description:</strong> Retrieves All user.</p>
             <p><strong>Request Example:</strong></p>
             <pre><code>// No body needed (auth token required)</code></pre>
             <p><strong>Response Example:</strong></p>
-            <pre><code>{ "id": 3, "name": "John Doe", "email": "john@example.com", "role_id": 2, "section_id": 1 }</code></pre>
+            <pre><code>[{ "id": 3, "name": "John Doe", "email": "john@example.com", "role_id": 2, "section_id": 1 }]</code></pre>
             <details>
               <summary><strong>Possible Error Responses</strong></summary>
               <pre><code>// 401 Unauthorized
 { "message": "Unauthenticated." }</code></pre>
             </details>
           </div>
-        </div> --}}
+        </div>
+
+        <div class="endpoint" data-title="Get Blocked Users">
+          <h3>12. Get Blocked Users</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/blockedUsers</p>
+            <p><strong>Description:</strong> Retrieves All blocked Users .</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>// No body needed (auth token required)</code></pre>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[{ "id": 3, "name": "John Doe", "email": "john@example.com", "role_id": 2, "section_id": 1 }]</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Get user based on Role">
+          <h3>13. Get users based on Role</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/userRoles/{Role_id}</p>
+            <p><strong>Description:</strong> Retrieves All Users of specifer Role .</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>// No body needed (auth token required)</code></pre>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[{ "id": 3, "name": "John Doe", "email": "john@example.com", "role_id": 2, "section_id": 1 }]</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
         <div class="endpoint" data-title="Get Logged In User">
-          <h3>7. Profile</h3>
+          <h3>14. Profile</h3>
           <div class="endpoint-content">
             <p><span class="method GET">GET</span> /api/profile</p>
             <p><strong>Description:</strong> Retrieves the currently authenticated user's profile.</p>
@@ -409,6 +591,24 @@
               <summary><strong>Possible Error Responses</strong></summary>
               <pre><code>// 401 Unauthorized
 { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Search User">
+          <h3>15. Search User</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/users/search?query=keyword</p>
+            <p><strong>Description:</strong> Searches users by name or email. (Should be logged in)</p>
+            <p><strong>Response Example (matches found):</strong></p>
+            <pre><code>[{ "id": 3, "name": "John Doe", "email": "john@example.com", "role_id": 2, "section_id": 1 }]</code></pre>
+            <p><strong>Alternate Response Example (no matches):</strong></p>
+            <pre><code>{ "message": "not found !" }</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code>
+              </pre>
             </details>
           </div>
         </div>
@@ -555,9 +755,114 @@
           </div>
         </div>
 
+        <div class="endpoint" data-title="Search Section">
+          <h3>6. Search Section</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/sections/search?query=keyword</p>
+            <p><strong>Description:</strong> Searches sections by name or division. (Should be logged in)</p>
+            <p><strong>Response Example (matches found):</strong></p>
+            <pre><code>[
+              {
+                "id": 1,
+                "name": "UAT & Training",
+                "division": "CC - Customer Care Support",
+                "email": "CCTraining@mtn.com.sy"
+              }
+              ]</code>
+            </pre>
+            <p><strong>Alternate Response Example (no matches):</strong></p>
+            <pre><code>{ "message": "not found !" }</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+{ "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>        
+
+        <div class="endpoint" data-title="List With Trashed">
+          <h3>7. List All Sections (With Trashed)</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/sections/withTrashed</p>
+            <p><strong>Description:</strong> Lists all sections including soft-deleted ones. (Role: SuperAdmin, Admin)
+            </p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+              {
+                "id": 1,
+                "name": "UAT & Training",
+                "division": "CC - Customer Care Support",
+                "email": "CCTraining@mtn.com.sy",
+                "deleted_at":"2025-08-15T08:00:00.000000Z"
+              }
+              ]</code>
+            </pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }
+
+                // 403 Forbidden (if not SuperAdmin/Admin)
+                { "message": "User does not have the right roles." }</code>
+              </pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="List Only Trashed">
+          <h3>8. List Only Trashed Sections</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/sections/trashed</p>
+            <p><strong>Description:</strong> Lists only the soft-deleted sections. (Role: SuperAdmin, Admin)</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+              {
+                "id": 1,
+                "name": "UAT & Training",
+                "division": "CC - Customer Care Support",
+                "email": "CCTraining@mtn.com.sy",
+                "deleted_at":"2025-08-15T08:00:00.000000Z"
+              }
+              ]</code>
+            </pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+{ "message": "Unauthenticated." }
+
+// 403 Forbidden (if not SuperAdmin/Admin)
+{ "message": "User does not have the right roles." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Restore Section">
+          <h3>9. Restore Section</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/sections/restore/{id}</p>
+            <p><strong>Description:</strong> Restores a previously soft-deleted Section. (Role: SuperAdmin, Admin)</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{ "message": "section has been restored successfully !','section' => $section" }</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 400 Bad Request (section isn't deleted)
+                { "message": "sections isn't deleted !" }
+
+                // 401 Unauthorized
+                { "message": "Unauthenticated." }
+
+                // 403 Forbidden (if not SuperAdmin/Admin)
+                { "message": "User does not have the right roles." }
+
+                // 404 Not Found
+                { "message": "No query results for model [Category] 123" }</code>
+              </pre>
+            </details>
+          </div>
+        </div>
+
       </div>
     </div>
-
 
     <!-- Section 3: Categories -->
     <div class="section-wrapper">
@@ -850,7 +1155,6 @@
       </div>
     </div>
 
-
     <!-- Section 4: Tasks -->
     <div class="section-wrapper">
       <div class="section-header"
@@ -869,13 +1173,57 @@
             <pre><code>// Requires Authorization Header</code></pre>
             <p><strong>Response Example:</strong></p>
             <pre><code>[
-  {
-    "id": 10,
-    "category": { "id": 1, "name": "Training" },
-    "owner": { "id": 2, "name": "Amar" },
-    "delegation": { "id": 3, "name": "Sara" }
-  }
-]</code></pre>
+                {
+                  "id": 1,
+                  "category_id": 1,
+                  "owner_id": 1,
+                  "delegation_id": 2,
+                  "deleted_at": null,
+                  "created_at": "2025-08-14T20:15:54.000000Z",
+                  "updated_at": "2025-08-14T20:15:54.000000Z",
+                  "category": {
+                    "id": 1,
+                    "name": "superclip",
+                    "description": "superclip",
+                    "owner_id": 3,
+                    "weight": 0,
+                    "deleted_at": null,
+                    "created_at": "2025-08-14T20:15:53.000000Z",
+                    "updated_at": "2025-08-14T20:15:53.000000Z"
+                  },
+                  "owner": {
+                    "id": 1,
+                    "name": "Admin",
+                    "email": "admin@mail.com",
+                    "email_verified_at": null,
+                    "position": "Manager",
+                    "section_id": 1,
+                    "role_id": 1,
+                    "delegation_id": null,
+                    "code": null,
+                    "status": 1,
+                    "img_url": null,
+                    "created_at": "2025-08-14T20:15:50.000000Z",
+                    "updated_at": "2025-08-14T20:15:50.000000Z"
+                  },
+                  "delegation": {
+                    "id": 2,
+                    "name": "Alaa",
+                    "email": "aelolabi@mtn.com.sy",
+                    "email_verified_at": null,
+                    "position": "Coordinator",
+                    "section_id": 1,
+                    "role_id": 3,
+                    "delegation_id": null,
+                    "code": null,
+                    "status": 1,
+                    "img_url": null,
+                    "created_at": "2025-08-14T20:15:50.000000Z",
+                    "updated_at": "2025-08-14T20:15:50.000000Z"
+                  }
+                },
+              ]</code>
+            </pre>
             <details>
               <summary><strong>Possible Error Responses</strong></summary>
               <pre><code>// 401 Unauthorized
@@ -892,11 +1240,55 @@
               users.</p>
             <p><strong>Response Example:</strong></p>
             <pre><code>{
-  "id": 12,
-  "category": { "id": 3, "name": "Support" },
-  "owner": { "id": 5, "name": "Rami" },
-  "delegation": { "id": 6, "name": "Nour" }
-}</code></pre>
+                "id": 1,
+                "category_id": 1,
+                "owner_id": 1,
+                "delegation_id": 2,
+                "deleted_at": null,
+                "created_at": "2025-08-14T20:15:54.000000Z",
+                "updated_at": "2025-08-14T20:15:54.000000Z",
+                "category": {
+                  "id": 1,
+                  "name": "superclip",
+                  "description": "superclip",
+                  "owner_id": 3,
+                  "weight": 0,
+                  "deleted_at": null,
+                  "created_at": "2025-08-14T20:15:53.000000Z",
+                  "updated_at": "2025-08-14T20:15:53.000000Z"
+                },
+                "owner": {
+                  "id": 1,
+                  "name": "Admin",
+                  "email": "admin@mail.com",
+                  "email_verified_at": null,
+                  "position": "Manager",
+                  "section_id": 1,
+                  "role_id": 1,
+                  "delegation_id": null,
+                  "code": null,
+                  "status": 1,
+                  "img_url": null,
+                  "created_at": "2025-08-14T20:15:50.000000Z",
+                  "updated_at": "2025-08-14T20:15:50.000000Z"
+                },
+                "delegation": {
+                  "id": 2,
+                  "name": "Alaa",
+                  "email": "aelolabi@mtn.com.sy",
+                  "email_verified_at": null,
+                  "position": "Coordinator",
+                  "section_id": 1,
+                  "role_id": 3,
+                  "delegation_id": null,
+                  "code": null,
+                  "status": 1,
+                  "img_url": null,
+                  "created_at": "2025-08-14T20:15:50.000000Z",
+                  "updated_at": "2025-08-14T20:15:50.000000Z"
+                }
+              }</code>
+            </pre>
             <details>
               <summary><strong>Possible Error Responses</strong></summary>
               <pre><code>// 404 Not Found
@@ -1009,6 +1401,58 @@
             </details>
           </div>
         </div>
+
+        <div class="endpoint" data-title="Reset All Tasks">
+          <h3>7. Reset All Tasks</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/tasks/reset</p>
+            <p><strong>Description:</strong> Reset All Task (remove the owner from categories)
+              users.</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{'message' : 'reset tasks has been done successfully !'}</code>
+            </pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 404 Not Found
+                { "message": "No query results for model [Task] 999." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Reset Specified Task">
+          <h3>8. Reset Specified Task</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/tasks/reset/{id}</p>
+            <p><strong>Description:</strong> Reset Specified Task (remove the owner from category)
+            </p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{'message' : 'reset task has been done successfully !'}</code>
+            </pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 404 Not Found
+                { "message": "No query results for model [Task] 999." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Randomly Assign">
+          <h3>9. Randomly Assign</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/random-assign</p>
+            <p><strong>Description:</strong> Reset All Tasks then random-assign
+            </p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{'message' : 'Tasks have been randomly assigned successfully!'}</code>
+            </pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 404 Not Found
+                { "message": "There are no trainers to assign tasks to!" }</code></pre>
+            </details>
+          </div>
+        </div>
+
 
       </div>
     </div>
@@ -1543,7 +1987,7 @@
     </div>
 
     <!-- Section 5: Inquiries -->
-    <div class="section-wrapper">
+    {{-- <div class="section-wrapper">
       <div class="section-header"
         onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
         <h2>Inquiries</h2>
@@ -1737,7 +2181,7 @@
         </div>
 
       </div>
-    </div>
+    </div> --}}
 
 
     <!-- Section 6: Follow-ups -->
@@ -1746,6 +2190,7 @@
         onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
         <h2>Follow-ups</h2>
       </div>
+
       <div class="section-content">
 
         <div class="endpoint" data-title="Get All Follow-ups">
@@ -1841,6 +2286,123 @@
           </div>
         </div>
 
+        <div class="endpoint" data-title="followups of Section">
+          <h3>7. Followups of Section</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/followupsSection/{section_id}</p>
+            <p><strong>Description:</strong> Restores a follow-ups of section.</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+              {
+                "id": 5,
+                "inquiry_id": 1,
+                "status": 1,
+                "follower_id": 3,
+                "section_id": 6,
+                "response": null,
+                "created_at": "2025-08-14T20:24:02.000000Z",
+                "updated_at": "2025-08-14T20:24:02.000000Z",
+                "inquiry": {
+                  "id": 1,
+                  "user_id": 23,
+                  "assignee_id": 2,
+                  "category_id": 1,
+                  "cur_status_id": 3,
+                  "title": "استفسار عن خدمة سوبركليب",
+                  "body": "كيف يمكن تفعيل السوبر كليب",
+                  "response": "تم الرد",
+                  "closed_at": "2025-08-24 20:52:57",
+                  "deleted_at": null,
+                  "created_at": "2025-08-14T20:15:54.000000Z",
+                  "updated_at": "2025-08-24T20:52:57.000000Z"
+                }
+              },
+              {
+                "id": 9,
+                "inquiry_id": 1,
+                "status": 1,
+                "follower_id": 3,
+                "section_id": 6,
+                "response": null,
+                "created_at": "2025-08-15T15:36:51.000000Z",
+                "updated_at": "2025-08-15T15:36:51.000000Z",
+                "inquiry": {
+                  "id": 1,
+                  "user_id": 23,
+                  "assignee_id": 2,
+                  "category_id": 1,
+                  "cur_status_id": 3,
+                  "title": "استفسار عن خدمة سوبركليب",
+                  "body": "كيف يمكن تفعيل السوبر كليب",
+                  "response": "تم الرد",
+                  "closed_at": "2025-08-24 20:52:57",
+                  "deleted_at": null,
+                  "created_at": "2025-08-14T20:15:54.000000Z",
+                  "updated_at": "2025-08-24T20:52:57.000000Z"
+                }
+              },]</code></pre>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="followups of Section">
+          <h3>8. Follow up details</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/followups/{id}</p>
+            <p><strong>Description:</strong> Restores a specified follow-up.</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+                            {
+                "id": 1,
+                "inquiry_id": 1,
+                "status": 0,
+                "follower_id": 1,
+                "section_id": 4,
+                "response": null,
+                "created_at": "2025-08-14T20:15:55.000000Z",
+                "updated_at": "2025-08-15T20:45:22.000000Z",
+                "inquiry": {
+                  "id": 1,
+                  "user_id": 23,
+                  "assignee_id": 2,
+                  "category_id": 1,
+                  "cur_status_id": 3,
+                  "title": "استفسار عن خدمة سوبركليب",
+                  "body": "كيف يمكن تفعيل السوبر كليب",
+                  "response": "تم الرد",
+                  "closed_at": "2025-08-24 20:52:57",
+                  "deleted_at": null,
+                  "created_at": "2025-08-14T20:15:54.000000Z",
+                  "updated_at": "2025-08-24T20:52:57.000000Z"
+                },
+                "section": {
+                  "id": 4,
+                  "name": "VAS - Adminstration&Operation",
+                  "division": "IT - CSD",
+                  "email": "VAS@mail.com",
+                  "deleted_at": null,
+                  "created_at": "2025-08-14T20:15:49.000000Z",
+                  "updated_at": "2025-08-14T20:15:49.000000Z"
+                },
+                "follower": {
+                  "id": 1,
+                  "name": "Admin",
+                  "email": "admin@mail.com",
+                  "email_verified_at": null,
+                  "position": "Manager",
+                  "section_id": 1,
+                  "role_id": 1,
+                  "delegation_id": null,
+                  "code": null,
+                  "status": 1,
+                  "img_url": null,
+                  "created_at": "2025-08-14T20:15:50.000000Z",
+                  "updated_at": "2025-08-14T20:15:50.000000Z"
+                }
+              }]</code>
+            </pre>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -1853,15 +2415,210 @@
       </div>
       <div class="section-content">
 
-        <div class="endpoint" data-title="Get All Follow-ups">
-          <h3>1. Get All Follow-ups</h3>
+        <div class="endpoint" data-title="Get All Favourites">
+          <h3>1. Get All Favourites</h3>
           <div class="endpoint-content">
-            <p><span class="method GET">GET</span> /api/followups</p>
-            <p><strong>Description:</strong> Returns a list of all follow-up records.</p>
+            <p><span class="method GET">GET</span> /api/favourites</p>
+            <p><strong>Description:</strong> Returns a list of All favourites Inquiries . (Admin/SuperAdmin)</p>
+
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+              {
+                "id": 1,
+                "inquiry_id": 1,
+                "user_id": 3,
+                "created_at": "2025-08-16T19:44:06.000000Z",
+                "updated_at": "2025-08-16T19:44:06.000000Z",
+                "inquiry": {
+                  "id": 1,
+                  "user_id": 23,
+                  "assignee_id": 2,
+                  "category_id": 1,
+                  "cur_status_id": 3,
+                  "title": "استفسار عن خدمة سوبركليب",
+                  "body": "كيف يمكن تفعيل السوبر كليب",
+                  "response": "تم الرد",
+                  "closed_at": "2025-08-23 10:10:36",
+                  "deleted_at": null,
+                  "created_at": "2025-08-14T20:15:54.000000Z",
+                  "updated_at": "2025-08-23T10:10:36.000000Z"
+                }
+              },
+              {
+                "id": 2,
+                "inquiry_id": 2,
+                "user_id": 3,
+                "created_at": "2025-08-16T19:44:06.000000Z",
+                "updated_at": "2025-08-16T19:44:06.000000Z",
+                "inquiry": {
+                  "id": 2,
+                  "user_id": 23,
+                  "assignee_id": 2,
+                  "category_id": 1,
+                  "cur_status_id": 2,
+                  "title": "استفسار عن خدمة سوبركليب",
+                  "body": "كيف يمكن تفعيل السوبر كليب",
+                  "response": null,
+                  "closed_at": "2025-08-16 20:15:54",
+                  "deleted_at": null,
+                  "created_at": "2025-08-14T20:15:54.000000Z",
+                  "updated_at": "2025-08-14T20:15:54.000000Z"
+                }
+              },
+              {
+                "id": 4,
+                "inquiry_id": 4,
+                "user_id": 3,
+                "created_at": "2025-08-16T19:44:06.000000Z",
+                "updated_at": "2025-08-16T19:44:06.000000Z",
+                "inquiry": {
+                  "id": 4,
+                  "user_id": 23,
+                  "assignee_id": 2,
+                  "category_id": 3,
+                  "cur_status_id": 4,
+                  "title": "استفسار عن خدمة سوبركليب",
+                  "body": "كيف يمكن تفعيل السوبر كليب",
+                  "response": null,
+                  "closed_at": null,
+                  "deleted_at": null,
+                  "created_at": "2025-08-14T20:15:55.000000Z",
+                  "updated_at": "2025-08-14T20:15:55.000000Z"
+                }
+              }
+            ]
+            </code>
+            </pre>
+
+
             <details>
               <summary><strong>Possible Error Responses</strong></summary>
               <pre><code>// 401 Unauthorized
-{ "message": "Unauthenticated." }</code></pre>
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Add to favourites">
+          <h3>2. Add Inquiry to favourites</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/favourites</p>
+            <p><strong>Description:</strong> Add an inquiry to favourites.</p>
+
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{ "inquiry_id": 1 }</code></pre>
+
+            <p><strong>Response Example:</strong></p>
+            <pre><code>'message' => 'Inquiry has been favourited successfully !'
+            </code>
+            </pre>
+
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Get myFavourites">
+          <h3>3. Get myFavourites</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/myFavourites</p>
+            <p><strong>Description:</strong> Returns a list of myFavourites Inquiries .</p>
+
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+              {
+                "id": 1,
+                "inquiry_id": 1,
+                "user_id": 3,
+                "created_at": "2025-08-16T19:44:06.000000Z",
+                "updated_at": "2025-08-16T19:44:06.000000Z",
+                "inquiry": {
+                  "id": 1,
+                  "user_id": 23,
+                  "assignee_id": 2,
+                  "category_id": 1,
+                  "cur_status_id": 3,
+                  "title": "استفسار عن خدمة سوبركليب",
+                  "body": "كيف يمكن تفعيل السوبر كليب",
+                  "response": "تم الرد",
+                  "closed_at": "2025-08-23 10:10:36",
+                  "deleted_at": null,
+                  "created_at": "2025-08-14T20:15:54.000000Z",
+                  "updated_at": "2025-08-23T10:10:36.000000Z"
+                }
+              },
+              {
+                "id": 2,
+                "inquiry_id": 2,
+                "user_id": 3,
+                "created_at": "2025-08-16T19:44:06.000000Z",
+                "updated_at": "2025-08-16T19:44:06.000000Z",
+                "inquiry": {
+                  "id": 2,
+                  "user_id": 23,
+                  "assignee_id": 2,
+                  "category_id": 1,
+                  "cur_status_id": 2,
+                  "title": "استفسار عن خدمة سوبركليب",
+                  "body": "كيف يمكن تفعيل السوبر كليب",
+                  "response": null,
+                  "closed_at": "2025-08-16 20:15:54",
+                  "deleted_at": null,
+                  "created_at": "2025-08-14T20:15:54.000000Z",
+                  "updated_at": "2025-08-14T20:15:54.000000Z"
+                }
+              },
+              {
+                "id": 4,
+                "inquiry_id": 4,
+                "user_id": 3,
+                "created_at": "2025-08-16T19:44:06.000000Z",
+                "updated_at": "2025-08-16T19:44:06.000000Z",
+                "inquiry": {
+                  "id": 4,
+                  "user_id": 23,
+                  "assignee_id": 2,
+                  "category_id": 3,
+                  "cur_status_id": 4,
+                  "title": "استفسار عن خدمة سوبركليب",
+                  "body": "كيف يمكن تفعيل السوبر كليب",
+                  "response": null,
+                  "closed_at": null,
+                  "deleted_at": null,
+                  "created_at": "2025-08-14T20:15:55.000000Z",
+                  "updated_at": "2025-08-14T20:15:55.000000Z"
+                }
+              }
+            ]
+            </code>
+            </pre>
+
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Remove from favourites">
+          <h3>4. Remove Favourite</h3>
+          <div class="endpoint-content">
+            <p><span class="method DELETE">DELETE</span> /api/favourites/{id}</p>
+            <p><strong>Description:</strong> Remove Inquiry from favourites</p>
+            <p><strong>Rule:</strong> favourite.user == auth.user </p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{ "message": "the inquiry has been removed from favourite successfully !" }</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 404 Not Found
+                { "message": "No query results for model [Section] 999" }
+
+                // 403 Unauthorized
+                { "message": "unauthorized !" }</code></pre>
             </details>
           </div>
         </div>
@@ -2000,6 +2757,93 @@
           </div>
         </div>
 
+        <div class="endpoint" data-title="Trainers Details">
+          <h3>3. Trainers Details</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/reports/trainers</p>
+            <p><strong>Description:</strong> Returns a Trainers details.</p>
+
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+              {
+                "user_id": 2,
+                "username": "Alaa",
+                "total_responded_inquiries": 4,
+                "opened_inquiries": 1,
+                "closed_inquiries": 1,
+                "pending_inquiries": 1,
+                "reopened_inquiries": 1,
+                "avg_closing_hours": "18:52",
+                "last_delegated_user": "Admin"
+              },
+              {
+                "user_id": 3,
+                "username": "trainer",
+                "total_responded_inquiries": 0,
+                "opened_inquiries": 0,
+                "closed_inquiries": 0,
+                "pending_inquiries": 0,
+                "reopened_inquiries": 0,
+                "avg_closing_hours": null,
+                "last_delegated_user": null
+              },
+              {
+                "user_id": 4,
+                "username": "Gabriel Cummings",
+                "total_responded_inquiries": 0,
+                "opened_inquiries": 0,
+                "closed_inquiries": 0,
+                "pending_inquiries": 0,
+                "reopened_inquiries": 0,
+                "avg_closing_hours": null,
+                "last_delegated_user": null
+              },
+              {
+                "user_id": 5,
+                "username": "Prof. Emile Kozey Jr.",
+                "total_responded_inquiries": 0,
+                "opened_inquiries": 0,
+                "closed_inquiries": 0,
+                "pending_inquiries": 0,
+                "reopened_inquiries": 0,
+                "avg_closing_hours": null,
+                "last_delegated_user": null
+              },
+              {
+                "user_id": 6,
+                "username": "Edward Durgan",
+                "total_responded_inquiries": 0,
+                "opened_inquiries": 0,
+                "closed_inquiries": 0,
+                "pending_inquiries": 0,
+                "reopened_inquiries": 0,
+                "avg_closing_hours": null,
+                "last_delegated_user": null
+              },
+              {
+                "user_id": 7,
+                "username": "Elvera Smith",
+                "total_responded_inquiries": 0,
+                "opened_inquiries": 0,
+                "closed_inquiries": 0,
+                "pending_inquiries": 0,
+                "reopened_inquiries": 0,
+                "avg_closing_hours": null,
+                "last_delegated_user": null
+              },]
+            </code>
+            </pre>
+
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+
+
       </div>
     </div>
 
@@ -2043,14 +2887,14 @@
             </div>
         </div> --}}
 
-          <div class="endpoint" data-title="My Notifcations">
+        <div class="endpoint" data-title="My Notifcations">
           <h3>2. My Notifcations</h3>
           <div class="endpoint-content">
             <p><span class="method GET">GET</span> /api/notifications/myNotifications</p>
             <p><strong>Description:</strong> Returns my notifications.</p>
 
             <p><strong>Response Example:</strong></p>
-              <pre><code>[
+            <pre><code>[
                 {
                   "id": 1,
                   "inquiry_id": 10,
@@ -2129,24 +2973,57 @@
       </div>
     </div>
 
-
-    <!-- Section 9: Roles -->
+    <!-- Section 10: Roles -->
     <div class="section-wrapper">
       <div class="section-header"
         onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
         <h2>Roles</h2>
       </div>
-      <div class="section-content">
 
-        <div class="endpoint" data-title="Get All Follow-ups">
-          <h3>1. Get All Follow-ups</h3>
+      <div class="section-content">
+        <div class="endpoint" data-title="Get All Roles">
+          <h3>1. Get All Roles</h3>
           <div class="endpoint-content">
-            <p><span class="method GET">GET</span> /api/followups</p>
-            <p><strong>Description:</strong> Returns a list of all follow-up records.</p>
+            <p><span class="method GET">GET</span> /api/roles</p>
+            <p><strong>Description:</strong> Returns a list of all Roles. (SuperAdmin,Admin,Trainer)</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+              {
+                "id": 1,
+                "name": "SuperAdmin",
+                "created_at": "2025-08-14T20:15:49.000000Z",
+                "updated_at": "2025-08-14T20:15:49.000000Z"
+              },
+              {
+                "id": 2,
+                "name": "Admin",
+                "created_at": "2025-08-14T20:15:49.000000Z",
+                "updated_at": "2025-08-14T20:15:49.000000Z"
+              },
+              {
+                "id": 3,
+                "name": "Trainer",
+                "created_at": "2025-08-14T20:15:49.000000Z",
+                "updated_at": "2025-08-14T20:15:49.000000Z"
+              },
+              {
+                "id": 4,
+                "name": "Assistant",
+                "created_at": "2025-08-14T20:15:49.000000Z",
+                "updated_at": "2025-08-14T20:15:49.000000Z"
+              },
+              {
+                "id": 5,
+                "name": "User",
+                "created_at": "2025-08-14T20:15:49.000000Z",
+                "updated_at": "2025-08-14T20:15:49.000000Z"
+              }
+            ]</code>
+            </pre>
             <details>
               <summary><strong>Possible Error Responses</strong></summary>
               <pre><code>// 401 Unauthorized
-{ "message": "Unauthenticated." }</code></pre>
+                { "message": "Unauthenticated." }</code></pre>
             </details>
           </div>
         </div>

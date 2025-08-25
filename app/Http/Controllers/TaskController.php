@@ -26,7 +26,6 @@ class TaskController extends Controller
         return $tasks;
     }
 
-
     /**
      * Store a newly created resource in storage.
      */
@@ -37,7 +36,6 @@ class TaskController extends Controller
             'owner_id' => ['required', 'numeric', 'exists:users,id'],
         ]);
 
-        //select delegation from user profile
         $delegation_id = User::findOrFail($request['owner_id'])->delegation_id;
         $request['delegation_id'] = $delegation_id;
 
@@ -59,7 +57,6 @@ class TaskController extends Controller
         $task->delegation;
         return $task;
     }
-
 
     /**
      * Update the specified resource in storage.
@@ -137,6 +134,13 @@ class TaskController extends Controller
             $category->update(['owner_id' => null]);
         }
         return response()->json(['message' => 'reset tasks has been done successfully !']);
+    }
+
+    public function reset1($id)
+    {
+        $category = Category::findOrFail($id);
+            $category->update(['owner_id' => null]);
+        return response()->json(['message' => 'reset task has been done successfully !']);
     }
 
 

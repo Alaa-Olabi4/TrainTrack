@@ -144,6 +144,67 @@ class ReportController extends Controller
         return $data;
     }
 
+    public function Trainers()
+    {
+        $data = [];
+        $i = 0;
+
+        $users = User::where('role_id', 3)
+            ->where('status', 1)
+            ->get();
+
+        foreach ($users as $user) {
+            $inquiries = $user->assignedInquiries();
+
+            $totalResponded = (clone $inquiries)->count();
+            $opened   = (clone $inquiries)->whereHas('status', fn($q) => $q->where('name', 'opened'))->count();
+            $closed   = (clone $inquiries)->whereHas('status', fn($q) => $q->where('name', 'closed'))->count();
+            $pending  = (clone $inquiries)->whereHas('status', fn($q) => $q->where('name', 'pending'))->count();
+            $reopened = (clone $inquiries)->whereHas('status', fn($q) => $q->where('name', 'reopened'))->count();
+
+            // Average closing time in seconds
+            $avgClosingSeconds = (clone $inquiries)
+                ->whereHas('status', fn($q) => $q->where('name', 'closed'))
+                ->whereNotNull('closed_at')
+                ->selectRaw('AVG(TIMESTAMPDIFF(SECOND, created_at, closed_at)) as avg_seconds')
+                ->value('avg_seconds');
+
+            $avgClosingFormatted = null;
+            if ($avgClosingSeconds !== null) {
+                $hours = floor($avgClosingSeconds / 3600);
+                $minutes = floor(($avgClosingSeconds % 3600) / 60);
+                $avgClosingFormatted = sprintf('%02d:%02d', $hours, $minutes);
+            }
+
+            // Average evaluation
+            // $avgEvaluation = (clone $inquiries)
+            //     ->join('evaluations', 'evaluations.inquiry_id', '=', 'inquiries.id')
+            //     ->avg('evaluations.score');
+
+            // Last user they delegated to in the given period
+            $lastDelegatedUser = Task::where('owner_id', $user->id)
+                ->latest('created_at')
+                ->with('delegation')
+                ->first();
+
+            $data[$i] = [
+                'user_id'                  => $user->id,
+                'username'                 => $user->name,
+                'total_responded_inquiries' => $totalResponded,
+                'opened_inquiries'         => $opened,
+                'closed_inquiries'         => $closed,
+                'pending_inquiries'        => $pending,
+                'reopened_inquiries'       => $reopened,
+                'avg_closing_hours'        => $avgClosingFormatted,
+                // 'avg_evaluation'           => $avgEvaluation ? round($avgEvaluation, 2) : null,
+                'last_delegated_user'      => $lastDelegatedUser?->delegation?->name,
+            ];
+            $i++;
+        }
+
+        return $data;
+    }
+
 
     public function myDailyReport(Request $request)
     {
@@ -227,7 +288,7 @@ class ReportController extends Controller
             'avg_closing'     => null,
             // 'avg_evaluation'  => null,
             'followups'       => array_sum(array_column($report, 'followups')),
-            'last_delegation_from' => '-', 
+            'last_delegation_from' => '-',
         ];
 
         // حساب متوسط زمن الإغلاق (بالثواني)

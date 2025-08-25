@@ -33,29 +33,29 @@ Route::controller(AuthController::class)->group(function () {
     Route::middleware(['auth:sanctum', 'active'])->group(function () {
         Route::middleware(['role:SuperAdmin,Admin'])->group(function () {
             Route::post('add_user', 'addUser'); //1
-            Route::post('changeRole', 'changeRole');
-            Route::post('block', 'block');
-            Route::post('updateProfile/{id}', 'update');
-            Route::get('users', 'index');
-            Route::get('blockedUsers', 'blockedUsers');
-            Route::get('userRoles/{role_id}', 'userRoles');
-            Route::get('users/search', 'search');
+            Route::post('changeRole', 'changeRole');//1
+            Route::post('block', 'block');//1
+            Route::post('updateProfile/{id}', 'update');//1
+            Route::get('users', 'index');//1
+            Route::get('blockedUsers', 'blockedUsers');//1
+            Route::get('userRoles/{role_id}', 'userRoles');//1
         });
 
         Route::post('logout', 'logout'); //1
         Route::get('/profile', 'profile'); //1
     });
+    Route::get('users/search', 'search');//1
 });
 
 Route::controller(SectionController::class)->group(function () {
     Route::prefix('sections')->group(function () {
-        Route::get('', 'index');
+        Route::get('', 'index');//1
         Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin,Trainer,Assistant', 'active'])->group(function () {
-            Route::get('/search', 'search');
+            Route::get('/search', 'search');//1
         });
         Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin', 'active'])->group(function () {
-            Route::get('/withTrashed', 'indexWithTrashed');
-            Route::get('/trashed', 'indexOnlyTrashed');
+            Route::get('/withTrashed', 'indexWithTrashed');//1
+            Route::get('/trashed', 'indexOnlyTrashed');//1
             Route::post('', 'store'); //1
             Route::post('/{id}', 'update'); //1
             Route::delete('/{id}', 'destroy'); //1
@@ -90,12 +90,16 @@ Route::controller(CategoryController::class)->group(function () {
 Route::controller(TaskController::class)->group(function () {
 
     //TaskController Admins Routes :
-    Route::get('random-assign', 'randomlyAssign');
     Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin', 'active'])->group(function () {
-        Route::post('tasks', 'store');
+        Route::get('random-assign', 'randomlyAssign');
         Route::post('bulktasks', 'bulkstore');
-        Route::post('tasks/{id}', 'update');
-        Route::delete('tasks/{id}', 'destroy');
+
+        Route::prefix('tasks')->group(function () {
+            Route::post('', 'store');
+            Route::post('/{id}', 'update');
+            Route::get('/reset', 'reset');
+            Route::get('/reset/{id}', 'reset1');
+        });
     });
 
     //TaskController Admin Or Trainers Routes :
@@ -140,7 +144,6 @@ Route::controller(FollowupController::class)->group(function () {
 
     //TaskController Admins Routes :
     Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin', 'active'])->group(function () {
-        Route::get('followups', 'index');
         Route::get('followups/restore/{id}', 'restore');
     });
 
@@ -175,11 +178,12 @@ Route::controller(FavouriteController::class)->group(function () {
 
 Route::controller(ReportController::class)->group(function () {
     Route::prefix('reports')->group(function () {
-        Route::middleware(['auth:sanctum', 'active'])->group(function () {
+        Route::middleware(['auth:sanctum', 'active', 'role:SuperAdmin,Admin,Trainer'])->group(function () {
             Route::post('system', 'SystemReport');
             Route::post('myDailyReport', 'myDailyReport');
         });
         Route::post('trainers', 'TrainerReport');
+        Route::get('trainers', 'Trainers');
     });
 });
 
@@ -195,4 +199,4 @@ Route::controller(NotificationController::class)->group(function () {
 
 Route::get('/roles', function () {
     return Role::all();
-})->middleware(['auth:sanctum', 'role:SuperAdmin,Admin', 'active']);
+})->middleware(['auth:sanctum', 'role:SuperAdmin,Admin,Trainer', 'active']);

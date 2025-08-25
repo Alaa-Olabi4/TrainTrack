@@ -21,14 +21,18 @@ class FavouriteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'inquiry_id' => ['required' , 'numeric' , 'exists:inquiries,id']
+            'inquiry_id' => ['required', 'numeric', 'exists:inquiries,id']
         ]);
 
-        $user = auth()->user();
+        $user = auth()->user()->id;
+
+        if (Favourite::where('inquiry_id', $request['inquiry_id'])->where('user_id', $user)->first()) {
+            return response()->json(['message' => 'the inquiry is already favourited !'], 400);
+        }
 
         Favourite::create([
             'inquiry_id' => $request['inquiry_id'],
-            'user_id' => $user            
+            'user_id' => $user
         ]);
 
         return response()->json(['message' => 'Inquiry has been favourited successfully !']);
@@ -47,16 +51,23 @@ class FavouriteController extends Controller
         return $favourite;
     }
 
-    public function myFavourites(){
+    public function myFavourites()
+    {
         $user = auth()->user();
-        $favourites = Favourite::where('user_id',$user->id)->get();
+        $favourites = Favourite::where('user_id', $user->id)->get();
+        foreach ($favourites as $f) {
+            $f->inquiry;
+        }
         return $favourites;
     }
 
-    public function remove($id){
+    public function remove($id)
+    {
         $favourite = Favourite::findOrFail($id);
-        if(auth()->user()->id != $favourite->user_id){return response()->json(['message' => 'unauthorized !'],403);}
+        if (auth()->user()->id != $favourite->user_id) {
+            return response()->json(['message' => 'unauthorized !'], 403);
+        }
         $favourite->delete();
-        return response()->json(['message'=>'the inquiry has been removed from favourite successfully !']);
+        return response()->json(['message' => 'the inquiry has been removed from favourite successfully !']);
     }
 }

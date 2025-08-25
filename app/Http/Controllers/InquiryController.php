@@ -45,7 +45,6 @@ class InquiryController extends Controller
         }
         return $res;
     }
-
     /**
      * Display a listing of the Inquiries.
      */
@@ -220,7 +219,6 @@ class InquiryController extends Controller
             $msg
         );
 
-
         // Dispatch queued jobs
         if ($category->owner) {
             SendNewInquiryEmail::dispatch($inquiry->id, $category->owner->email, $category->owner->name);
@@ -329,6 +327,10 @@ class InquiryController extends Controller
 
         $inq = Inquiry::findOrFail($request['inquiry_id']);
 
+        if($inq->status->id == 3){
+            return response()->json(['message'=>'the inquiry is already closed !'],400);
+        }
+
         if ($request['status_id'] == 3) {
             $status_id = $request['status_id'];
             $inq->update(['closed_at' => now()]);
@@ -350,17 +352,24 @@ class InquiryController extends Controller
         return response()->json(['message' => 'your reply has been submitted successfully !']);
     }
 
-    public function reopen($inq_id)
+    public function reopen(Request $request)
     {
+        $request->validate([
+            'inq_id' => ['required', 'exists:inquiries,id'],
+            'response' => ['string']
+        ]);
+
         $user = auth()->user();
-        $inq = Inquiry::findOrFail($inq_id);
+        $inq = Inquiry::findOrFail($request['inq_id']);
 
         if ($inq->user_id != $user->id) {
             return response()->json(['message' => 'only the user who ask can reopen the inquiry !'], 400);
         }
 
         $inq->update(['cur_status_id' => 4]);
+
         // Create a follow up
+        FollowupController::store($request->merge(['status' => 4, 'section_id' => 1]));
 
         // Notify UAT & Training
 

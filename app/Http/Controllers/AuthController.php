@@ -173,7 +173,7 @@ class AuthController extends Controller
 
     // Start Users for admin
 
-    // Users :
+    // Users
     public function index()
     {
         return User::where('role_id', '!=', 1)->get();
@@ -300,7 +300,6 @@ class AuthController extends Controller
         $user->update($request->all());
         return response()->json(['message' => 'user updated successfully !']);
     }
-
     public function search(Request $request)
     {
         $data = $request->validate([
@@ -330,4 +329,5 @@ class AuthController extends Controller
 
         return count($results) == 0 ? response()->json(['message' => 'not found !']) : $results;
     }
+
 }
