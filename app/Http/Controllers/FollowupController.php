@@ -14,12 +14,24 @@ class FollowupController extends Controller
      */
     public function index()
     {
-        return FollowUp::all();
+        $fs = FollowUp::all();
+        foreach ($fs as $f) {
+            $f->inquiry;
+            $f->section;
+            $f->follower;
+        }
+        return $fs;
     }
 
     public function indexSection($section_id)
     {
-        return FollowUp::with('inquiry')->where('section_id', $section_id)->get();
+        $fs= FollowUp::where('section_id', $section_id)->get();
+        foreach ($fs as $f) {
+            $f->inquiry;
+            $f->section;
+            $f->follower;
+        }
+        return $fs;
     }
     /**
      * Store a newly created resource in storage.
@@ -39,6 +51,7 @@ class FollowupController extends Controller
         $data = [
             'inquiry_id' => $request['inquiry_id'],
             'status' => $request['status'],
+            'response' => $request['response'],
             'section_id' => $request['section_id'],
             'follower_id' => $follower->id
         ];
@@ -63,7 +76,13 @@ class FollowupController extends Controller
 
     public function followupsrequest($inquiry_id)
     {
-        return FollowUp::with('section')->with('follower')->where('inquiry_id', $inquiry_id)->get();
+        $fs = FollowUp::where('inquiry_id', $inquiry_id)->get();
+        foreach ($fs as $f) {
+            $f->inquiry;
+            $f->section;
+            $f->follower;
+        }
+        return $fs;
     }
 
     /**
