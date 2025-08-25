@@ -13,17 +13,34 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return Category::orderByDesc('id')->get();
+        $cs = Category::orderByDesc('id')->get();
+        foreach ($cs as $c) {
+            $c->owner;
+        }
+        return $cs;
     }
 
     public function indexWithTrashed()
     {
-        return Category::withTrashed()->get();
+        $cs =  Category::withTrashed()->get();
+        foreach ($cs as $c) {
+            $c->owner;
+        }
+        return $cs;
     }
 
     public function indexOnlyTrashed()
     {
-        return Category::onlyTrashed()->get();
+        $cs = Category::onlyTrashed()->get();
+        foreach ($cs as $c) {
+            $c->owner;
+        }
+        return $cs;
+    }
+
+    public function indexNoOwner(){
+        $categories = Category::where('owner_id', null)->get();
+        return $categories;
     }
 
     /**
@@ -47,7 +64,9 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        return Category::findOrFail($id);
+        $c = Category::findOrFail($id);
+        $c->owner;
+        return $c;
     }
 
     /**
@@ -65,8 +84,8 @@ class CategoryController extends Controller
         Category::findOrFail($id)->update($request->all());
 
         $msg = "";
-        if($request['owner_id'] != null){
-            $task = Task::where('category_id',$id)->latest()->first();
+        if ($request['owner_id'] != null) {
+            $task = Task::where('category_id', $id)->latest()->first();
             Task::create([
                 'category_id' => $id,
                 'owner_id' => $request['owner_id'],

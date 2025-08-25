@@ -76,6 +76,7 @@ Route::controller(CategoryController::class)->group(function () {
         Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin', 'active'])->group(function () {
             Route::post('', 'store'); //1
             Route::post('/{id}', 'update'); //1
+            Route::get('/indexNoOwner', 'indexNoOwner'); //1
             Route::get('/withTrashed', 'indexWithTrashed'); //1
             Route::get('/trashed', 'indexOnlyTrashed'); //1
             Route::get('/restore/{id}', 'restore'); //1
@@ -129,7 +130,7 @@ Route::controller(InquiryController::class)->group(function () {
             Route::get('Status/{status_id}', 'indexStatuses');
             Route::get('Sender/{sender_id}', 'indexSender');
             Route::get('Trainer/{assignee_id}', 'indexTrainer');
-            Route::post('repoen/{inq_id}', 'reopen');
+            Route::post('/reopen', 'reopen');
             Route::post('', 'store');
         });
         Route::get('/{id}', 'show');
@@ -175,7 +176,10 @@ Route::controller(ReportController::class)->group(function () {
     Route::prefix('reports')->group(function () {
         Route::middleware(['auth:sanctum', 'active', 'role:SuperAdmin,Admin,Trainer'])->group(function () {
             Route::post('system', 'SystemReport');
-            Route::post('myDailyReport', 'myDailyReport');///0
+            Route::get('category','categoryReport');
+            Route::post('myDailyReport', 'myDailyReport');
+            Route::post('myWeeklyReport', 'myWeeklyReport');
+            Route::post('myMonthlyReport', 'myMonthlyReport');
         });
         Route::post('trainers', 'TrainerReport');
         Route::get('trainers', 'Trainers');
