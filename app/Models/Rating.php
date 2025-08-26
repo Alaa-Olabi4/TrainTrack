@@ -16,13 +16,11 @@ class Rating extends Model
         'feedback_text'
     ];
 
-    // علاقة مع الاستفسار
     public function inquiry()
     {
         return $this->belongsTo(Inquiry::class);
     }
 
-    // علاقة مع المستخدم
     public function user()
     {
         return $this->belongsTo(User::class);

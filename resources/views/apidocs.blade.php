@@ -459,7 +459,7 @@
             <pre><code>{ "user_id": 10, "status": 0 }</code></pre>
             <p><strong>Response2 Example:</strong></p>
             <pre><code>{ "message": "user has been blocked successfully !" }</code></pre>
-            
+
             <details>
               <summary><strong>Possible Error Responses</strong></summary>
               <pre><code>// 401 Unauthorized
@@ -741,7 +741,7 @@
           <h3>5. Delete Section</h3>
           <div class="endpoint-content">
             <p><span class="method DELETE">DELETE</span> /api/sections/2</p>
-            <p><strong>Description:</strong> Permanently deletes a section from the system.</p>
+            <p><strong>Description:</strong> Soft deletes a section from the system.</p>
             <p><strong>Response Example:</strong></p>
             <pre><code>{ "message": "Section has been deleted successfully !" }</code></pre>
             <details>
@@ -778,7 +778,7 @@
 { "message": "Unauthenticated." }</code></pre>
             </details>
           </div>
-        </div>        
+        </div>
 
         <div class="endpoint" data-title="List With Trashed">
           <h3>7. List All Sections (With Trashed)</h3>
@@ -1124,6 +1124,7 @@
           </div>
         </div>
 
+
         <!-- 9. Show Category -->
         <div class="endpoint" data-title="Show Category">
           <h3>9. Show Category</h3>
@@ -1148,6 +1149,33 @@
 
 // 404 Not Found
 { "message": "No query results for model [Category] 123" }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="index No Owner">
+          <h3>10. index No Owner</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/categories/indexNoOwner</p>
+            <p><strong>Description:</strong> Lists only the categories have no owner. (Role: SuperAdmin, Admin)</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+                {
+                  "id": 10,
+                  "name": "RBT",
+                  "description": "RBT",
+                  'owner_id':null
+                }
+              ]</code>
+            </pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }
+
+                // 403 Forbidden (if not SuperAdmin/Admin)
+                { "message": "User does not have the right roles." }</code>
+              </pre>
             </details>
           </div>
         </div>
@@ -1308,7 +1336,6 @@
             <pre><code>{
   "category_id": 2,
   "owner_id": 5,
-  "delegation_id": 7
 }</code></pre>
             <p><strong>Response Example:</strong></p>
             <pre><code>{
@@ -1973,14 +2000,20 @@
         <div class="endpoint" data-title="Reopen Inquiry">
           <h3>17. Reopen Inquiry</h3>
           <div class="endpoint-content">
-            <p><span class="method POST">POST</span> /api/inquiries/repoen/{inq_id}</p>
+            <p><span class="method POST">POST</span> /api/inquiries/reopen</p>
             <p><strong>Middleware:</strong> auth:sanctum</p>
             <p><strong>Description:</strong> Reopens a closed inquiry (only original sender can reopen).</p>
-            <p><strong>Example:</strong> <code>/api/inquiries/repoen/15</code></p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{
+                "inquiry_id": 1,
+                "response": "Can't access VPN",
+                }</code>
+              </pre>
             <p><strong>Response Example:</strong></p>
             <pre><code>{ 
-  "message": "the inquiry has been reopened successfully !" 
-}</code></pre>
+                "message": "the inquiry has been reopened successfully !" 
+              }</code>
+            </pre>
           </div>
         </div>
 
@@ -2627,7 +2660,372 @@
       </div>
     </div>
 
-    <!-- Section 8: Reports -->
+    <!-- Section 8: Ratings -->
+    <div class="section-wrapper">
+      <div class="section-header"
+        onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
+        <h2>Ratings</h2>
+      </div>
+      <div class="section-content">
+
+        <div class="endpoint" data-title="Get All Ratings">
+          <h3>1. Get All Rating</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/ratings</p>
+            <p><strong>Description:</strong> Returns a list of All Ratings . (Admin/SuperAdmin/Trainer)</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+              {
+                "rating_id": 1,
+                "score": 5,
+                "feedback": "v.good response",
+                "rated_by": "Asa Cruickshank",
+                "rated_by_role": "User",
+                "inquiry_title": "استفسار عن خدمة سوبركليب",
+                "user": {
+                  "id": 14,
+                  "name": "Asa Cruickshank",
+                  "email": "freddie97@example.org",
+                  "email_verified_at": "2025-08-14 20:15:52",
+                  "position": "Rep",
+                  "section_id": 1,
+                  "role_id": 5,
+                  "delegation_id": null,
+                  "code": null,
+                  "status": 1,
+                  "img_url": null,
+                  "created_at": "2025-08-14T20:15:52.000000Z",
+                  "updated_at": "2025-08-14T20:15:52.000000Z",
+                  "role": {
+                    "id": 5,
+                    "name": "User",
+                    "created_at": "2025-08-14T20:15:49.000000Z",
+                    "updated_at": "2025-08-14T20:15:49.000000Z"
+                  }
+                },
+                "inquiry": {
+                  "id": 2,
+                  "user_id": 23,
+                  "assignee_id": 2,
+                  "category_id": 1,
+                  "cur_status_id": 2,
+                  "title": "استفسار عن خدمة سوبركليب",
+                  "body": "كيف يمكن تفعيل السوبر كليب",
+                  "response": null,
+                  "closed_at": "2025-08-16 20:15:54",
+                  "deleted_at": null,
+                  "created_at": "2025-08-14T20:15:54.000000Z",
+                  "updated_at": "2025-08-14T20:15:54.000000Z",
+                  "category": {
+                    "id": 1,
+                    "name": "superclip",
+                    "description": "superclip",
+                    "owner_id": 3,
+                    "weight": 0,
+                    "deleted_at": null,
+                    "created_at": "2025-08-14T20:15:53.000000Z",
+                    "updated_at": "2025-08-14T20:15:53.000000Z"
+                  }
+                }
+              },
+              ]</code>
+            </pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Add rating">
+          <h3>2. Add Rating to Inquiry Response</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/ratings</p>
+            <p><strong>Description:</strong> Add Rating to Inquiry Response. (Admin/SuperAdmin/User)</p>
+
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{ "inquiry_id": 2 , "score":4 , "feedback_text" : "clear response"}</code></pre>
+
+            <p><strong>Response Example:</strong></p>
+            <pre><code>'message' => 'The rating has been sent successfully.'
+            </code>
+            </pre>
+
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Get a Rating of id">
+          <h3>3. Get a specified Rating</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/ratings/{id}</p>
+            <p><strong>Description:</strong> Returns a specified Rating . (Admin/SuperAdmin/Trainer)</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+              {
+                "rating_id": 1,
+                "score": 5,
+                "feedback": "v.good response",
+                "rated_by": "Asa Cruickshank",
+                "rated_by_role": "User",
+                "inquiry_title": "استفسار عن خدمة سوبركليب",
+                "user": {
+                  "id": 14,
+                  "name": "Asa Cruickshank",
+                  "email": "freddie97@example.org",
+                  "email_verified_at": "2025-08-14 20:15:52",
+                  "position": "Rep",
+                  "section_id": 1,
+                  "role_id": 5,
+                  "delegation_id": null,
+                  "code": null,
+                  "status": 1,
+                  "img_url": null,
+                  "created_at": "2025-08-14T20:15:52.000000Z",
+                  "updated_at": "2025-08-14T20:15:52.000000Z",
+                  "role": {
+                    "id": 5,
+                    "name": "User",
+                    "created_at": "2025-08-14T20:15:49.000000Z",
+                    "updated_at": "2025-08-14T20:15:49.000000Z"
+                  }
+                },
+                "inquiry": {
+                  "id": 2,
+                  "user_id": 23,
+                  "assignee_id": 2,
+                  "category_id": 1,
+                  "cur_status_id": 2,
+                  "title": "استفسار عن خدمة سوبركليب",
+                  "body": "كيف يمكن تفعيل السوبر كليب",
+                  "response": null,
+                  "closed_at": "2025-08-16 20:15:54",
+                  "deleted_at": null,
+                  "created_at": "2025-08-14T20:15:54.000000Z",
+                  "updated_at": "2025-08-14T20:15:54.000000Z",
+                  "category": {
+                    "id": 1,
+                    "name": "superclip",
+                    "description": "superclip",
+                    "owner_id": 3,
+                    "weight": 0,
+                    "deleted_at": null,
+                    "created_at": "2025-08-14T20:15:53.000000Z",
+                    "updated_at": "2025-08-14T20:15:53.000000Z"
+                  }
+                }
+              },
+              ]</code>
+            </pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Update Rating">
+          <h3>4. Update Rating of Inquiry Response</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/ratings/{id}</p>
+            <p><strong>Description:</strong> Update Rating to Inquiry Response. (Admin/SuperAdmin/User)</p>
+
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{ "score":2 , "feedback_text" : "unclear response"}</code></pre>
+
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{
+                  "message": "Rating updated successfully.",
+                  "data": {
+                    "id": 1,
+                    "inquiry_id": 2,
+                    "user_id": 14,
+                    "score": "2",
+                    "feedback_text": "unclear response",
+                    "created_at": "2025-08-26T18:45:26.000000Z",
+                    "updated_at": "2025-08-26T19:37:58.000000Z"
+                  }
+                }
+              </code>
+            </pre>
+
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Delete Rating">
+          <h3>5. Delete Rating</h3>
+          <div class="endpoint-content">
+            <p><span class="method DELETE">DELETE</span> /api/ratings/{id}</p>
+            <p><strong>Description:</strong> Permanently deletes a rating from the system.</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{ "message": "Rating has been deleted successfully!" }</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 404 Not Found
+                { "message": "No query results for model [Rating] 999" }
+
+                // 401 Unauthorized
+                { "message": "Unauthenticated." }</code>
+              </pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Get All Users Ratings">
+          <h3>6. Get All Users Rating</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/ratings/user</p>
+            <p><strong>Description:</strong> Returns a list of All Users Ratings . (Admin/SuperAdmin/Trainer)</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+              {
+                "rating_id": 1,
+                "score": 5,
+                "feedback": "v.good response",
+                "rated_by": "Asa Cruickshank",
+                "rated_by_role": "User",
+                "inquiry_title": "استفسار عن خدمة سوبركليب",
+                "user": {
+                  "id": 14,
+                  "name": "Asa Cruickshank",
+                  "email": "freddie97@example.org",
+                  "email_verified_at": "2025-08-14 20:15:52",
+                  "position": "Rep",
+                  "section_id": 1,
+                  "role_id": 5,
+                  "delegation_id": null,
+                  "code": null,
+                  "status": 1,
+                  "img_url": null,
+                  "created_at": "2025-08-14T20:15:52.000000Z",
+                  "updated_at": "2025-08-14T20:15:52.000000Z",
+                  "role": {
+                    "id": 5,
+                    "name": "User",
+                    "created_at": "2025-08-14T20:15:49.000000Z",
+                    "updated_at": "2025-08-14T20:15:49.000000Z"
+                  }
+                },
+                "inquiry": {
+                  "id": 2,
+                  "user_id": 23,
+                  "assignee_id": 2,
+                  "category_id": 1,
+                  "cur_status_id": 2,
+                  "title": "استفسار عن خدمة سوبركليب",
+                  "body": "كيف يمكن تفعيل السوبر كليب",
+                  "response": null,
+                  "closed_at": "2025-08-16 20:15:54",
+                  "deleted_at": null,
+                  "created_at": "2025-08-14T20:15:54.000000Z",
+                  "updated_at": "2025-08-14T20:15:54.000000Z",
+                  "category": {
+                    "id": 1,
+                    "name": "superclip",
+                    "description": "superclip",
+                    "owner_id": 3,
+                    "weight": 0,
+                    "deleted_at": null,
+                    "created_at": "2025-08-14T20:15:53.000000Z",
+                    "updated_at": "2025-08-14T20:15:53.000000Z"
+                  }
+                }
+              },
+              ]</code>
+            </pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Get All Admins Ratings">
+          <h3>7. Get All Admins Rating</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/ratings/admin</p>
+            <p><strong>Description:</strong> Returns a list of All Admins Ratings . (Admin/SuperAdmin/Trainer)</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+              {
+                "rating_id": 1,
+                "score": 5,
+                "feedback": "v.good response",
+                "rated_by": "Asa Cruickshank",
+                "rated_by_role": "User",
+                "inquiry_title": "استفسار عن خدمة سوبركليب",
+                "user": {
+                  "id": 14,
+                  "name": "Asa Cruickshank",
+                  "email": "freddie97@example.org",
+                  "email_verified_at": "2025-08-14 20:15:52",
+                  "position": "Rep",
+                  "section_id": 1,
+                  "role_id": 2,
+                  "delegation_id": null,
+                  "code": null,
+                  "status": 1,
+                  "img_url": null,
+                  "created_at": "2025-08-14T20:15:52.000000Z",
+                  "updated_at": "2025-08-14T20:15:52.000000Z",
+                  "role": {
+                    "id": 5,
+                    "name": "User",
+                    "created_at": "2025-08-14T20:15:49.000000Z",
+                    "updated_at": "2025-08-14T20:15:49.000000Z"
+                  }
+                },
+                "inquiry": {
+                  "id": 2,
+                  "user_id": 23,
+                  "assignee_id": 2,
+                  "category_id": 1,
+                  "cur_status_id": 2,
+                  "title": "استفسار عن خدمة سوبركليب",
+                  "body": "كيف يمكن تفعيل السوبر كليب",
+                  "response": null,
+                  "closed_at": "2025-08-16 20:15:54",
+                  "deleted_at": null,
+                  "created_at": "2025-08-14T20:15:54.000000Z",
+                  "updated_at": "2025-08-14T20:15:54.000000Z",
+                  "category": {
+                    "id": 1,
+                    "name": "superclip",
+                    "description": "superclip",
+                    "owner_id": 3,
+                    "weight": 0,
+                    "deleted_at": null,
+                    "created_at": "2025-08-14T20:15:53.000000Z",
+                    "updated_at": "2025-08-14T20:15:53.000000Z"
+                  }
+                }
+              },
+              ]</code>
+            </pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Section 9: Reports -->
     <div class="section-wrapper">
       <div class="section-header"
         onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
@@ -2670,8 +3068,105 @@
           </div>
         </div>
 
+        <div class="endpoint" data-title="Category Report">
+          <h3>2. Category Reports</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/reports/category</p>
+            <p><strong>Description:</strong> Returns a Category Report.</p>
+
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+                  {
+                    "category_id": 1,
+                    "category_name": "superclip",
+                    "total_inquiries": 15,
+                    "opened_inquiries": 12,
+                    "closed_inquiries": 1,
+                    "pending_inquiries": 1,
+                    "reopened_inquiries": 1,
+                    "avg_closing": "240:37"
+                  },
+                  {
+                    "category_id": 2,
+                    "category_name": "RBT",
+                    "total_inquiries": 1,
+                    "opened_inquiries": 0,
+                    "closed_inquiries": 1,
+                    "pending_inquiries": 0,
+                    "reopened_inquiries": 0,
+                    "avg_closing": "18:52"
+                  },
+                  {
+                    "category_id": 3,
+                    "category_name": "Prepaid & Postpaid Subscription ( Stay With us - Pick your number )",
+                    "total_inquiries": 1,
+                    "opened_inquiries": 0,
+                    "closed_inquiries": 0,
+                    "pending_inquiries": 0,
+                    "reopened_inquiries": 1,
+                    "avg_closing": null
+                  },
+                  {
+                    "category_id": 4,
+                    "category_name": "Post & Prepaid Cancelation",
+                    "total_inquiries": 15,
+                    "opened_inquiries": 15,
+                    "closed_inquiries": 0,
+                    "pending_inquiries": 0,
+                    "reopened_inquiries": 0,
+                    "avg_closing": null
+                  },
+                  {
+                    "category_id": 5,
+                    "category_name": "Line Reservation Post & Pre",
+                    "total_inquiries": 0,
+                    "opened_inquiries": 0,
+                    "closed_inquiries": 0,
+                    "pending_inquiries": 0,
+                    "reopened_inquiries": 0,
+                    "avg_closing": null
+                  },{
+                    "category_id": null,
+                    "category_name": "Total",
+                    "total_inquiries": 46,
+                    "opened_inquiries": 40,
+                    "closed_inquiries": 3,
+                    "pending_inquiries": 1,
+                    "reopened_inquiries": 2,
+                    "avg_closing": "86:44",
+                    "avg_evaluation": null
+                  }
+                ]
+            </code>
+            </pre>
+
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Export Category Report to Excel">
+          <h3>2. Export Category Report to Excel</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/reports/categoryExcel</p>
+            <p><strong>Description:</strong> Download an Excel Category Report file.</p>
+
+            <p><strong>Response Example:</strong></p>
+            <pre><code>1756194332categoryReport.xlsx</code></pre>
+
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
         <div class="endpoint" data-title="Trainers Report">
-          <h3>2. Trainers Report</h3>
+          <h3>3. Trainers Report</h3>
           <div class="endpoint-content">
             <p><span class="method POST">POST</span> /api/reports/trainers/</p>
             <p><strong>Description:</strong> Returns a Trainers Report.</p>
@@ -2759,7 +3254,7 @@
         </div>
 
         <div class="endpoint" data-title="Trainers Details">
-          <h3>3. Trainers Details</h3>
+          <h3>4. Trainers Details</h3>
           <div class="endpoint-content">
             <p><span class="method GET">GET</span> /api/reports/trainers</p>
             <p><strong>Description:</strong> Returns a Trainers details.</p>
@@ -2843,12 +3338,250 @@
           </div>
         </div>
 
+        <div class="endpoint" data-title="my Daily Report">
+          <h3>5. my Daily Report</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/reports/myDailyReport</p>
+            <p><strong>Description:</strong> Returns myDailyReport</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{ "start_date": "​2025-08-01", "end_date": "2025-08-31​" }</code></pre>
 
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+                {
+                  "date": "2025-08-01",
+                  "total_responded": 0,
+                  "opened": 0,
+                  "closed": 0,
+                  "pending": 0,
+                  "reopened": 0,
+                  "avg_closing": null,
+                  "followups": 0,
+                  "last_delegation_from": null
+                },
+                {
+                  "date": "2025-08-02",
+                  "total_responded": 0,
+                  "opened": 0,
+                  "closed": 0,
+                  "pending": 0,
+                  "reopened": 0,
+                  "avg_closing": null,
+                  "followups": 0,
+                  "last_delegation_from": null
+                },...{
+                  "date": "Total",
+                  "total_responded": 13,
+                  "opened": 12,
+                  "closed": 0,
+                  "pending": 0,
+                  "reopened": 1,
+                  "avg_closing": null,
+                  "followups": 19,
+                  "last_delegation_from": "-"
+                }]
+              </code>
+            </pre>
+
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="my Weekly Report">
+          <h3>6. my Weekly Report</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/reports/myWeeklyReport</p>
+            <p><strong>Description:</strong> Returns myDailyReport</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{ "month": "​2025-08" }</code></pre>
+
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+                  {
+                    "date": "2025-08-01 → 2025-08-01",
+                    "total_responded": 0,
+                    "opened": 0,
+                    "closed": 0,
+                    "pending": 0,
+                    "reopened": 0,
+                    "avg_closing": null,
+                    "followups": 0,
+                    "last_delegation_from": null
+                  },
+                  {
+                    "date": "2025-08-02 → 2025-08-08",
+                    "total_responded": 0,
+                    "opened": 0,
+                    "closed": 0,
+                    "pending": 0,
+                    "reopened": 0,
+                    "avg_closing": null,
+                    "followups": 0,
+                    "last_delegation_from": null
+                  },
+                  {
+                    "date": "2025-08-09 → 2025-08-15",
+                    "total_responded": 0,
+                    "opened": 0,
+                    "closed": 0,
+                    "pending": 0,
+                    "reopened": 0,
+                    "avg_closing": null,
+                    "followups": 1,
+                    "last_delegation_from": null
+                  },
+                  {
+                    "date": "2025-08-16 → 2025-08-22",
+                    "total_responded": 0,
+                    "opened": 0,
+                    "closed": 0,
+                    "pending": 0,
+                    "reopened": 0,
+                    "avg_closing": null,
+                    "followups": 0,
+                    "last_delegation_from": null
+                  },
+                  {
+                    "date": "2025-08-23 → 2025-08-29",
+                    "total_responded": 13,
+                    "opened": 12,
+                    "closed": 0,
+                    "pending": 0,
+                    "reopened": 1,
+                    "avg_closing": null,
+                    "followups": 11,
+                    "last_delegation_from": null
+                  },
+                  {
+                    "date": "2025-08-30 → 2025-08-31",
+                    "total_responded": 0,
+                    "opened": 0,
+                    "closed": 0,
+                    "pending": 0,
+                    "reopened": 0,
+                    "avg_closing": null,
+                    "followups": 0,
+                    "last_delegation_from": null
+                  },
+                  {
+                    "date": "Total",
+                    "total_responded": 13,
+                    "opened": 12,
+                    "closed": 0,
+                    "pending": 0,
+                    "reopened": 1,
+                    "avg_closing": null,
+                    "avg_evaluation": null,
+                    "followups": 12,
+                    "last_delegation_from": "-"
+                  }
+                ]
+              </code>
+            </pre>
+
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="my Monthly Report">
+          <h3>7. my Monthly Report</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/reports/myMonthlyReport</p>
+            <p><strong>Description:</strong> Returns myMonthlyReport</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{ "year": "​2025" }</code></pre>
+
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[{
+                  "date": "August 2025",
+                  "total_responded": 13,
+                  "opened": 12,
+                  "closed": 0,
+                  "pending": 0,
+                  "reopened": 1,
+                  "avg_closing": null,
+                  "followups": 19,
+                  "last_delegation_from": null
+                },
+                {
+                  "date": "September 2025",
+                  "total_responded": 0,
+                  "opened": 0,
+                  "closed": 0,
+                  "pending": 0,
+                  "reopened": 0,
+                  "avg_closing": null,
+                  "followups": 0,
+                  "last_delegation_from": null
+                },
+                {
+                  "date": "October 2025",
+                  "total_responded": 0,
+                  "opened": 0,
+                  "closed": 0,
+                  "pending": 0,
+                  "reopened": 0,
+                  "avg_closing": null,
+                  "followups": 0,
+                  "last_delegation_from": null
+                },
+                {
+                  "date": "November 2025",
+                  "total_responded": 0,
+                  "opened": 0,
+                  "closed": 0,
+                  "pending": 0,
+                  "reopened": 0,
+                  "avg_closing": null,
+                  "followups": 0,
+                  "last_delegation_from": null
+                },
+                {
+                  "date": "December 2025",
+                  "total_responded": 0,
+                  "opened": 0,
+                  "closed": 0,
+                  "pending": 0,
+                  "reopened": 0,
+                  "avg_closing": null,
+                  "followups": 0,
+                  "last_delegation_from": null
+                },
+                {
+                  "date": "Total",
+                  "total_responded": 13,
+                  "opened": 12,
+                  "closed": 0,
+                  "pending": 0,
+                  "reopened": 1,
+                  "avg_closing": null,
+                  "avg_evaluation": null,
+                  "followups": 19,
+                  "last_delegation_from": "-"
+                }
+              ]</code>
+            </pre>
+
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
 
       </div>
     </div>
 
-    <!-- Section 9: Notification -->
+    <!-- Section 10: Notification -->
     <div class="section-wrapper">
       <div class="section-header"
         onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
@@ -2974,7 +3707,7 @@
       </div>
     </div>
 
-    <!-- Section 10: Roles -->
+    <!-- Section 11: Roles -->
     <div class="section-wrapper">
       <div class="section-header"
         onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
