@@ -300,6 +300,30 @@ class AuthController extends Controller
         $user->update($request->all());
         return response()->json(['message' => 'user updated successfully !']);
     }
+
+    public function updateMyProfile(Request $request)
+    {
+        $user = auth()->user();
+        $id = $user->id;
+        $request->validate([
+            'name' => ['string'],
+            'password' => ['string', 'confirmed', 'min:8'],
+            'image' => ['image'],
+        ]);
+
+        $user = User::findOrFail($id);
+
+        if ($request->image) {
+            $photo = $request->image;
+            $photoName = time() . $photo->getClientOriginalName();
+            $photo->move('uploads/users', $photoName);
+            $request->merge(['img_url' => 'uploads/images   /' . $photoName]);
+        }
+
+        $user->update($request->all());
+        return response()->json(['message' => 'Your profile updated successfully !']);
+    }
+
     public function search(Request $request)
     {
         $data = $request->validate([
@@ -329,5 +353,4 @@ class AuthController extends Controller
 
         return count($results) == 0 ? response()->json(['message' => 'not found !']) : $results;
     }
-
 }

@@ -613,6 +613,33 @@
           </div>
         </div>
 
+        <div class="endpoint" data-title="Update My Profile">
+          <h3>16. Update MY Profile</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/updateMyProfile</p>
+            <p><strong>Description:</strong> update Profile of authenticated user.
+            </p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{ "name": "New User", "password": "password123", "password_confirmation": "password123" , 'image':image}</code></pre>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{ "message": "Your profile updated successfully !" }</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code>
+              </pre>
+              <pre><code>// 422 Validation Error
+                {
+                  "message": "The given data was invalid.",
+                  "errors": {
+                    "password": ["The password confirmation does not match."]
+                  }
+                }</code>
+              </pre>
+            </details>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -1891,15 +1918,153 @@
           <div class="endpoint-content">
             <p><span class="method GET">GET</span> /api/inquiries/statistics</p>
             <p><strong>Middleware:</strong> auth:sanctum, role.superadmin</p>
-            <p><strong>Description:</strong> Returns inquiry statistics including counts and averages.</p>
+            <p><strong>Description:</strong> Returns inquiry statistics including counts and averages...</p>
             <p><strong>Response Example:</strong></p>
             <pre><code>{
-  "opened_inquiries": 5,
-  "pending_inquiries": 3,
-  "closed_inquiries": 12,
-  "average_handling_time": "24.5 hours",
-  "average_ratings": 4.2
-}</code></pre>
+                "opened_inquiries": 41,
+                "pending_inquiries": 1,
+                "reopened_inquiries": 3,
+                "closed_inquiries": 2,
+                "average_handling_time": "129 hours",
+                "average_ratings": 2.5,
+                "trainers_performance": [
+                  {
+                    "name": "Alaa",
+                    "closed_inquiries": 2,
+                    "not_closed_inquiries": 17
+                  },
+                  {
+                    "name": "trainer",
+                    "closed_inquiries": 0,
+                    "not_closed_inquiries": 13
+                  },
+                  {
+                    "name": "Mohammad Alaa El Olabi",
+                    "closed_inquiries": 0,
+                    "not_closed_inquiries": 15
+                  },
+                  {
+                    "name": "Prof. Emile Kozey Jr.",
+                    "closed_inquiries": 0,
+                    "not_closed_inquiries": 0
+                  },
+                  {
+                    "name": "Edward Durgan",
+                    "closed_inquiries": 0,
+                    "not_closed_inquiries": 0
+                  },
+                  {
+                    "name": "Elvera Smith",
+                    "closed_inquiries": 0,
+                    "not_closed_inquiries": 0
+                  },
+                  {
+                    "name": "Antonette Stracke",
+                    "closed_inquiries": 0,
+                    "not_closed_inquiries": 0
+                  },
+                  {
+                    "name": "Florine Kovacek",
+                    "closed_inquiries": 0,
+                    "not_closed_inquiries": 0
+                  },
+                  {
+                    "name": "Anderson Stroman Sr.",
+                    "closed_inquiries": 0,
+                    "not_closed_inquiries": 0
+                  },
+                  {
+                    "name": "Kamron Strosin",
+                    "closed_inquiries": 0,
+                    "not_closed_inquiries": 0
+                  },
+                  {
+                    "name": "Mekhi Okuneva DVM",
+                    "closed_inquiries": 0,
+                    "not_closed_inquiries": 0
+                  },
+                  {
+                    "name": "Ms. Sarina Aufderhar",
+                    "closed_inquiries": 0,
+                    "not_closed_inquiries": 0
+                  }
+                ],
+                "topCategories": [
+                  {
+                    "name": "superclip",
+                    "inquiries_count": 15
+                  },
+                  {
+                    "name": "Post & Prepaid Cancelation",
+                    "inquiries_count": 15
+                  },
+                  {
+                    "name": "Conference  Post & Pre",
+                    "inquiries_count": 6
+                  },
+                  {
+                    "name": "Others",
+                    "inquiries_count": 11
+                  }
+                ],
+                "inquiries_last_7_days": [
+                  {
+                    "label": "Wednesday",
+                    "total": 0
+                  },
+                  {
+                    "label": "Thursday",
+                    "total": 0
+                  },
+                  {
+                    "label": "Friday",
+                    "total": 0
+                  },
+                  {
+                    "label": "Saturday",
+                    "total": 36
+                  },
+                  {
+                    "label": "Sunday",
+                    "total": 1
+                  },
+                  {
+                    "label": "Monday",
+                    "total": 5
+                  },
+                  {
+                    "label": "Tuesday",
+                    "total": 1
+                  }
+                ],
+                "inquiries_last_6_months": [
+                  {
+                    "label": "Mar",
+                    "total": 0
+                  },
+                  {
+                    "label": "Apr",
+                    "total": 0
+                  },
+                  {
+                    "label": "May",
+                    "total": 0
+                  },
+                  {
+                    "label": "Jun",
+                    "total": 0
+                  },
+                  {
+                    "label": "Jul",
+                    "total": 0
+                  },
+                  {
+                    "label": "Aug",
+                    "total": 47
+                  }
+                ]
+              }</code>
+            </pre>
           </div>
         </div>
 

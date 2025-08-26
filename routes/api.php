@@ -36,12 +36,13 @@ Route::controller(AuthController::class)->group(function () {
             Route::post('add_user', 'addUser'); //1
             Route::post('changeRole', 'changeRole'); //1
             Route::post('block', 'block'); //1
-            Route::post('updateProfile/{id}', 'update'); //1
+            Route::post('updateProfile/{id}', 'updateProfile'); //1
             Route::get('users', 'index'); //1
             Route::get('blockedUsers', 'blockedUsers'); //1
             Route::get('userRoles/{role_id}', 'userRoles'); //1
         });
 
+        Route::post('updateMyProfile', 'updateMyProfile');
         Route::post('logout', 'logout'); //1
         Route::get('/profile', 'profile'); //1
     });
@@ -118,9 +119,9 @@ Route::controller(InquiryController::class)->group(function () {
             // Route::post('/{id}', 'update');
             Route::delete('/{id}', 'destroy');
             Route::get('/restore/{id}', 'restore');
-            Route::get('statistics', 'statistics');
         });
         Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin,Trainer'])->group(function () {
+            Route::get('statistics', 'statistics');
             Route::post('reply', 'reply');
         });
 

@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\SendNotification;
 use App\Models\attachment;
 use Illuminate\Http\Request;
 use App\Models\Inquiry;
-use App\Models\Task;
+// use App\Models\Task;
 use App\Models\User;
 use App\Models\Rating;
 use App\Models\Category;
 use App\Models\Favourite;
 use App\Models\Notification;
 use DateTime;
-use Pusher\Pusher;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\NewInquiryMail;
+// use Pusher\Pusher;
+// use Illuminate\Support\Facades\Mail;
+// use App\Mail\NewInquiryMail;
 use App\Jobs\SendNewInquiryEmail;
 use App\Jobs\SendPusherNotification;
-
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
 class InquiryController extends Controller
 {
@@ -112,6 +113,8 @@ class InquiryController extends Controller
             $inq->category;
             $inq->status;
             $inq->followUps;
+            // $inq->followUps->section;
+            // $inq->followUps->follower;
             foreach ($inq->followUps as $if) {
                 $if->section;
                 $if->follower;
@@ -143,7 +146,7 @@ class InquiryController extends Controller
         }
 
         return [
-            'inqs' => $query->get(),
+            'inqs' => $inqs,
             'totalResponded' => $totalResponded,
             'opened' => $opened,
             'closed' => $closed,
@@ -169,6 +172,7 @@ class InquiryController extends Controller
         }
         return $inqs;
     }
+
     /**
      * Store a newly created Inquiry in storage.
      */
@@ -233,10 +237,10 @@ class InquiryController extends Controller
 
         return response()->json(['message' => 'the inquiry has been submitted successfully !', $inquiry]);
     }
+
     /**
      * Display the specified Inquiry.
      */
-
     public function show($id)
     {
         $inq = Inquiry::findOrFail($id);
@@ -434,10 +438,10 @@ class InquiryController extends Controller
 
     public function statistics()
     {
-        //opened inquirirs
-        //closed inquirirs
+        //Inquiries
         $opened_inquiries = Inquiry::where('cur_status_id', 1)->get()->count();
         $pending_inquiries = Inquiry::where('cur_status_id', 2)->get()->count();
+        $reopened_inquiries = Inquiry::where('cur_status_id', 4)->get()->count();
         $closed_inquiries = Inquiry::where('cur_status_id', 3)->get();
 
         //average handled time
@@ -469,13 +473,116 @@ class InquiryController extends Controller
             $average_ratings = "No ratings !";
         }
 
+        //Trainer Performance 
+        $trainers_performance = [];
+        $trainers = User::where('role_id', 3)->get();
+        foreach ($trainers as $t) {
+            $trainers_performance[] = [
+                'name' => $t->name,
+                'closed_inquiries' => $t->assignedInquiries->where('cur_status_id', 3)->count(),
+                'not_closed_inquiries' => $t->assignedInquiries->whereNotIn('cur_status_id', [3])->count(),
+            ];
+        }
+
+        // Categories Chart
+        $topCategories = Category::select('name')
+            ->withCount('inquiries')
+            ->orderBy('inquiries_count', 'desc')
+            ->take(3)
+            ->get();
+
+        $othersCount = Category::withCount('inquiries')
+            ->orderByDesc('inquiries_count')
+            ->get()
+            ->skip(3)
+            ->sum('inquiries_count');
+
+        if ($othersCount > 0) {
+            $topCategories->push((object)[
+                'name' => 'Others',
+                'inquiries_count' => $othersCount
+            ]);
+        }
+
+
+        //Inquiry Volume
+
+
+
         return response()->json([
             'opened_inquiries' => $opened_inquiries,
             'pending_inquiries' => $pending_inquiries,
+            'reopened_inquiries' => $reopened_inquiries,
             'closed_inquiries' => $cnt,
-            'average_handling_time' => $average_handling_time,
-            'average_ratings' => $average_ratings
 
+            'average_handling_time' => $average_handling_time,
+            'average_ratings' => $average_ratings,
+            'trainers_performance' => $trainers_performance,
+            'topCategories' => $topCategories,
+            'inquiries_last_7_days' => $this->inquiriesByPeriod('daily', 7),
+            'inquiries_last_6_months' => $this->inquiriesByPeriod('monthly', 6),
         ]);
+    }
+
+    /**
+     * Get inquiry counts grouped by day or month.
+     *
+     * @param string $period 'daily' or 'monthly'
+     * @param int $length Number of days or months to include
+     * @return \Illuminate\Support\Collection
+     */
+    public static function inquiriesByPeriod(string $period = 'daily', int $length = 7): Collection
+    {
+        $query = DB::table('inquiries');
+
+        if ($period === 'daily') {
+            $startDate = Carbon::today()->subDays($length - 1);
+
+            // Get counts from DB
+            $data = $query
+                ->selectRaw('DATE(created_at) as date, COUNT(*) as total')
+                ->where('created_at', '>=', $startDate)
+                ->groupBy('date')
+                ->pluck('total', 'date');
+
+            // Build full date range with day names
+            $result = collect();
+            for ($i = 0; $i < $length; $i++) {
+                $date = $startDate->copy()->addDays($i);
+                $label = $date->format('l'); // Full day name
+                $result->push([
+                    'label' => $label,
+                    'total' => $data->get($date->toDateString(), 0)
+                ]);
+            }
+
+            return $result;
+        }
+
+        if ($period === 'monthly') {
+            $startDate = Carbon::now()->startOfMonth()->subMonths($length - 1);
+
+            // Get counts from DB
+            $data = $query
+                ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month, COUNT(*) as total")
+                ->where('created_at', '>=', $startDate)
+                ->groupBy('month')
+                ->pluck('total', 'month');
+
+            // Build full month range with month names
+            $result = collect();
+            for ($i = 0; $i < $length; $i++) {
+                $date = $startDate->copy()->addMonths($i);
+                $label = $date->format('M'); // Short month name (Jan, Feb...)
+                $result->push([
+                    'label' => $label,
+                    'total' => $data->get($date->format('Y-m'), 0)
+                ]);
+            }
+
+            return $result;
+        }
+
+        throw new \InvalidArgumentException("Invalid period type: {$period}");
     }
 }
