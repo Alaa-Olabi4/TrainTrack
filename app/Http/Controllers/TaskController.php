@@ -16,12 +16,17 @@ class TaskController extends Controller
     public function index()
     {
         $tasks = Task::all();
-
+        $excepted =[];
         foreach ($tasks as $task) {
-            $task->category;
-            $task->owner;
-            $task->delegation;
+            if($task->category->owner == null){
+                $excepted[] = $task;
+            }else{
+                $task->category;
+                $task->owner;
+                $task->delegation;
+            }
         }
+        $tasks->except($excepted);
 
         return $tasks;
     }
@@ -139,7 +144,7 @@ class TaskController extends Controller
     public function reset1($id)
     {
         $category = Category::findOrFail($id);
-            $category->update(['owner_id' => null]);
+        $category->update(['owner_id' => null]);
         return response()->json(['message' => 'reset task has been done successfully !']);
     }
 
