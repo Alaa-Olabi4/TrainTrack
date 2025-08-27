@@ -179,14 +179,23 @@ Route::controller(ReportController::class)->group(function () {
         Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin,Trainer'])->group(function () {
             Route::post('system', 'SystemReport');
             Route::post('systemExcel', 'SystemReportExcel');
+
             Route::post('category', 'categoryReport');
             Route::post('categoryExcel', 'CategoryReportExcel');
+
+            Route::post('trainers', 'TrainerReport');
+            Route::post('trainerExcel', 'TrainerReportExcel');
+            Route::get('trainers', 'Trainers');
+
             Route::post('myDailyReport', 'myDailyReport');
+            Route::post('myDailyExcel', 'myDailyReportExcel');
+
             Route::post('myWeeklyReport', 'myWeeklyReport');
+            Route::post('myWeeklyExcel', 'myWeeklyReportExcel');
+
             Route::post('myMonthlyReport', 'myMonthlyReport');
+            Route::post('myMonthlyExcel', 'myMonthlyReportExcel');
         });
-        Route::post('trainers', 'TrainerReport');
-        Route::get('trainers', 'Trainers');
     });
 });
 
@@ -211,8 +220,8 @@ Route::controller(RatingController::class)->group(function () {
         Route::middleware(['auth:sanctum', 'role:SuperAdmin,Admin,User'])->group(function () {
             Route::post('', 'store');
             Route::post('/{id}', 'update');
-            Route::delete('/{id}', 'destroy');
         });
+        Route::delete('/{id}', 'destroy')->middleware(['auth:sanctum','role:SuperAdmin']);
     });
 });
 

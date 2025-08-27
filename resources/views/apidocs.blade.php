@@ -3233,64 +3233,59 @@
           </div>
         </div>
 
+        <div class="endpoint" data-title="Export System Report to Excel">
+          <h3>2. Export System Report to Excel</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/reports/systemExcel</p>
+            <p><strong>Description:</strong> Download an Excel System Report file.</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{ "start_date": "​2025-08-01", "end_date": "2025-08-31​" }</code></pre>
+
+            <p><strong>Response Example:</strong></p>
+            <pre><code>1756194332systemReport.xlsx</code></pre>
+
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
         <div class="endpoint" data-title="Category Report">
-          <h3>2. Category Reports</h3>
+          <h3>3. Category Reports</h3>
           <div class="endpoint-content">
             <p><span class="method POST">POST</span> /api/reports/category</p>
             <p><strong>Description:</strong> Returns a Category Report.</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{ "start_date": "​2025-08-01", "end_date": "2025-08-31​" }</code></pre>
 
             <p><strong>Response Example:</strong></p>
             <pre><code>[
-                  {
-                    "category_id": 1,
-                    "category_name": "superclip",
-                    "total_inquiries": 15,
-                    "opened_inquiries": 12,
-                    "closed_inquiries": 1,
-                    "pending_inquiries": 1,
-                    "reopened_inquiries": 1,
-                    "avg_closing": "240:37"
-                  },
-                  {
-                    "category_id": 2,
-                    "category_name": "RBT",
-                    "total_inquiries": 1,
-                    "opened_inquiries": 0,
-                    "closed_inquiries": 1,
-                    "pending_inquiries": 0,
-                    "reopened_inquiries": 0,
-                    "avg_closing": "18:52"
-                  },
-                  {
-                    "category_id": 3,
-                    "category_name": "Prepaid & Postpaid Subscription ( Stay With us - Pick your number )",
-                    "total_inquiries": 1,
-                    "opened_inquiries": 0,
-                    "closed_inquiries": 0,
-                    "pending_inquiries": 0,
-                    "reopened_inquiries": 1,
-                    "avg_closing": null
-                  },
-                  {
-                    "category_id": 4,
-                    "category_name": "Post & Prepaid Cancelation",
-                    "total_inquiries": 15,
-                    "opened_inquiries": 15,
-                    "closed_inquiries": 0,
-                    "pending_inquiries": 0,
-                    "reopened_inquiries": 0,
-                    "avg_closing": null
-                  },
-                  {
-                    "category_id": 5,
-                    "category_name": "Line Reservation Post & Pre",
-                    "total_inquiries": 0,
-                    "opened_inquiries": 0,
-                    "closed_inquiries": 0,
-                    "pending_inquiries": 0,
-                    "reopened_inquiries": 0,
-                    "avg_closing": null
-                  },{
+                {
+                  "category_id": 1,
+                  "category_name": "superclip",
+                  "category_weight": 0,
+                  "total_inquiries": 15,
+                  "opened_inquiries": 12,
+                  "closed_inquiries": 1,
+                  "pending_inquiries": 1,
+                  "reopened_inquiries": 1,
+                  "avg_closing": "240:37",
+                  "avg_rating": 2
+                },
+                {
+                  "category_id": 2,
+                  "category_name": "RBT",
+                  "category_weight": 0,
+                  "total_inquiries": 1,
+                  "opened_inquiries": 0,
+                  "closed_inquiries": 1,
+                  "pending_inquiries": 0,
+                  "reopened_inquiries": 0,
+                  "avg_closing": "18:52",
+                  "avg_rating": 4
+                },{
                     "category_id": null,
                     "category_name": "Total",
                     "total_inquiries": 46,
@@ -3314,10 +3309,12 @@
         </div>
 
         <div class="endpoint" data-title="Export Category Report to Excel">
-          <h3>2. Export Category Report to Excel</h3>
+          <h3>4. Export Category Report to Excel</h3>
           <div class="endpoint-content">
             <p><span class="method POST">POST</span> /api/reports/categoryExcel</p>
             <p><strong>Description:</strong> Download an Excel Category Report file.</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{ "start_date": "​2025-08-01", "end_date": "2025-08-31​" }</code></pre>
 
             <p><strong>Response Example:</strong></p>
             <pre><code>1756194332categoryReport.xlsx</code></pre>
@@ -3331,7 +3328,7 @@
         </div>
 
         <div class="endpoint" data-title="Trainers Report">
-          <h3>3. Trainers Report</h3>
+          <h3>5. Trainers Report</h3>
           <div class="endpoint-content">
             <p><span class="method POST">POST</span> /api/reports/trainers/</p>
             <p><strong>Description:</strong> Returns a Trainers Report.</p>
@@ -3418,8 +3415,27 @@
           </div>
         </div>
 
+        <div class="endpoint" data-title="Export Trainers Report to Excel">
+          <h3>6. Export Trainers Report to Excel</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/reports/trainerExcel</p>
+            <p><strong>Description:</strong> Download an Excel Trainers Report file.</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{ "start_date": "​2025-08-01", "end_date": "2025-08-31​" }</code></pre>
+
+            <p><strong>Response Example:</strong></p>
+            <pre><code>1756276118_trainerReport.xlsx</code></pre>
+
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
         <div class="endpoint" data-title="Trainers Details">
-          <h3>4. Trainers Details</h3>
+          <h3>7. Trainers Details</h3>
           <div class="endpoint-content">
             <p><span class="method GET">GET</span> /api/reports/trainers</p>
             <p><strong>Description:</strong> Returns a Trainers details.</p>
@@ -3504,7 +3520,7 @@
         </div>
 
         <div class="endpoint" data-title="my Daily Report">
-          <h3>5. my Daily Report</h3>
+          <h3>8. my Daily Report</h3>
           <div class="endpoint-content">
             <p><span class="method POST">POST</span> /api/reports/myDailyReport</p>
             <p><strong>Description:</strong> Returns myDailyReport</p>
@@ -3556,8 +3572,27 @@
           </div>
         </div>
 
+        <div class="endpoint" data-title="Export my Daily Report to Excel">
+          <h3>9. Export my Daily Report to Excel</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/reports/myDailyExcel</p>
+            <p><strong>Description:</strong> Download an Excel of myDaily Report file.</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{ "start_date": "​2025-08-01", "end_date": "2025-08-31​" }</code></pre>
+
+            <p><strong>Response Example:</strong></p>
+            <pre><code>1756276118_dailyReport.xlsx</code></pre>
+
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
         <div class="endpoint" data-title="my Weekly Report">
-          <h3>6. my Weekly Report</h3>
+          <h3>10. my Weekly Report</h3>
           <div class="endpoint-content">
             <p><span class="method POST">POST</span> /api/reports/myWeeklyReport</p>
             <p><strong>Description:</strong> Returns myDailyReport</p>
@@ -3656,8 +3691,27 @@
           </div>
         </div>
 
+        <div class="endpoint" data-title="Export my Weekly Report to Excel">
+          <h3>11. Export my Weekly Report to Excel</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/reports/myWeeklyExcel</p>
+            <p><strong>Description:</strong> Download an Excel of myWeekly Report file.</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{ "month​": "2025-08​" }</code></pre>
+
+            <p><strong>Response Example:</strong></p>
+            <pre><code>1756276118_weeklyReport.xlsx</code></pre>
+
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
         <div class="endpoint" data-title="my Monthly Report">
-          <h3>7. my Monthly Report</h3>
+          <h3>12. my Monthly Report</h3>
           <div class="endpoint-content">
             <p><span class="method POST">POST</span> /api/reports/myMonthlyReport</p>
             <p><strong>Description:</strong> Returns myMonthlyReport</p>
@@ -3734,6 +3788,25 @@
                 }
               ]</code>
             </pre>
+
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="Export my Monthly Report to Excel">
+          <h3>13. Export my Monthly Report to Excel</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/reports/myMonthlyExcel</p>
+            <p><strong>Description:</strong> Download an Excel of myMonthly Report file.</p>
+            <p><strong>Request Example:</strong></p>
+            <pre><code>{ "yaer": "2025​" }</code></pre>
+
+            <p><strong>Response Example:</strong></p>
+            <pre><code>1756276118_monthlyReport.xlsx</code></pre>
 
             <details>
               <summary><strong>Possible Error Responses</strong></summary>

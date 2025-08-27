@@ -5,16 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\attachment;
 use Illuminate\Http\Request;
 use App\Models\Inquiry;
-// use App\Models\Task;
 use App\Models\User;
 use App\Models\Rating;
 use App\Models\Category;
 use App\Models\Favourite;
 use App\Models\Notification;
 use DateTime;
-// use Pusher\Pusher;
-// use Illuminate\Support\Facades\Mail;
-// use App\Mail\NewInquiryMail;
 use App\Jobs\SendNewInquiryEmail;
 use App\Jobs\SendPusherNotification;
 use Illuminate\Support\Facades\DB;
@@ -233,6 +229,7 @@ class InquiryController extends Controller
         // Dispatch queued jobs
         if ($category->owner) {
             SendNewInquiryEmail::dispatch($inquiry->id, $category->owner->email, $category->owner->name);
+            SendNewInquiryEmail::dispatch($inquiry->id, $category->section->email, $category->owner->name);
         }
 
         return response()->json(['message' => 'the inquiry has been submitted successfully !', $inquiry]);
@@ -504,11 +501,6 @@ class InquiryController extends Controller
             ]);
         }
 
-
-        //Inquiry Volume
-
-
-
         return response()->json([
             'opened_inquiries' => $opened_inquiries,
             'pending_inquiries' => $pending_inquiries,
@@ -538,18 +530,16 @@ class InquiryController extends Controller
         if ($period === 'daily') {
             $startDate = Carbon::today()->subDays($length - 1);
 
-            // Get counts from DB
             $data = $query
                 ->selectRaw('DATE(created_at) as date, COUNT(*) as total')
                 ->where('created_at', '>=', $startDate)
                 ->groupBy('date')
                 ->pluck('total', 'date');
 
-            // Build full date range with day names
             $result = collect();
             for ($i = 0; $i < $length; $i++) {
                 $date = $startDate->copy()->addDays($i);
-                $label = $date->format('l'); // Full day name
+                $label = $date->format('l');
                 $result->push([
                     'label' => $label,
                     'total' => $data->get($date->toDateString(), 0)
@@ -562,18 +552,16 @@ class InquiryController extends Controller
         if ($period === 'monthly') {
             $startDate = Carbon::now()->startOfMonth()->subMonths($length - 1);
 
-            // Get counts from DB
             $data = $query
                 ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month, COUNT(*) as total")
                 ->where('created_at', '>=', $startDate)
                 ->groupBy('month')
                 ->pluck('total', 'month');
 
-            // Build full month range with month names
             $result = collect();
             for ($i = 0; $i < $length; $i++) {
                 $date = $startDate->copy()->addMonths($i);
-                $label = $date->format('M'); // Short month name (Jan, Feb...)
+                $label = $date->format('M');
                 $result->push([
                     'label' => $label,
                     'total' => $data->get($date->format('Y-m'), 0)

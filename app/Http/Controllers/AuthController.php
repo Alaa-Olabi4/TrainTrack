@@ -16,6 +16,7 @@ class AuthController extends Controller
 {
 
     // Start Authorization
+    
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -86,8 +87,6 @@ class AuthController extends Controller
     // End Authorrization
 
 
-
-
     // Start Forget Password
 
     public function forget_password(Request $request)
@@ -116,7 +115,6 @@ class AuthController extends Controller
             "message" => "Code sent successfully",
         ]);
     }
-
     public function check_forget_code(Request $request)
     {
         $request->validate([
@@ -173,7 +171,7 @@ class AuthController extends Controller
 
     // Start Users for admin
 
-    // Users
+    
     public function index()
     {
         return User::where('role_id', '!=', 1)->get();
@@ -213,16 +211,6 @@ class AuthController extends Controller
         $request['status'] = 1;
 
         $user = User::Create($request->all());
-
-        // $user = User::create([
-        //     'name' => $validatedData['name'],
-        //     'email' => $validatedData['email'],
-        //     'password' => Hash::make($request['password']),
-        //     'role_id' => $validatedData['role_id'],
-        //     'section_key' => $validatedData['section_key'] ?? null,
-        // ]);
-
-        // $user->update(['status' => 1]);
 
         return response()->json([
             'message' => 'User added successfully!',
@@ -270,6 +258,8 @@ class AuthController extends Controller
 
         $user = User::findOrFail($id);
 
+        $request['password'] = Hash::make($request['password']);
+
         if ($request['delegation_id'] != null) {
             if ($user->role_id != 3) {
                 return response()->json(['message' => 'Sorry ! the trainer only who can has a delegation , Thank you for your understanding !'], 400);
@@ -300,7 +290,6 @@ class AuthController extends Controller
         $user->update($request->all());
         return response()->json(['message' => 'user updated successfully !']);
     }
-
     public function updateMyProfile(Request $request)
     {
         $user = auth()->user();
@@ -312,6 +301,7 @@ class AuthController extends Controller
         ]);
 
         $user = User::findOrFail($id);
+        $request['password'] = Hash::make($request['password']);
 
         if ($request->image) {
             $photo = $request->image;
@@ -323,7 +313,6 @@ class AuthController extends Controller
         $user->update($request->all());
         return response()->json(['message' => 'Your profile updated successfully !']);
     }
-
     public function search(Request $request)
     {
         $data = $request->validate([

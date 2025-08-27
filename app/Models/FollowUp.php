@@ -19,7 +19,7 @@ class FollowUp extends Model
 
     public function inquiry()
     {
-        return $this->belongsTo(Inquiry::class);
+        return $this->belongsTo(Inquiry::class,'inquiry_id');
     }
 
     public function section()
