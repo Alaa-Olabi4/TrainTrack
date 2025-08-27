@@ -67,24 +67,25 @@ class User extends Authenticatable
     {
         return $this->hasMany(Notification::class);
     }
+
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'category_trainer', 'trainer_id', 'category_id');
+        return $this->hasMany(Category::class, 'owner_id');
     }
 
     public function delegation()
     {
-        return $this->belongsTo(User::class, 'delegation_id', 'id');
+        return $this->belongsTo(User::class, 'delegation_id');
     }
 
     public function delegator()
     {
-        return $this->hasOne(User::class, 'delegation_id', 'id');
+        return $this->hasOne(User::class, 'delegation_id');
     }
 
     public function delegatedTasks()
     {
-        return $this->hasMany(Task::class, 'delegation_id', 'id');
+        return $this->hasMany(Task::class, 'delegation_id');
     }
 
     public function ownedTasks()

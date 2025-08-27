@@ -9,7 +9,11 @@ class Report extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['created_by', 'type', 'content'];
+    protected $fillable = [
+        'created_by',
+        'type',
+        'content'
+    ];
 
     public function user()
     {

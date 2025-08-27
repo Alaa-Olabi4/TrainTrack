@@ -8,18 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Attachment extends Model
 {
     use HasFactory;
-
-        protected $fillable = [
+    protected $fillable = [
         'inquiry_id',
         'followup_id',
         'url'
     ];
 
-    public function inquiry(){
-        return $this->belongsTo(Inquiry::class,'inquiry_id');
+    public function inquiry()
+    {
+        return $this->belongsTo(Inquiry::class);
     }
-    public function followup(){
-        return $this->belongsTo(FollowUp::class,'followup_id');
+    public function followup()
+    {
+        return $this->belongsTo(FollowUp::class,);
     }
-
 }

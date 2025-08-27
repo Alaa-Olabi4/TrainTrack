@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Task extends Model
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'category_id',
@@ -16,15 +16,18 @@ class Task extends Model
         'delegation_id'
     ];
 
-    public function category(){
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function owner(){
-        return $this->belongsTo(User::class,'owner_id', 'id');
+    public function owner()
+    {
+        return $this->belongsTo(User::class);
     }
 
-    public function delegation(){
-        return $this->belongsTo(User::class,'delegation_id', 'id');
+    public function delegation()
+    {
+        return $this->belongsTo(User::class);
     }
 }

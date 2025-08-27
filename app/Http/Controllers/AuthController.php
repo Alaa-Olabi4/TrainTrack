@@ -170,7 +170,6 @@ class AuthController extends Controller
 
 
     // Start Users for admin
-
     
     public function index()
     {

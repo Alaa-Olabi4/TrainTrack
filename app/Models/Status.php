@@ -14,7 +14,8 @@ class Status extends Model
         'value'
     ];
 
-    public function Inquiry(){
-        return $this->hasMany(Inquiry::class,'cur_status_id');
+    public function Inquiry()
+    {
+        return $this->hasMany(Inquiry::class, 'cur_status_id');
     }
 }

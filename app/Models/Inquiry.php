@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Inquiry extends Model
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -36,7 +36,7 @@ class Inquiry extends Model
     }
     public function status()
     {
-        return $this->belongsTo(Status::class,'cur_status_id','id');
+        return $this->belongsTo(Status::class, 'cur_status_id', 'id');
     }
 
     public function ratings()
@@ -57,9 +57,8 @@ class Inquiry extends Model
         return $this->hasMany(Notification::class);
     }
 
-    public function favourites(){
+    public function favourites()
+    {
         return $this->hasMany(Favourite::class);
     }
-
 }
-

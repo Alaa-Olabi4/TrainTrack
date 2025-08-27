@@ -155,7 +155,7 @@ class InquiryController extends Controller
     {
         $user = auth()->user();
         $inqs = Inquiry::where('assignee_id', $user->id)
-            ->orWhere('user_id', $user->id)
+            // ->orWhere('user_id', $user->id)
             ->get();
 
         foreach ($inqs as $inq) {
@@ -229,7 +229,7 @@ class InquiryController extends Controller
         // Dispatch queued jobs
         if ($category->owner) {
             SendNewInquiryEmail::dispatch($inquiry->id, $category->owner->email, $category->owner->name);
-            SendNewInquiryEmail::dispatch($inquiry->id, $category->section->email, $category->owner->name);
+            // SendNewInquiryEmail::dispatch($inquiry->id, $category->section->email, $category->owner->name);
         }
 
         return response()->json(['message' => 'the inquiry has been submitted successfully !', $inquiry]);

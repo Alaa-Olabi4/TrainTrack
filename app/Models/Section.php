@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Section extends Model
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -16,12 +16,12 @@ class Section extends Model
         'email'
     ];
 
-    public function users() {
+    public function users()
+    {
         return $this->hasMany(User::class);
     }
     public function followUps()
     {
-        return $this->hasMany(FollowUp::class, 'section_id');
+        return $this->hasMany(FollowUp::class);
     }
-
 }
