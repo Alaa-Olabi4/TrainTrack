@@ -13,6 +13,7 @@ use App\Models\Notification;
 use DateTime;
 use App\Jobs\SendNewInquiryEmail;
 use App\Jobs\SendPusherNotification;
+use App\Jobs\SendRepliedInquiryEmail;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -248,6 +249,9 @@ class InquiryController extends Controller
         $inq->followUps;
         $inq->attachments;
         $inq->ratings;
+        foreach ($inq->ratings as $r) {
+            $r->user;
+        }
         return $inq;
     }
 
@@ -357,11 +361,13 @@ class InquiryController extends Controller
             return response()->json(['message' => 'you can reassign the inquiry to trainer only !']);
         }
 
-        $inq = Inquiry::findOrFail($request['inquiry_id'])->update(['assignee_id' => $request['assignee_id']]);
+        $inq = Inquiry::findOrFail($request['inquiry_id']);
+        $inq->update(['assignee_id' => $request['assignee_id']]);
 
         // Should Notify the both Trainers
+        SendNewInquiryEmail::dispatch($inq->id, $new->email, $new->name);
 
-        return response()->json(['message' => "the inquiry has been reassigned successfully to " . $new->name . " !"]);
+        return response()->json(['message' => 'the inquiry has been reassigned successfully to ' . $new->name . " !"]);
     }
 
     public function reply(Request $request)
@@ -401,6 +407,7 @@ class InquiryController extends Controller
         FollowupController::store($request->merge(['status' => 3, 'section_id' => $section_id]));
 
         // Notify the team of the sender
+        SendRepliedInquiryEmail::dispatch($inq->id, $inq->user->section->email);
 
         return response()->json(['message' => 'your reply has been submitted successfully !']);
     }

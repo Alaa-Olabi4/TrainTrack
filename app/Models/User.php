@@ -41,12 +41,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Section::class);
     }
-
     public function inquiries()
     {
         return $this->hasMany(Inquiry::class);
     }
-
     public function assignedInquiries()
     {
         return $this->hasMany(Inquiry::class, 'assignee_id');

@@ -180,7 +180,6 @@ class TaskController extends Controller
                     'owner_id' => $selectedTrainerId,
                     'delegation_id' => $delegationId
                 ]);
-
                 $assignedWeights[$selectedTrainerId] += $category->weight;
             }
 

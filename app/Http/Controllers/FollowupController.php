@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\FollowUp;
 use App\Models\User;
 use App\Models\Attachment;
+use App\Models\Inquiry;
 
 class FollowupController extends Controller
 {
@@ -54,7 +55,7 @@ class FollowupController extends Controller
             'inquiry_id' => ['required', 'numeric', 'exists:inquiries,id'],
             'status' => ['required'],
             'section_id' => ['numeric', 'exists:sections,id'],
-            'response' => ['string'],
+            'response' => ['nullable','string'],
             'attachments' => ['nullable', 'array'],
             'attachments.*' => ['file', 'max:5120', 'mimes:jpg,jpeg,png,pdf,doc,docx']
         ]);
@@ -68,6 +69,7 @@ class FollowupController extends Controller
             'follower_id' => $follower->id
         ];
         $followup = FollowUp::create($data);
+        Inquiry::findOrFail($request['inquiry_id'])->update(['cur_status_id'=>$request['status']]);
 
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {

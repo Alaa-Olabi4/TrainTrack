@@ -9,19 +9,19 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class NewInquiryMail extends Mailable
+class RepliedInquiryMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $inquiry_id , $username;
+    public $inquiry_id;
+
 
     /**
      * Create a new message instance.
      */
-    public function __construct($inquiry_id , $username)
+    public function __construct($inquiry_id)
     {
         $this->inquiry_id = $inquiry_id;
-        $this->username = $username;
     }
 
     /**
@@ -30,7 +30,7 @@ class NewInquiryMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'New Inquiry Mail',
+            subject: 'Replied Inquiry Mail',
         );
     }
 
@@ -40,10 +40,9 @@ class NewInquiryMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.newInquiry',
+            view: 'emails.repliedInquiry',
         )->with([
-            'inquiryUrl'=>'http://traintrack.com/details/'.$this->inquiry_id,
-            'username'=>$this->username
+            'inquiryUrl' => 'http://traintrack.com/details/' . $this->inquiry_id
         ]);
     }
 

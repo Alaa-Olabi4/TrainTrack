@@ -32,7 +32,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/reset_password', 'reset_password'); //1
 
     Route::middleware(['auth:sanctum'])->group(function () {
-        Route::middleware(['role:SuperAdmin,Admin'])->group(function () {
+        Route::middleware(['role:SuperAdmin,Admin,Trainer'])->group(function () {
             Route::post('add_user', 'addUser'); //1
             Route::post('changeRole', 'changeRole'); //1
             Route::post('block', 'block'); //1
@@ -40,13 +40,14 @@ Route::controller(AuthController::class)->group(function () {
             Route::get('users', 'index'); //1
             Route::get('blockedUsers', 'blockedUsers'); //1
             Route::get('userRoles/{role_id}', 'userRoles'); //1
+            Route::get('users/search', 'search'); //1
+            Route::get('users/{id}', 'show');
         });
 
         Route::post('updateMyProfile', 'updateMyProfile');
         Route::post('logout', 'logout'); //1
         Route::get('/profile', 'profile'); //1
     });
-    Route::get('users/search', 'search'); //1
 });
 
 Route::controller(SectionController::class)->group(function () {
@@ -221,7 +222,7 @@ Route::controller(RatingController::class)->group(function () {
             Route::post('', 'store');
             Route::post('/{id}', 'update');
         });
-        Route::delete('/{id}', 'destroy')->middleware(['auth:sanctum','role:SuperAdmin']);
+        Route::delete('/{id}', 'destroy')->middleware(['auth:sanctum', 'role:SuperAdmin']);
     });
 });
 

@@ -613,8 +613,172 @@
           </div>
         </div>
 
+        <div class="endpoint" data-title="Get User">
+          <h3>16. Get a specific User</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/users/{id}</p>
+            <p><strong>Description:</strong> Return User by Id. (Admin , SuperAdmin)</p>
+            <p><strong>Response Example (matches found):</strong></p>
+            <pre><code>{
+              "id": 3,
+              "name": "trainer",
+              "email": "trainer@mail.com",
+              "email_verified_at": null,
+              "position": "Coordinator",
+              "section_id": 1,
+              "role_id": 3,
+              "delegation_id": 2,
+              "code": null,
+              "status": 1,
+              "img_url": null,
+              "created_at": "2025-08-14T20:15:50.000000Z",
+              "updated_at": "2025-08-14T20:15:50.000000Z",
+              "role": {
+                "id": 3,
+                "name": "Trainer",
+                "created_at": "2025-08-14T20:15:49.000000Z",
+                "updated_at": "2025-08-14T20:15:49.000000Z"
+              },
+              "section": {
+                "id": 1,
+                "name": "UAT & Training",
+                "division": "CC - Customer Care Support",
+                "email": "UAT@mail.com",
+                "deleted_at": null,
+                "created_at": "2025-08-14T20:15:49.000000Z",
+                "updated_at": "2025-08-14T20:15:49.000000Z"
+              },
+              "inquiries": [
+                {
+                  "id": 10,
+                  "user_id": 3,
+                  "assignee_id": 3,
+                  "category_id": 1,
+                  "cur_status_id": 2,
+                  "title": "Wondering",
+                  "body": "How to move on from IT after graduation ?",
+                  "response": "new response",
+                  "closed_at": null,
+                  "deleted_at": null,
+                  "created_at": "2025-08-23T12:46:28.000000Z",
+                  "updated_at": "2025-08-28T09:38:27.000000Z"
+                },
+                "assigned_inquiries": [
+                {
+                  "id": 7,
+                  "user_id": 22,
+                  "assignee_id": 3,
+                  "category_id": 1,
+                  "cur_status_id": 1,
+                  "title": "Inquiry",
+                  "body": "Inquiry",
+                  "response": null,
+                  "closed_at": null,
+                  "deleted_at": null,
+                  "created_at": "2025-08-23T12:07:44.000000Z",
+                  "updated_at": "2025-08-23T12:07:44.000000Z"
+                },],
+                "reports": [
+                {
+                  "id": 1,
+                  "created_by": 3,
+                  "type": "SystemReport",
+                  "content": "SystemReport",
+                  "created_at": "2025-08-26T23:24:34.000000Z",
+                  "updated_at": "2025-08-26T23:24:34.000000Z"
+                },],
+                "ratings": [],
+              "follow_ups": [
+                {
+                  "id": 5,
+                  "inquiry_id": 1,
+                  "status": 1,
+                  "follower_id": 3,
+                  "section_id": 6,
+                  "response": null,
+                  "created_at": "2025-08-14T20:24:02.000000Z",
+                  "updated_at": "2025-08-14T20:24:02.000000Z"
+                },],
+                "notifications": [
+                {
+                  "id": 1,
+                  "inquiry_id": 10,
+                  "user_id": 3,
+                  "message": "Hello, this is just for you!",
+                  "status": "unread",
+                  "created_at": "2025-08-23T12:46:28.000000Z",
+                  "updated_at": "2025-08-23T12:46:28.000000Z"
+                },],"categories": [
+                {
+                  "id": 1,
+                  "name": "superclip",
+                  "description": "superclip",
+                  "owner_id": 3,
+                  "weight": 0,
+                  "deleted_at": null,
+                  "created_at": "2025-08-14T20:15:53.000000Z",
+                  "updated_at": "2025-08-14T20:15:53.000000Z"
+                }
+              ],
+              "delegation": {
+                "id": 2,
+                "name": "Alaa",
+                "email": "alolaby25@gmail.com",
+                "email_verified_at": null,
+                "position": "Coordinator",
+                "section_id": 1,
+                "role_id": 3,
+                "delegation_id": 3,
+                "code": null,
+                "status": 1,
+                "img_url": null,
+                "created_at": "2025-08-14T20:15:50.000000Z",
+                "updated_at": "2025-08-14T20:15:50.000000Z"
+              },
+              "delegator": {
+                "id": 2,
+                "name": "Alaa",
+                "email": "alolaby25@gmail.com",
+                "email_verified_at": null,
+                "position": "Coordinator",
+                "section_id": 1,
+                "role_id": 3,
+                "delegation_id": 3,
+                "code": null,
+                "status": 1,
+                "img_url": null,
+                "created_at": "2025-08-14T20:15:50.000000Z",
+                "updated_at": "2025-08-14T20:15:50.000000Z"
+              },
+              "delegated_tasks": [],
+              "owned_tasks": [
+                {
+                  "id": 2,
+                  "category_id": 2,
+                  "owner_id": 3,
+                  "delegation_id": 1,
+                  "deleted_at": null,
+                  "created_at": "2025-08-14T20:15:54.000000Z",
+                  "updated_at": "2025-08-14T20:15:54.000000Z"
+                }
+              ]
+                ]
+              }
+              </code>
+            </pre>
+            <p><strong>Alternate Response Example (no matches):</strong></p>
+            <pre><code>{ "message": "not found !" }</code></pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code>
+              </pre>
+            </details>
+          </div>
+        </div>
+
         <div class="endpoint" data-title="Update My Profile">
-          <h3>16. Update MY Profile</h3>
+          <h3>17. Update MY Profile</h3>
           <div class="endpoint-content">
             <p><span class="method POST">POST</span> /api/updateMyProfile</p>
             <p><strong>Description:</strong> update Profile of authenticated user.

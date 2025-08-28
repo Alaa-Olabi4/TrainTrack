@@ -66,6 +66,9 @@ class CategoryController extends Controller
     {
         $c = Category::findOrFail($id);
         $c->owner;
+        $c->owner->role;
+        $c->owner->section;
+        $c->owner->delegation;
         return $c;
     }
 

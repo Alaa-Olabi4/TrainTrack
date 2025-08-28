@@ -16,7 +16,7 @@ class AuthController extends Controller
 {
 
     // Start Authorization
-    
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -170,7 +170,7 @@ class AuthController extends Controller
 
 
     // Start Users for admin
-    
+
     public function index()
     {
         return User::where('role_id', '!=', 1)->get();
@@ -236,11 +236,29 @@ class AuthController extends Controller
     {
         $request->validate([
             'user_id' => ['required', 'numeric', 'exists:users,id'],
-            'role_id' => ['required', 'numeric', 'exists:roles,id'],
+            'role_id' => ['required', 'numeric', 'exists:roles,id', 'min:2'],
         ]);
 
         User::findOrFail($request['user_id'])->update(['role_id' => $request['role_id']]);
         return response()->json(['message' => 'user\'s roles has been changed successfully!']);
+    }
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        $user->role;
+        $user->section;
+        $user->inquiries;
+        $user->assignedInquiries;
+        $user->reports;
+        $user->ratings;
+        $user->followUps;
+        $user->notifications;
+        $user->categories;
+        $user->delegation;
+        $user->delegator;
+        $user->delegatedTasks;
+        $user->ownedTasks;
+        return $user;
     }
     public function updateProfile(Request $request, $id)
     {
@@ -251,13 +269,15 @@ class AuthController extends Controller
             'section_id' => ['numeric', 'exists:sections,id'],
             'password' => ['string', 'confirmed', 'min:8'],
             'image' => ['image'],
-            'role_id' => ['integer', 'exists:roles,id'],
+            'role_id' => ['integer', 'exists:roles,id', 'min:2'],
             'delegation_id' => ['integer', 'exists:users,id'],
         ]);
 
         $user = User::findOrFail($id);
 
-        $request['password'] = Hash::make($request['password']);
+        if ($request['password'] != null) {
+            $request['password'] = Hash::make($request['password']);
+        }
 
         if ($request['delegation_id'] != null) {
             if ($user->role_id != 3) {
@@ -283,7 +303,7 @@ class AuthController extends Controller
             $photo = $request->image;
             $photoName = time() . $photo->getClientOriginalName();
             $photo->move('uploads/users', $photoName);
-            $request->merge(['img_url' => 'uploads/images   /' . $photoName]);
+            $request->merge(['img_url' => 'uploads/users/' . $photoName]);
         }
 
         $user->update($request->all());
@@ -300,13 +320,15 @@ class AuthController extends Controller
         ]);
 
         $user = User::findOrFail($id);
-        $request['password'] = Hash::make($request['password']);
+        if ($request['password'] != null) {
+            $request['password'] = Hash::make($request['password']);
+        }
 
         if ($request->image) {
             $photo = $request->image;
             $photoName = time() . $photo->getClientOriginalName();
             $photo->move('uploads/users', $photoName);
-            $request->merge(['img_url' => 'uploads/images   /' . $photoName]);
+            $request->merge(['img_url' => 'uploads/users/' . $photoName]);
         }
 
         $user->update($request->all());
