@@ -14,7 +14,7 @@ class CreateNotificationsTable extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('message');
             // $table->boolean('status')->default(0);
-            $table->enum('status', ['unread', 'read'])->default('unread'); // حالة الإشعار
+            $table->enum('status', ['unread', 'read'])->default('unread');
             $table->timestamps();
         });
     }

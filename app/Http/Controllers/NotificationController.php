@@ -38,6 +38,6 @@ class NotificationController extends Controller
 
             return response()->json(['message' => 'Notification status updated successfully !']);
         }
-        return response()->json(['message' => 'Sorry , you can\'t update this notification status !']);
+        return response()->json(['message' => 'Sorry , you can\'t update this notification status !'],403);
     }
 }

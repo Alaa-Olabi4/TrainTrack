@@ -155,6 +155,8 @@ Route::controller(FollowupController::class)->group(function () {
             Route::post('/{id}', 'update');
             Route::delete('/{id}', 'destroy');
         });
+        Route::get('receivedFollowups','receivedFollowups');
+        Route::get('sentFollowups','sentFollowups');
         Route::get('followupsrequest/{inquiry_id}', 'followupsrequest');
         Route::get('followupsSection/{section_id}', 'indexSection');
     });
@@ -203,7 +205,7 @@ Route::controller(ReportController::class)->group(function () {
 Route::controller(NotificationController::class)->group(function () {
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::prefix('notifications')->group(function () {
-            Route::get('', 'index');
+            Route::get('', 'index')->middleware(['role:SuperAdmin,Admin']);
             Route::get('myNotifications', 'myNotifications');
             Route::get('setRead/{notification_id}', 'setRead'); ///0
         });

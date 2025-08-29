@@ -16,49 +16,84 @@ class UserSeeder extends Seeder
     {
 
         User::create([
-            'name'=>'Admin',
-            'email'=>'admin@mail.com',
-            'password'=> Hash::make('adminadmin'),
+            'name' => 'Admin',
+            'email' => 'admin@mail.com',
+            'password' => Hash::make('adminadmin'),
             'position' => 'Manager',
             'section_id' => 1,
             'role_id' => 1,
         ]);
 
-        User::create([
-            'name'=>'Alaa',
-            'email'=>'alolaby25@gmail.com',
-            'password'=> Hash::make('12345678'),
-            'role_id'=>3,
-            'section_id'=>1,
-            'position' => 'Coordinator',
-        ]);
+        // User::create([
+        //     'name' => 'Alaa',
+        //     'email' => 'alolaby25@gmail.com',
+        //     'password' => Hash::make('12345678'),
+        //     'role_id' => 3,
+        //     'section_id' => 1,
+        //     'position' => 'Coordinator',
+        // ]);
 
         User::create([
-            'name'=>'trainer',
-            'email'=>'trainer@mail.com',
-            'password'=> Hash::make('12345678'),
-            'role_id'=>3,
-            'section_id'=>1,
+            'name' => 'trainer',
+            'email' => 'trainer@mail.com',
+            'password' => Hash::make('12345678'),
+            'role_id' => 3,
+            'section_id' => 1,
             'position' => 'Coordinator',
         ]);
 
-        User::factory()
-        ->count(10)
-        ->create([
-            'role_id'=>3,
-            'section_id'=>1,
+        User::create([
+            'name' => 'assistant',
+            'email' => 'assistant@mail.com',
+            'password' => Hash::make('12345678'),
+            'role_id' => 4,
+            'section_id' => 5,
             'position' => 'Coordinator',
-            'password'=>Hash::make('12345678'),
         ]);
 
-        User::factory()
-        ->count(10)
-        ->create([
-            'role_id'=>5,
-            'section_id'=>1,
+        User::create([
+            'name' => 'call center',
+            'email' => 'cceuser@mail.com',
+            'password' => Hash::make('12345678'),
+            'role_id' => 5,
+            'section_id' => 2,
             'position' => 'Rep',
-            'password'=>Hash::make('12345678'),
         ]);
+        User::create([
+            'name' => 'Customer Service',
+            'email' => 'cscuser@mail.com',
+            'password' => Hash::make('12345678'),
+            'role_id' => 5,
+            'section_id' => 3,
+            'position' => 'Rep',
+        ]);
+
+        User::factory()
+            ->count(10)
+            ->create([
+                'role_id' => 3,
+                'section_id' => 1,
+                'position' => 'Coordinator',
+                'password' => Hash::make('12345678'),
+            ]);
+
+        User::factory()
+            ->count(10)
+            ->create([
+                'role_id' => 4,
+                'section_id' => 1,
+                'position' => 'specialist',
+                'password' => Hash::make('12345678'),
+            ]);
+
+        User::factory()
+            ->count(10)
+            ->create([
+                'role_id' => 5,
+                'section_id' => 1,
+                'position' => 'Rep',
+                'password' => Hash::make('12345678'),
+            ]);
 
         // User::create([
         //     'name', 

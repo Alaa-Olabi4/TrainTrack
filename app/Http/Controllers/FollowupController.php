@@ -154,4 +154,29 @@ class FollowupController extends Controller
         }
         return response()->json(['message' => 'the follower only can delete the followup! '], 403);
     }
+
+    public function receivedFollowups(){
+        $user = User::findOrFail(auth()->user()->id);
+        $section = $user->section;
+        $followups = FollowUp::where('section_id',$section->id)->get();
+        foreach ($followups as $f) {
+            $f->inquiry;
+            $f->section;
+            $f->follower;
+            $f->attachments;
+        }
+        return $followups;
+    }
+
+    public function sentFollowups(){
+        $user = User::findOrFail(auth()->user()->id);
+        $followups = FollowUp::where('follower_id',$user->id)->get();
+        foreach ($followups as $f) {
+            $f->inquiry;
+            $f->section;
+            $f->follower;
+            $f->attachments;
+        }
+        return $followups;
+    }
 }

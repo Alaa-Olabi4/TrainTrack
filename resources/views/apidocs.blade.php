@@ -2766,6 +2766,126 @@
           </div>
         </div>
 
+        <div class="endpoint" data-title="received Followups">
+          <h3>9. Display received Followups to my section</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/receivedFollowups</p>
+            <p><strong>Description:</strong> Display received Followups to my section.</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+                {
+                  "id": 3,
+                  "inquiry_id": 3,
+                  "status": 4,
+                  "follower_id": 2,
+                  "section_id": 5,
+                  "response": "Initial review in progress",
+                  "created_at": "2025-08-29T08:21:13.000000Z",
+                  "updated_at": "2025-08-29T08:21:13.000000Z",
+                  "inquiry": {
+                    "id": 3,
+                    "user_id": 15,
+                    "assignee_id": 34,
+                    "category_id": 4,
+                    "cur_status_id": 1,
+                    "title": "International roaming problem",
+                    "body": "Molestias et rerum magni deleniti deleniti culpa iste aut. Aperiam doloremque voluptate sapiente in tempore eos nam. Non aperiam accusamus sint dicta reiciendis.\n\nConsequatur veritatis sit et animi non iure. Optio a quod quas harum. Laborum veritatis delectus natus natus sed nam ut. Officia vero non iure ut id nihil. Nihil nulla enim amet.",
+                    "response": null,
+                    "closed_at": null,
+                    "deleted_at": null,
+                    "created_at": "2025-08-29T08:21:10.000000Z",
+                    "updated_at": "2025-08-29T08:21:10.000000Z"
+                  },
+                  "section": {
+                    "id": 5,
+                    "name": "CVM",
+                    "division": "Marketing - P&S",
+                    "email": "CVM@mail.com",
+                    "deleted_at": null,
+                    "created_at": "2025-08-29T08:21:03.000000Z",
+                    "updated_at": "2025-08-29T08:21:03.000000Z"
+                  },
+                  "follower": {
+                    "id": 2,
+                    "name": "trainer",
+                    "email": "trainer@mail.com",
+                    "email_verified_at": null,
+                    "position": "Coordinator",
+                    "section_id": 1,
+                    "role_id": 3,
+                    "delegation_id": null,
+                    "code": null,
+                    "status": 1,
+                    "img_url": null,
+                    "created_at": "2025-08-29T08:21:04.000000Z",
+                    "updated_at": "2025-08-29T08:21:04.000000Z"
+                  },
+                  "attachments": []
+                },]</code>
+            </pre>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="sent Followups">
+          <h3>10. My sent Followups</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/sentFollowups</p>
+            <p><strong>Description:</strong> Display my sent Followups.</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+              {
+                "id": 5,
+                "inquiry_id": 5,
+                "status": 4,
+                "follower_id": 4,
+                "section_id": 7,
+                "response": "Initial review in progress",
+                "created_at": "2025-08-29T08:21:13.000000Z",
+                "updated_at": "2025-08-29T08:21:13.000000Z",
+                "inquiry": {
+                  "id": 5,
+                  "user_id": 32,
+                  "assignee_id": 27,
+                  "category_id": 8,
+                  "cur_status_id": 2,
+                  "title": "Voicemail not working",
+                  "body": "Sed quo fugiat non pariatur. Totam dolor veniam autem eum facere. Est fugit nisi dolores similique aspernatur. Voluptates voluptas quas quos quia saepe nostrum soluta.\n\nIn sed tempora nihil quaerat. Tempore tempora maiores explicabo aspernatur qui et. Commodi tempore aut perferendis.",
+                  "response": "Your billing adjustment will reflect in the next cycle.",
+                  "closed_at": null,
+                  "deleted_at": null,
+                  "created_at": "2025-08-29T08:21:10.000000Z",
+                  "updated_at": "2025-08-29T08:21:10.000000Z"
+                },
+                "section": {
+                  "id": 7,
+                  "name": "Billing Adminstration",
+                  "division": "IT - CSD",
+                  "email": "Billing@mail.com",
+                  "deleted_at": null,
+                  "created_at": "2025-08-29T08:21:04.000000Z",
+                  "updated_at": "2025-08-29T08:21:04.000000Z"
+                },
+                "follower": {
+                  "id": 4,
+                  "name": "call center",
+                  "email": "cceuser@mail.com",
+                  "email_verified_at": null,
+                  "position": "Rep",
+                  "section_id": 2,
+                  "role_id": 5,
+                  "delegation_id": null,
+                  "code": null,
+                  "status": 1,
+                  "img_url": null,
+                  "created_at": "2025-08-29T08:21:04.000000Z",
+                  "updated_at": "2025-08-29T08:21:04.000000Z"
+                },
+                "attachments": []
+              },]</code>
+            </pre>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -3967,7 +4087,7 @@
             <p><span class="method POST">POST</span> /api/reports/myMonthlyExcel</p>
             <p><strong>Description:</strong> Download an Excel of myMonthly Report file.</p>
             <p><strong>Request Example:</strong></p>
-            <pre><code>{ "yaer": "2025​" }</code></pre>
+            <pre><code>{ "year": "2025​" }</code></pre>
 
             <p><strong>Response Example:</strong></p>
             <pre><code>1756276118_monthlyReport.xlsx</code></pre>
@@ -3991,37 +4111,34 @@
       </div>
       <div class="section-content">
 
-        {{-- <div class="endpoint" data-title="All Notifcations">
-          <ifca>1. List All Notifcations</h3>
-            <div class="endpoint-content">
-              <p><span class="method POST">POST</span> /api/notifications/</p>
-              <p><strong>Description:</strong> Returns all notifications.</p>
+        <div class="endpoint" data-title="All Notifcations">
+          <h3>1. List All Notifcations</h3>
+          <div class="endpoint-content">
+            <p><span class="method POST">POST</span> /api/notifications/</p>
+            <p><strong>Description:</strong> Returns all notifications (SuperAdmin / Admin).</p>
 
-              <p><strong>Response Example:</strong></p>
-              <pre><code>{
-                "users_count": 23,
-                "active_users_count": 23,
-                "trainers_count": 12,
-                "active_trainers_count": 12,
-                "sections_count": 8,
-                "categories_count": 17,
-                "inquiries_count": 4,
-                "closed_inquiries_count": 1,
-                "opened_inquiries_count": 1,
-                "pending_inquiries_count": 1,
-                "reopened_inquiries_count": 1,
-                "avg_closing": "48:00"
-              }
-            </code>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[
+                {
+                  "id": 1,
+                  "inquiry_id": 51,
+                  "user_id": 2,
+                  "message": "You have received a new inquiry!",
+                  "status": "unread",
+                  "created_at": "2025-08-29T11:25:02.000000Z",
+                  "updated_at": "2025-08-29T11:25:02.000000Z"
+                }
+              ]
+              </code>
             </pre>
 
-              <details>
-                <summary><strong>Possible Error Responses</strong></summary>
-                <pre><code>// 401 Unauthorized
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
                 { "message": "Unauthenticated." }</code></pre>
-              </details>
-            </div>
-        </div> --}}
+            </details>
+          </div>
+        </div>
 
         <div class="endpoint" data-title="My Notifcations">
           <h3>2. My Notifcations</h3>
@@ -4102,6 +4219,27 @@
               <summary><strong>Possible Error Responses</strong></summary>
               <pre><code>// 401 Unauthorized
                 { "message": "Unauthenticated." }</code></pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="endpoint" data-title="My Notifcations">
+          <h3>3. Set Read / unread</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/notifications/setRead/{notification_id}</p>
+            <p><strong>Description:</strong> set Notification read/unread.</p>
+
+            <p><strong>Response Example:</strong></p>
+            <pre><code>{'message' : 'Notification status updated successfully !'}
+              </code>
+            </pre>
+
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 401 Unauthorized
+                { "message": "Unauthenticated." }</code></pre>
+              <pre><code>// 403 notification not for this user
+                { 'message' : 'Sorry , you can\'t update this notification status !' }</code></pre>
             </details>
           </div>
         </div>

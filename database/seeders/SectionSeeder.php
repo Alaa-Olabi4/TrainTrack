@@ -14,43 +14,53 @@ class SectionSeeder extends Seeder
     public function run(): void
     {
         Section::create([
-            'name'=>'UAT & Training',
-            'division'=> 'CC - Customer Care Support',
+            'name' => 'UAT & Training',
+            'division' => 'CC - Customer Care Support',
             'email' => 'UAT@mail.com'
         ]);
         Section::create([
-            'name'=>'Segment Consumer',
-            'division'=> 'Marketing - P&S',
+            'name' => 'Call Center',
+            'division' => 'CC - Customer Care Support',
+            'email' => 'CCE@mail.com'
+        ]);
+        Section::create([
+            'name' => 'Customer Service Center',
+            'division' => 'CC - Customer Care Support',
+            'email' => 'CSC@mail.com'
+        ]);
+        Section::create([
+            'name' => 'Segment Consumer',
+            'division' => 'Marketing - P&S',
             'email' => 'Segment@mail.com'
         ]);
         Section::create([
-            'name'=>'CVM',
-            'division'=> 'Marketing - P&S',
+            'name' => 'CVM',
+            'division' => 'Marketing - P&S',
             'email' => 'CVM@mail.com'
         ]);
         Section::create([
-            'name'=>'VAS - Adminstration&Operation',
-            'division'=> 'IT - CSD',
+            'name' => 'VAS - Adminstration&Operation',
+            'division' => 'IT - CSD',
             'email' => 'VAS@mail.com'
         ]);
         Section::create([
-            'name'=>'Billing Adminstration',
-            'division'=> 'IT - CSD',
+            'name' => 'Billing Adminstration',
+            'division' => 'IT - CSD',
             'email' => 'Billing@mail.com'
         ]);
         Section::create([
-            'name'=>'IN Adminstration',
-            'division'=> 'IT - CSD',
+            'name' => 'IN Adminstration',
+            'division' => 'IT - CSD',
             'email' => 'IN@mail.com'
         ]);
         Section::create([
-            'name'=>'Legal',
-            'division'=> 'CEO',
+            'name' => 'Legal',
+            'division' => 'CEO',
             'email' => 'Legal@mail.com'
         ]);
         Section::create([
-            'name'=>'Recruitment',
-            'division'=> 'HR',
+            'name' => 'Recruitment',
+            'division' => 'HR',
             'email' => 'Recruitment@mail.com'
         ]);
     }

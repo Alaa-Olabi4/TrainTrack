@@ -23,7 +23,7 @@ class ReportController extends Controller
     {
         $request->validate([
             'start_date' => ['required', 'date'],
-            'end_date'   => ['required', 'date']
+            'end_date'   => ['required', 'date', 'after:start_date']
         ]);
 
         $start = $request->start_date;
@@ -151,7 +151,7 @@ class ReportController extends Controller
     {
         $request->validate([
             'start_date'   => ['nullable', 'date'],
-            'end_date'     => ['nullable', 'date'],
+            'end_date'     => ['nullable', 'date', 'after:start_date'],
             'assignee_id'  => ['nullable', 'integer', 'exists:users,id']
         ]);
 
@@ -343,7 +343,7 @@ class ReportController extends Controller
     {
         $request->validate([
             'start_date' => ['required', 'date'],
-            'end_date'   => ['required', 'date']
+            'end_date'   => ['required', 'date', 'after:start_date']
         ]);
 
         $start = $request->start_date;
@@ -530,7 +530,7 @@ class ReportController extends Controller
     {
         $request->validate([
             'start_date' => ['required', 'date'],
-            'end_date'   => ['required', 'date']
+            'end_date'   => ['required', 'date', 'after:start_date']
         ]);
 
         $start = Carbon::parse($request->start_date)->startOfDay();

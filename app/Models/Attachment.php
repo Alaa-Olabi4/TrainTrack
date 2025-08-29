@@ -18,8 +18,8 @@ class Attachment extends Model
     {
         return $this->belongsTo(Inquiry::class);
     }
-    public function followup()
+    public function followups()
     {
-        return $this->belongsTo(FollowUp::class,);
+        return $this->belongsTo(FollowUp::class);
     }
 }
