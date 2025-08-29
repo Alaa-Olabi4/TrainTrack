@@ -156,7 +156,7 @@ class InquiryController extends Controller
     {
         $user = auth()->user();
         $inqs = Inquiry::where('assignee_id', $user->id)
-            // ->orWhere('user_id', $user->id)
+            ->orWhere('user_id', $user->id)
             ->get();
 
         foreach ($inqs as $inq) {
@@ -198,7 +198,7 @@ class InquiryController extends Controller
         $category = Category::findOrFail($request['category_id']);
         $data['assignee_id'] = $category->owner
             ? $category->owner->id
-            : User::where('role_id', 2)->first()->id;
+            : User::where('role_id', 2)->orWhere('role_id', 1)->first()->id;
 
         $inquiry = Inquiry::create($data);
 
@@ -344,8 +344,21 @@ class InquiryController extends Controller
         }
 
         $results = $query->latest()->get();
+        $res = [];
+        foreach ($results as $inq) {
+            $res[] = [
+                'inquiry'       => $inq,
+                'user'          => $inq->user,
+                'assigneeUser'  => $inq->assigneeUser,
+                'category'      => $inq->category,
+                'status'        => $inq->status,
+                'followUps'     => $inq->followUps,
+                'attachments'   => $inq->attachments,
+            ];
+        }
 
-        return count($results) == 0 ? response()->json(['message' => 'not found !'], 404) : $results;
+
+        return count($results) == 0 ? response()->json(['message' => 'not found !'], 404) : $res;
     }
 
     public function reassign(Request $request)
@@ -522,7 +535,6 @@ class InquiryController extends Controller
             'inquiries_last_6_months' => $this->inquiriesByPeriod('monthly', 6),
         ]);
     }
-
     /**
      * Get inquiry counts grouped by day or month.
      *

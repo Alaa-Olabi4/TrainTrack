@@ -26,6 +26,13 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = User::findOrFail(auth()->user()->id);
+            if ($user && $user->status === 0) {
+                return response()->json([
+                    'status' => 403,
+                    'message' => 'Your account is blocked. Please contact admin.',
+                ], 403);
+            }
+
             $token = $user->createToken('auth_token')->plainTextToken;
 
             $user->section;
@@ -51,9 +58,17 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = User::findOrFail(auth()->user()->id);
+
             if ($user->role_id > 3) {
                 return response()->json(['message' => 'the mobile app is only for trainer/admins'], 403);
             }
+            if ($user && $user->status === 0) {
+                return response()->json([
+                    'status' => 403,
+                    'message' => 'Your account is blocked. Please contact admin.',
+                ], 403);
+            }
+
             $token = $user->createToken('auth_token')->plainTextToken;
 
             $user->section;
@@ -192,6 +207,7 @@ class AuthController extends Controller
             'section_id' => 'nullable|integer|max:10|exists:sections,id',
             'role_id' => 'required|integer|in:2,3,4,5',
             'delegation_id' => ['integer', 'exists:users,id'],
+            'position' => ['string'],
             'image' => ['image']
         ]);
 
@@ -210,6 +226,7 @@ class AuthController extends Controller
         $request['status'] = 1;
 
         $user = User::Create($request->all());
+        $user->section;
 
         return response()->json([
             'message' => 'User added successfully!',

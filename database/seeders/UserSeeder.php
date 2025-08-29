@@ -16,12 +16,20 @@ class UserSeeder extends Seeder
     {
 
         User::create([
-            'name' => 'Admin',
+            'name' => 'SuperAdmin',
             'email' => 'admin@mail.com',
             'password' => Hash::make('adminadmin'),
             'position' => 'Manager',
             'section_id' => 1,
             'role_id' => 1,
+        ]);
+        User::create([
+            'name' => 'Admin',
+            'email' => 'sadmin@mail.com',
+            'password' => Hash::make('adminadmin'),
+            'position' => 'Manager',
+            'section_id' => 1,
+            'role_id' => 2,
         ]);
 
         // User::create([

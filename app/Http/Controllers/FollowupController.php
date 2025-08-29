@@ -25,7 +25,7 @@ class FollowupController extends Controller
             $f->inquiry->attachments;
             $f->section;
             $f->follower;
-            // $f->attachments;
+            $f->attachments;
         }
         return $fs;
     }
@@ -42,7 +42,7 @@ class FollowupController extends Controller
             $f->inquiry->attachments;
             $f->section;
             $f->follower;
-            // $f->attachments;
+            $f->attachments;
         }
         return $fs;
     }
@@ -55,7 +55,7 @@ class FollowupController extends Controller
             'inquiry_id' => ['required', 'numeric', 'exists:inquiries,id'],
             'status' => ['required'],
             'section_id' => ['numeric', 'exists:sections,id'],
-            'response' => ['nullable','string'],
+            'response' => ['nullable', 'string'],
             'attachments' => ['nullable', 'array'],
             'attachments.*' => ['file', 'max:5120', 'mimes:jpg,jpeg,png,pdf,doc,docx']
         ]);
@@ -69,7 +69,7 @@ class FollowupController extends Controller
             'follower_id' => $follower->id
         ];
         $followup = FollowUp::create($data);
-        Inquiry::findOrFail($request['inquiry_id'])->update(['cur_status_id'=>$request['status']]);
+        Inquiry::findOrFail($request['inquiry_id'])->update(['cur_status_id' => $request['status']]);
 
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
@@ -100,7 +100,7 @@ class FollowupController extends Controller
             $f->inquiry->attachments;
             $f->section;
             $f->follower;
-            // $f->attachments;
+            $f->attachments;
         }
         return $fs;
     }
@@ -119,7 +119,7 @@ class FollowupController extends Controller
         $followup->inquiry->attachments;
         $followup->section;
         $followup->follower;
-        // $followup->attachments;
+        $followup->attachments;
         return $followup;
     }
 
@@ -155,12 +155,14 @@ class FollowupController extends Controller
         return response()->json(['message' => 'the follower only can delete the followup! '], 403);
     }
 
-    public function receivedFollowups(){
+    public function receivedFollowups()
+    {
         $user = User::findOrFail(auth()->user()->id);
         $section = $user->section;
-        $followups = FollowUp::where('section_id',$section->id)->get();
+        $followups = FollowUp::where('section_id', $section->id)->get();
         foreach ($followups as $f) {
             $f->inquiry;
+            $f->inquiry->status;
             $f->section;
             $f->follower;
             $f->attachments;
@@ -168,11 +170,13 @@ class FollowupController extends Controller
         return $followups;
     }
 
-    public function sentFollowups(){
+    public function sentFollowups()
+    {
         $user = User::findOrFail(auth()->user()->id);
-        $followups = FollowUp::where('follower_id',$user->id)->get();
+        $followups = FollowUp::where('follower_id', $user->id)->get();
         foreach ($followups as $f) {
             $f->inquiry;
+            $f->inquiry->status;
             $f->section;
             $f->follower;
             $f->attachments;

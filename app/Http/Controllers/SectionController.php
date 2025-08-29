@@ -53,9 +53,9 @@ class SectionController extends Controller
      */
     public function show($id)
     {
-        $section =  Section::withCount('users')->findOrFail($id);
+        $section =  Section::withCount('users')->withTrashed()->findOrFail($id);
         $fus = $section->followUps;
-        foreach($fus as $fu){
+        foreach ($fus as $fu) {
             $fu->inquiry->category;
         }
         return $section;
@@ -83,7 +83,7 @@ class SectionController extends Controller
     {
         $section = Section::findOrFail($id);
         $section->delete();
-        return response()->json(['message' => 'Section has been deleted successfully !','section' => $section]);
+        return response()->json(['message' => 'Section has been deleted successfully !', 'section' => $section]);
     }
 
     /**
@@ -94,7 +94,7 @@ class SectionController extends Controller
         $section = Section::withTrashed()->findOrFail($id);
         if ($section->deleted_at != null) {
             $section->restore();
-            return response()->json(['message' => 'section has been restored successfully !','section' => $section]);
+            return response()->json(['message' => 'section has been restored successfully !', 'section' => $section]);
         }
         return response()->json(['message' => 'Section isn\'t deleted !'], 400);
     }
