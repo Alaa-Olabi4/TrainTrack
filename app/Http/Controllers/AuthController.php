@@ -111,7 +111,6 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
-            // Always return success to prevent email enumeration
             return response()->json([
                 "status" => 200,
                 "message" => "If email exists, code will be sent",
@@ -196,7 +195,20 @@ class AuthController extends Controller
     }
     public function userRoles($role_id)
     {
-        return User::where('role_id', $role_id)->get();
+        $users = User::where('role_id', $role_id)->get();
+        // return $users;
+        $data = [];
+        if ($role_id == 3) {
+            foreach ($users as $u) {
+                $total_weight = 0;
+                foreach ($u->categories as $c) {
+                    $total_weight += $c->weight;
+                }
+                $data[] = [$u, 'total_weight' => $total_weight];
+            }
+        }
+
+        return $data == [] ? $users : $data;
     }
     public function addUser(Request $request)
     {

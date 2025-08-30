@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Models\Notification;
+use App\Jobs\SendPusherNotification;
+use App\Jobs\SendNewTasks;
+use App\Models\Section;
 
 class TaskController extends Controller
 {
@@ -16,11 +20,11 @@ class TaskController extends Controller
     public function index()
     {
         $tasks = Task::all();
-        $excepted =[];
+        $excepted = [];
         foreach ($tasks as $task) {
-            if($task->category->owner == null){
+            if ($task->category->owner == null) {
                 $excepted[] = $task;
-            }else{
+            } else {
                 $task->category;
                 $task->owner;
                 $task->delegation;
@@ -46,7 +50,29 @@ class TaskController extends Controller
 
         Task::create($request->all());
 
-        Category::findOrFail($request['category_id'])->update(['owner_id' => $request['owner_id']]);
+        $category = Category::findOrFail($request['category_id']);
+        $category->update(['owner_id' => $request['owner_id']]);
+
+        $msg = "New Tasks have been assigned!";
+
+        Notification::create([
+            'inquiry_id' => $category->id,
+            'user_id' => $request['owner_id'],
+            'message' => $msg,
+        ]);
+        SendPusherNotification::dispatch(
+            'user-' . $request['owner_id'],
+            'my-event',
+            $msg
+        );
+
+        // Dispatch queued jobs
+        if ($category->owner) {
+            SendNewTasks::dispatch($category->owner->email);
+            // SendNewInquiryEmail::dispatch($inquiry->id, $category->owner->email, $category->owner->name);
+            // SendNewInquiryEmail::dispatch($inquiry->id, $category->section->email, $category->owner->name);
+        }
+
 
         return response()->json(['message' => 'the task has been assigned successfully !'], 201);
     }
@@ -108,20 +134,26 @@ class TaskController extends Controller
         $failesIds = [];
         $i = 0;
         foreach ($request['category_ids'] as $id) {
-            if (!Category::findOrFail($id)) {
+            $category = Category::findOrFail($id);
+            if (!$category) {
                 $failesIds[$i] = $id;
                 $i++;
             } else {
                 $delegation_id = User::findOrFail($request['owner_id'])->delegation_id;
-
+                if ($category->owner && $category->owner->id == $request['owner_id']) {
+                    return response()->json(['message' => 'this task is already assign !'], 400);
+                }
                 Task::create([
                     'category_id' => $id,
                     'owner_id' => $request['owner_id'],
                     'delegation_id' => $delegation_id
                 ]);
-                Category::findOrFail($id)->update(['owner_id' => $request['owner_id']]);
+                $category->update(['owner_id' => $request['owner_id']]);
             }
         }
+
+        $section = Section::findOrFail(1);
+        SendNewTasks::dispatch($section->email);
 
         if ($i == 0) {
             return response()->json(['message' => 'tasks have been added successfully !']);
@@ -148,6 +180,19 @@ class TaskController extends Controller
         return response()->json(['message' => 'reset task has been done successfully !']);
     }
 
+    public function myTasks()
+    {
+        $user = User::findOrFail(auth()->user()->id);
+        if ($user->role_id != 3) {
+            return response()->json(['message' => 'only the trainer have tasks !'], 403);
+        }
+        $data = [];
+        $category = Category::where('owner_id', $user->id)->get();
+        $delegation = User::find($user->delegation_id);
+        $data[] = $category;
+        $delegation != null ? $data[] = $delegation : null;
+        return $data;
+    }
 
     public function randomlyAssign()
     {

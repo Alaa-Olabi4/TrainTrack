@@ -27,7 +27,7 @@ class InquiryController extends Controller
     {
         $userId = auth()->id();
         $res = [];
-        foreach (Inquiry::all() as $inq) {
+        foreach (Inquiry::orderBy('updated_at', 'desc')->get() as $inq) {
             $res[] = [
                 'inquiry'       => $inq,
                 'user'          => $inq->user,
@@ -241,12 +241,17 @@ class InquiryController extends Controller
      */
     public function show($id)
     {
-        $inq = Inquiry::findOrFail($id);
+        $inq = Inquiry::withTrashed()->findOrFail($id);
         $inq->user;
         $inq->assigneeUser;
         $inq->category;
         $inq->status;
         $inq->followUps;
+        foreach ($inq->followUps as $a) {
+            $a->follower;
+            $a->section;
+            $a->attachments;
+        }
         $inq->attachments;
         $inq->ratings;
         foreach ($inq->ratings as $r) {
@@ -373,8 +378,12 @@ class InquiryController extends Controller
         if ($new->role_id != 3) {
             return response()->json(['message' => 'you can reassign the inquiry to trainer only !']);
         }
-
         $inq = Inquiry::findOrFail($request['inquiry_id']);
+        // dd($inq->owner->id);
+        if ($new->id == $inq->assigneeUser->id) {
+            return response()->json(['message' => 'you can\'t reassign the inquiry to the same trainer !'], 400);
+        }
+
         $inq->update(['assignee_id' => $request['assignee_id']]);
 
         // Should Notify the both Trainers
@@ -472,7 +481,7 @@ class InquiryController extends Controller
                 $interval = $createdAt->diff($closedAt);
                 $total_time += $interval->days * 24 + $interval->h;
             }
-            $average_handling_time = ($total_time / $cnt) . " hours";
+            $average_handling_time = number_format($total_time / $cnt, 2) . " hours";
         } else {
             $average_handling_time = "No closed inquireis !";
         }
@@ -485,7 +494,7 @@ class InquiryController extends Controller
             foreach ($ratings as $r) {
                 $total_ratings += $r->score;
             }
-            $average_ratings = $total_ratings / $ratings_cnt;
+            $average_ratings = number_format($total_ratings / $ratings_cnt, 2);
         } else {
             $average_ratings = "No ratings !";
         }
@@ -529,6 +538,7 @@ class InquiryController extends Controller
 
             'average_handling_time' => $average_handling_time,
             'average_ratings' => $average_ratings,
+
             'trainers_performance' => $trainers_performance,
             'topCategories' => $topCategories,
             'inquiries_last_7_days' => $this->inquiriesByPeriod('daily', 7),

@@ -14,7 +14,7 @@ class SectionController extends Controller
      */
     public function index()
     {
-        return Section::withCount('users')->orderByDesc('id')->get();
+        return Section::withCount('users')->get(); //orderByDesc('id')->get();
     }
 
     /**

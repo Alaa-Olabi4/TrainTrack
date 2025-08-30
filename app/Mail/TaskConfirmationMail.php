@@ -5,22 +5,39 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
+
 
 class TaskConfirmationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $confirmationCode;
+    // public $taskUrl;
 
-    public function __construct($confirmationCode)
+    public function __construct()
     {
-        $this->confirmationCode = $confirmationCode;
+        // $this->taskUrl = $taskUrl;
     }
 
-    public function build()
+    /**
+     * Get the message envelope.
+     */
+    public function envelope(): Envelope
     {
-        return $this->subject('Your Task Confirmation Code')
-            ->view('emails.task_confirmation')
-            ->with('confirmationCode', $this->confirmationCode);
+        return new Envelope(
+            subject: 'New Task Assigned',
+        );
+    }
+    /**
+     * Get the message content definition.
+     */
+    public function content(): Content
+    {
+        return new Content(
+            view: 'emails.task_confirmation',
+        )->with([
+            'taskUrl' => 'http://traintrack.com/details/' //. $this->taskUrl,
+        ]);
     }
 }

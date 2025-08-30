@@ -14,7 +14,7 @@ class RatingController extends Controller
     public function index()
     {
         $ratings = Rating::with(['user.role', 'inquiry.category'])
-            ->latest()
+        ->latest()
             ->get()
             ->map(function ($rating) {
                 return [

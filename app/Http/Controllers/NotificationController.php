@@ -21,7 +21,7 @@ class NotificationController extends Controller
     {
         $user_id = auth()->user()->id;
         $user = User::findOrFail($user_id);
-        $notifications = Notification::where('user_id', $user->id)->get();
+        $notifications = Notification::orderBy('created_at', 'desc')->where('user_id', $user->id)->get();
         return $notifications;
     }
 
@@ -38,6 +38,6 @@ class NotificationController extends Controller
 
             return response()->json(['message' => 'Notification status updated successfully !']);
         }
-        return response()->json(['message' => 'Sorry , you can\'t update this notification status !'],403);
+        return response()->json(['message' => 'Sorry , you can\'t update this notification status !'], 403);
     }
 }

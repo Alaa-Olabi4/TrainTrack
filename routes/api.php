@@ -46,7 +46,8 @@ Route::controller(AuthController::class)->group(function () {
 
         Route::post('updateMyProfile', 'updateMyProfile');
         Route::post('logout', 'logout'); //1
-        Route::get('/profile', 'profile'); //1
+        // Route::options('/profile','profile');
+        Route::get('/profile', 'profile');
     });
 });
 
@@ -108,6 +109,7 @@ Route::controller(TaskController::class)->group(function () {
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('tasks', 'index');
         Route::get('tasks/{id}', 'show');
+        Route::get('myTasks', 'myTasks')->middleware(['role:Trainer']);
     });
 });
 
@@ -128,9 +130,9 @@ Route::controller(InquiryController::class)->group(function () {
 
         Route::get('/search', 'search');
         Route::get('', 'index');
+        Route::get('Status/{status_id}', 'indexStatuses');
         Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('myinquiries', 'myinquiries');
-            Route::get('Status/{status_id}', 'indexStatuses');
             Route::get('Sender/{sender_id}', 'indexSender');
             Route::get('Trainer/{assignee_id}', 'indexTrainer');
             Route::post('/reopen', 'reopen');
@@ -155,8 +157,8 @@ Route::controller(FollowupController::class)->group(function () {
             Route::post('/{id}', 'update');
             Route::delete('/{id}', 'destroy');
         });
-        Route::get('receivedFollowups','receivedFollowups');
-        Route::get('sentFollowups','sentFollowups');
+        Route::get('receivedFollowups', 'receivedFollowups');
+        Route::get('sentFollowups', 'sentFollowups');
         Route::get('followupsrequest/{inquiry_id}', 'followupsrequest');
         Route::get('followupsSection/{section_id}', 'indexSection');
     });

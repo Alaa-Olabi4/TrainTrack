@@ -1671,6 +1671,23 @@
           </div>
         </div>
 
+        <div class="endpoint" data-title="Get Task by ID">
+          <h3>9. Get My Task</h3>
+          <div class="endpoint-content">
+            <p><span class="method GET">GET</span> /api/myTasks</p>
+            <p><strong>Description:</strong> Shows details of one task, including category and related
+              users.</p>
+            <p><strong>Response Example:</strong></p>
+            <pre><code>[[{"id":2,"name":"RBT","description":"RBT","owner_id":3,"weight":5,"deleted_at":null,"created_at":"2025-08-29T18:40:44.000000Z","updated_at":"2025-08-30T09:11:12.000000Z"}],{"id":9,"name":"Assunta Cole III","email":"green.agustina@example.com","email_verified_at":"2025-08-29 18:40:39","position":"Coordinator","section_id":1,"role_id":3,"delegation_id":null,"code":null,"status":1,"img_url":null,"created_at":"2025-08-29T18:40:40.000000Z","updated_at":"2025-08-29T18:40:40.000000Z"}]</code>
+            </pre>
+            <details>
+              <summary><strong>Possible Error Responses</strong></summary>
+              <pre><code>// 404 Not Found
+{ "message": "No query results for model [Category] 999." }</code></pre>
+            </details>
+          </div>
+        </div>
+
 
       </div>
     </div>
@@ -1991,7 +2008,7 @@
         <div class="endpoint" data-title="Get Inquiries by Status">
           <h3>6. Get Inquiries by Status ID</h3>
           <div class="endpoint-content">
-            <p><span class="method GET">GET</span> /api/inquiriesStatus/{status_id}</p>
+            <p><span class="method GET">GET</span> /api/inquiries/Status/{status_id}</p>
             <p><strong>Description:</strong> Filters inquiries by current status (e.g. Open, Closed).</p>
             <p><strong>Response Example:</strong></p>
             <pre><code>[{

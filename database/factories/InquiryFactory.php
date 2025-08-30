@@ -20,11 +20,19 @@ class InquiryFactory extends Factory
      */
     public function definition(): array
     {
+        $userId = User::where('role_id', 5)->inRandomOrder()->first()?->id;
+        $assigneeId = User::where('role_id', 3)->inRandomOrder()->first()?->id;
+        $categoryId = Category::inRandomOrder()->first()?->id;
+        $statusId = Status::whereBetween('id', [1, 4])->inRandomOrder()->first()?->id;
+
+        $createdAt = $this->faker->dateTimeBetween('-90 days', '-1 days');
+        $isClosed = $statusId == 3;
+
         return [
-            'user_id' => User::inRandomOrder()->first()->id,
-            'assignee_id' => User::inRandomOrder()->first()->id,
-            'category_id' => Category::inRandomOrder()->first()->id,
-            'cur_status_id' => Status::inRandomOrder()->first()->id,
+            'user_id' => $userId,
+            'assignee_id' => $assigneeId,
+            'category_id' => $categoryId,
+            'cur_status_id' => $statusId,
             'title' => $this->faker->randomElement([
                 'SIM activation issue',
                 'Billing discrepancy',
@@ -36,16 +44,11 @@ class InquiryFactory extends Factory
                 'RBT subscription failed',
             ]),
             'body' => $this->faker->paragraphs(2, true),
-            'response' => $this->faker->optional()->randomElement([
-                'Your issue has been escalated to our technical team.',
-                'We’ve refreshed your network settings remotely.',
-                'Please restart your device and try again.',
-                'We apologize for the inconvenience. A fix is underway.',
-                'Your billing adjustment will reflect in the next cycle.',
-                'Roaming services have been reactivated successfully.',
-                'We’re currently experiencing a temporary outage in your area.',
-                'closed_at' => $this->faker->optional()->dateTimeBetween('-1 month', 'now'),
-            ]),
+            'response' => $isClosed ? $this->faker->sentence : null,
+            'created_at' => $createdAt,
+            'closed_at' => $isClosed
+                ? (clone $createdAt)->modify('+' . rand(1, 80) . ' hours')
+                : null,
         ];
     }
 }

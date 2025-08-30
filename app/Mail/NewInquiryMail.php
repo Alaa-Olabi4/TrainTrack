@@ -13,12 +13,12 @@ class NewInquiryMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $inquiry_id , $username;
+    public $inquiry_id, $username;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($inquiry_id , $username)
+    public function __construct($inquiry_id, $username)
     {
         $this->inquiry_id = $inquiry_id;
         $this->username = $username;
@@ -30,7 +30,7 @@ class NewInquiryMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'New Inquiry Mail',
+            subject: 'New Inquiry Received',
         );
     }
 
@@ -42,8 +42,8 @@ class NewInquiryMail extends Mailable
         return new Content(
             view: 'emails.newInquiry',
         )->with([
-            'inquiryUrl'=>'http://traintrack.com/details/'.$this->inquiry_id,
-            'username'=>$this->username
+            'inquiryUrl' => 'https://dbc51bd6252f.ngrok-free.app/details/' . $this->inquiry_id,
+            'username' => $this->username
         ]);
     }
 

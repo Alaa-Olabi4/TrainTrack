@@ -69,6 +69,10 @@ Route::get('replied', function () {
 Route::get('submit', function () {
     return view('emails.submitInquiry')->with(['inquiryUrl' => 'www']);
 });
+Route::get('tasks', function () {
+    return view('emails.task_confirmation')->with(['taskUrl' => '   ']);
+});
+
 
 
 
