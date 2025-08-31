@@ -169,7 +169,6 @@ class InquiryController extends Controller
         }
         return $inqs;
     }
-
     /**
      * Store a newly created Inquiry in storage.
      */
@@ -198,7 +197,8 @@ class InquiryController extends Controller
         $category = Category::findOrFail($request['category_id']);
         $data['assignee_id'] = $category->owner
             ? $category->owner->id
-            : User::where('role_id', 2)->orWhere('role_id', 1)->first()->id;
+            : User::where('role_id', 2)
+            ->orWhere('role_id', 1)->first()->id;
 
         $inquiry = Inquiry::create($data);
 
@@ -216,9 +216,15 @@ class InquiryController extends Controller
         //send notification to UAT & Training:
         // Create DB notification record
         $msg = "You have received a new inquiry!";
+
         Notification::create([
             'inquiry_id' => $inquiry->id,
             'user_id' => $data['assignee_id'],
+            'message' => $msg,
+        ]);
+        Notification::create([
+            'inquiry_id' => $inquiry->id,
+            'user_id' => 1,
             'message' => $msg,
         ]);
         SendPusherNotification::dispatch(
@@ -235,7 +241,6 @@ class InquiryController extends Controller
 
         return response()->json(['message' => 'the inquiry has been submitted successfully !', $inquiry]);
     }
-
     /**
      * Display the specified Inquiry.
      */
@@ -259,7 +264,6 @@ class InquiryController extends Controller
         }
         return $inq;
     }
-
     /**
      * Update the specified Inquiry in storage.
      */
@@ -305,7 +309,6 @@ class InquiryController extends Controller
 
         return response()->json(['message' => 'the inquiry has been updated successfully!']);
     }
-
     /**
      * Remove the specified Inquiry from storage.
      */
@@ -322,7 +325,6 @@ class InquiryController extends Controller
         Inquiry::withTrashed()->findOrFail($id)->restore();
         return response()->json(['message' => 'inquiry has been restored successfully !']);
     }
-
     public function search(Request $request)
     {
         $data = $request->validate([
@@ -365,7 +367,6 @@ class InquiryController extends Controller
 
         return count($results) == 0 ? response()->json(['message' => 'not found !'], 404) : $res;
     }
-
     public function reassign(Request $request)
     {
         $request->validate([
@@ -391,7 +392,6 @@ class InquiryController extends Controller
 
         return response()->json(['message' => 'the inquiry has been reassigned successfully to ' . $new->name . " !"]);
     }
-
     public function reply(Request $request)
     {
         $request->validate([
@@ -431,9 +431,8 @@ class InquiryController extends Controller
         // Notify the team of the sender
         SendRepliedInquiryEmail::dispatch($inq->id, $inq->user->section->email);
 
-        return response()->json(['message' => 'your reply has been submitted successfully !']);
+        return response()->json(['message' => 'your inquiry has been replied successfully , please check the details and feedback if any']);
     }
-
     public function reopen(Request $request)
     {
         $request->validate([
@@ -461,7 +460,6 @@ class InquiryController extends Controller
 
         return response()->json(['message' => 'the inquiry has been reopened successfully !']);
     }
-
     public function statistics()
     {
         //Inquiries

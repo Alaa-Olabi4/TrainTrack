@@ -7,6 +7,9 @@ use App\Models\FollowUp;
 use App\Models\User;
 use App\Models\Attachment;
 use App\Models\Inquiry;
+use App\Models\Section;
+use App\Models\Notification;
+use App\Jobs\SendNewInquiryEmail;
 
 class FollowupController extends Controller
 {
@@ -69,7 +72,8 @@ class FollowupController extends Controller
             'follower_id' => $follower->id
         ];
         $followup = FollowUp::create($data);
-        Inquiry::findOrFail($request['inquiry_id'])->update(['cur_status_id' => $request['status']]);
+        $inquiry = Inquiry::findOrFail($request['inquiry_id']);
+        $inquiry->update(['cur_status_id' => $request['status']]);
 
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
@@ -81,6 +85,16 @@ class FollowupController extends Controller
                 ]);
             }
         }
+        $sction = Section::findOrFail($request['section_id']);
+        foreach ($sction->users as $u) {
+            Notification::create([
+                'inquiry_id' => $inquiry->id,
+                'user_id' => $u->id,
+                'message' => "new Inquiry to followup !",
+            ]);
+        }
+
+        SendNewInquiryEmail::dispatch($inquiry->id, $sction->email, $sction->name);
 
         return response()->json([
             'message' => 'the inquiry is following up successfully !',

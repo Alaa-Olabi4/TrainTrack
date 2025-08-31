@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(FollowUpSeeder::class);
         $this->call(FavouriteSeeder::class);
         $this->call(RatingSeeder::class);
+        $this->call(NotificationSeeder::class);
 
         // \App\Models\User::factory(10)->create();
 

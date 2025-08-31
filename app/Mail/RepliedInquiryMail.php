@@ -42,7 +42,7 @@ class RepliedInquiryMail extends Mailable
         return new Content(
             view: 'emails.repliedInquiry',
         )->with([
-            'inquiryUrl' => 'http://traintrack.com/details/' . $this->inquiry_id
+            'inquiryUrl' => 'https://d699294a5af8.ngrok-free.app/details/' . $this->inquiry_id
         ]);
     }
 

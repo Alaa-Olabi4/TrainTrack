@@ -34,10 +34,11 @@ class TaskConfirmationMail extends Mailable
      */
     public function content(): Content
     {
+        $domain = env('domain');
         return new Content(
             view: 'emails.task_confirmation',
         )->with([
-            'taskUrl' => 'http://traintrack.com/details/' //. $this->taskUrl,
+            'taskUrl' => 'https://d699294a5af8.ngrok-free.app/tasks/' //. $this->taskUrl,
         ]);
     }
 }

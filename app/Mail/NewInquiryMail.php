@@ -42,7 +42,7 @@ class NewInquiryMail extends Mailable
         return new Content(
             view: 'emails.newInquiry',
         )->with([
-            'inquiryUrl' => 'https://dbc51bd6252f.ngrok-free.app/details/' . $this->inquiry_id,
+            'inquiryUrl' => 'https://d699294a5af8.ngrok-free.app/details/' . $this->inquiry_id,
             'username' => $this->username
         ]);
     }
